@@ -4,11 +4,11 @@ import validateInput from '../shared/validations/signup';
 const router = express.Router();
 
 router.post('/', (req, res) => {
-    const { errors, isValid } = validateInput(req.body);
+  const { errors, isValid } = validateInput(req.body);
 
-    if (!isValid) {
-        res.status(400).json(errors);
-    }
+  if (!isValid) {
+    res.status(400).json(errors);
+  }
 });
 
 export default router;

@@ -1,11 +1,12 @@
-import path from 'path'
+import path from 'path';
 import webpack from 'webpack';
 
 export default {
-  devtool: 'eval-source-map',
+  devtool: process.env.NODE_ENV !== 'production'
+    ? 'eval-source-map'
+    : null,
   entry: [
-    'webpack-hot-middleware/client',
-    path.join(__dirname, '/client/index.js')
+    'webpack-hot-middleware/client', path.join(__dirname, '/client/index.js')
   ],
   output: {
     path: '/',
@@ -13,8 +14,16 @@ export default {
     filename: 'bundle.js'
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        BROWSER: JSON.stringify(true),
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+      }
+    }),
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack
+      .optimize
+      .OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ],
   module: {
@@ -25,11 +34,11 @@ export default {
           path.join(__dirname, 'client'),
           path.join(__dirname, 'server/shared')
         ],
-        loaders: ['react-hot-loader', 'babel-loader']
+        loaders: ['react-hot-loader', 'babel-loader', 'eslint-loader']
       }
     ]
   },
   resolve: {
-    extensions: ['.js' ]
+    extensions: ['.js']
   }
-}
+};

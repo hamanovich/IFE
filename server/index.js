@@ -9,7 +9,7 @@ import webpackConfig from '../webpack.config.dev';
 
 import users from './routes/users';
 
-let app = express();
+const app = express();
 
 app.use(bodyParser.json());
 

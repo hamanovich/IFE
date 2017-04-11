@@ -6,7 +6,8 @@ import validateInput from '../../../server/shared/validations/signup';
 
 class SignupForm extends Component {
   constructor(props) {
-    super(props)
+    super(props);
+
     this.state = {
       username: '',
       email: '',
@@ -16,9 +17,9 @@ class SignupForm extends Component {
       isLoading: false
     };
   }
-  
+
   onChange = (e) => {
-    this.setState({[e.target.name]: e.target.value});
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   isValid = () => {
@@ -30,16 +31,16 @@ class SignupForm extends Component {
 
     return isValid;
   };
-  
+
   onSubmit = (e) => {
     e.preventDefault();
 
-    if (this.isValid()){
+    if (this.isValid()) {
       this.setState({ errors: {}, isLoading: true });
 
       this.props.userSignupRequest(this.state).then(
-        () => {},
-        (err) => this.setState({ errors: err.response.data, isLoading: false })
+        () => { },
+        err => this.setState({ errors: err.response.data, isLoading: false })
       );
     }
   };
@@ -58,9 +59,9 @@ class SignupForm extends Component {
           value={this.state.username}
           htmlFor="username"
           placeholder="Type your name"
-          field="text"
+          field="username"
         />
-        
+
         <TextFieldGroup
           error={errors.email}
           label="Email"
@@ -71,7 +72,7 @@ class SignupForm extends Component {
           field="email"
           type="email"
         />
-        
+
         <TextFieldGroup
           error={errors.password}
           label="Password"
@@ -101,8 +102,8 @@ class SignupForm extends Component {
         </div>
       </form>
     );
-  };
-};
+  }
+}
 
 SignupForm.propTypes = {
   userSignupRequest: PropTypes.func.isRequired
