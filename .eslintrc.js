@@ -13,12 +13,14 @@ module.exports = {
         "linebreak-style": ["error", "windows"],
         "no-shadow": 0,
         "no-console": 0,
+        "no-case-declarations": 0,
         "import/prefer-default-export": 0,
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "react/jsx-boolean-value": 2,
         "react/jsx-curly-spacing":  [2, "never"],
         "react/jsx-indent-props": 1,
         "react/jsx-indent": [1, 2],
+        "react/forbid-prop-types": [2, { "forbid": ["any"] }],
         "react/jsx-key": 2,
         "react/jsx-max-props-per-line": [2, {maximum: 3}],
         "react/jsx-no-bind": [2, {
@@ -59,6 +61,7 @@ module.exports = {
     },
     "globals":{
         "$": true,
-        "document": true
+        "document": true,
+        "window": true
     }
 };

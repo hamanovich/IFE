@@ -4,7 +4,7 @@ class Greetings extends Component {
   render() {
     return (
       <div className="jumbotron">
-        <h1>Hi there</h1>
+        <h1>Welcome</h1>
       </div>
     );
   }
