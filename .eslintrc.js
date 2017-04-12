@@ -63,6 +63,7 @@ module.exports = {
     "globals":{
         "$": true,
         "document": true,
-        "window": true
+        "window": true,
+        "localStorage": true
     }
 };
