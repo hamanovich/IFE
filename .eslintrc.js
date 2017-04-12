@@ -14,6 +14,7 @@ module.exports = {
         "no-shadow": 0,
         "no-console": 0,
         "no-case-declarations": 0,
+        "camelcase": 0,
         "import/prefer-default-export": 0,
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "react/jsx-boolean-value": 2,

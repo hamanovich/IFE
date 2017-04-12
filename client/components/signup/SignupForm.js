@@ -92,7 +92,7 @@ class SignupForm extends Component {
 
         <TextFieldGroup
           error={errors.passwordConfirmation}
-          label="Password"
+          label="Confirm your Password"
           onChange={this.onChange}
           value={this.state.passwordConfirmation}
           htmlFor="passwordConfirmation"
