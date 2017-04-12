@@ -75,7 +75,15 @@ class SignupForm extends Component {
   };
 
   render() {
-    const { errors } = this.state;
+    const {
+      errors,
+      username,
+      email,
+      password,
+      passwordConfirmation,
+      isLoading,
+      invalid
+    } = this.state;
 
     return (
       <form onSubmit={this.onSubmit} noValidate>
@@ -86,7 +94,7 @@ class SignupForm extends Component {
           label="Username"
           onChange={this.onChange}
           checkUserExists={this.checkUserExists}
-          value={this.state.username}
+          value={username}
           htmlFor="username"
           placeholder="Type your name"
           field="username"
@@ -97,7 +105,7 @@ class SignupForm extends Component {
           label="Email"
           onChange={this.onChange}
           checkUserExists={this.checkUserExists}
-          value={this.state.email}
+          value={email}
           htmlFor="email"
           placeholder="Type your email"
           field="email"
@@ -108,7 +116,7 @@ class SignupForm extends Component {
           error={errors.password}
           label="Password"
           onChange={this.onChange}
-          value={this.state.password}
+          value={password}
           htmlFor="password"
           placeholder="Come up with a password"
           field="password"
@@ -119,7 +127,7 @@ class SignupForm extends Component {
           error={errors.passwordConfirmation}
           label="Confirm your Password"
           onChange={this.onChange}
-          value={this.state.passwordConfirmation}
+          value={passwordConfirmation}
           htmlFor="passwordConfirmation"
           placeholder="Repeat your password"
           field="passwordConfirmation"
@@ -127,7 +135,7 @@ class SignupForm extends Component {
         />
 
         <div className="form-group">
-          <button disabled={this.state.isLoading || this.state.invalid} type="submit" className="btn btn-primary btn-lg">
+          <button disabled={isLoading || invalid} type="submit" className="btn btn-primary btn-lg">
             Sign up
           </button>
         </div>
