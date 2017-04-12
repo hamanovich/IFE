@@ -3,7 +3,7 @@ import { Router, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import jwt from 'jsonwebtoken';
+import jwtDecode from 'jwt-decode';
 
 import routes from '../routes';
 import rootReducer from '../rootReducer';
@@ -22,7 +22,7 @@ const localJwtToken = localStorage.jwtToken;
 
 if (localJwtToken) {
   setAuthorizationToken(localJwtToken);
-  store.dispatch(setCurrentUser(jwt.decode(localJwtToken)));
+  store.dispatch(setCurrentUser(jwtDecode(localJwtToken)));
 }
 
 const Root = () => (

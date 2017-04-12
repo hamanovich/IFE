@@ -1,6 +1,6 @@
 import path from 'path';
 import webpack from 'webpack';
-import WebpackBrowserPlugin from 'webpack-browser-plugin';
+// import WebpackBrowserPlugin from 'webpack-browser-plugin';
 
 export default {
   devtool: process.env.NODE_ENV !== 'production'
@@ -25,10 +25,10 @@ export default {
     new webpack
       .optimize
       .OccurrenceOrderPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new WebpackBrowserPlugin({
-      port: 3000
-    })
+    new webpack.HotModuleReplacementPlugin()
+    // new WebpackBrowserPlugin({
+    //   port: 3000
+    // })
   ],
   module: {
     loaders: [
@@ -44,9 +44,5 @@ export default {
   },
   resolve: {
     extensions: ['.js']
-  },
-  node: {
-    net: 'empty',
-    dns: 'empty'
   }
 };
