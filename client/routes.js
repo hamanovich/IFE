@@ -5,7 +5,7 @@ import App from './components/App';
 import Greetings from './components/Greetings';
 import SignupPage from './components/signup/SignupPage';
 import LoginPage from './components/login/LoginPage';
-import AddPage from './components/add/AddPage';
+import AddQuestionPage from './components/addQuestion/AddQuestionPage';
 
 import requireAuth from './utils/requireAuth';
 
@@ -14,6 +14,6 @@ export default (
     <IndexRoute component={Greetings} />
     <Route path="signup" component={SignupPage} />
     <Route path="login" component={LoginPage} />
-    <Route path="add" component={requireAuth(AddPage)} />
+    <Route path="add-question" component={requireAuth(AddQuestionPage)} />
   </Route>
 );

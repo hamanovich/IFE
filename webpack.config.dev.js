@@ -1,13 +1,12 @@
 import path from 'path';
 import webpack from 'webpack';
-// import WebpackBrowserPlugin from 'webpack-browser-plugin';
 
 export default {
   devtool: process.env.NODE_ENV !== 'production'
     ? 'eval-source-map'
     : null,
   entry: [
-    'webpack-hot-middleware/client', path.join(__dirname, '/client/index.js')
+    'webpack-hot-middleware/client', 'react-hot-loader/patch', path.join(__dirname, '/client/index.js')
   ],
   output: {
     path: '/',
@@ -26,9 +25,6 @@ export default {
       .optimize
       .OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin()
-    // new WebpackBrowserPlugin({
-    //   port: 3000
-    // })
   ],
   module: {
     loaders: [
@@ -38,7 +34,7 @@ export default {
           path.join(__dirname, 'client'),
           path.join(__dirname, 'server/shared')
         ],
-        loaders: ['react-hot-loader', 'babel-loader', 'eslint-loader']
+        loaders: ['babel-loader']
       }
     ]
   },
