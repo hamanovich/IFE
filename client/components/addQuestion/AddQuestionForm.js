@@ -5,6 +5,7 @@ import { Field, FieldArray, reduxForm } from 'redux-form';
 import RenderAnswers from './RenderAnswers';
 import renderTextField from '../common/renderTextField';
 import renderTextareaField from '../common/renderTextareaField';
+import renderRadioButton from '../common/renderRadioButton';
 import validate from '../../../server/shared/validations/question';
 
 const AddQuestionForm = (props) => {
@@ -60,33 +61,15 @@ const AddQuestionForm = (props) => {
 
       <div className="form-group">
         <label htmlFor="theory-practice">Choose type of question*:</label>
-        <div className="radio">
-          <label htmlFor="theory">
-            <Field
-              name="theory"
-              component="input"
-              type="radio"
-              id="theory"
-              value="theory"
-              checked
-            />
-            {' '}
-            Theoretical
-          </label>
-        </div>
-        <div className="radio">
-          <label htmlFor="practice">
-            <Field
-              name="theory"
-              component="input"
-              type="radio"
-              id="practice"
-              value="practice"
-            />
-            {' '}
-            Practical
-          </label>
-        </div>
+        <Field
+          component={renderRadioButton}
+          name="theory"
+          required
+          options={[
+            { title: 'Theoretical', value: 'theory' },
+            { title: 'Practical', value: 'practice' }
+          ]}
+        />
       </div>
 
       <hr />
@@ -133,6 +116,7 @@ export default reduxForm({
   validate,
   initialValues: {
     question: '',
-    answer: ''
+    answer: '',
+    theory: ''
   }
 })(AddQuestionForm);

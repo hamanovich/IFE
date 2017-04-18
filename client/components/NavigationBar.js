@@ -35,6 +35,9 @@ class NavigationBar extends Component {
             <Link to="/" className="navbar-brand">IFE</Link>
           </div>
           <div className="collapse navbar-collapse">
+            <ul className="nav navbar-nav navbar-left">
+              <li><Link to="/answers">Answers</Link></li>
+            </ul>
             {isAuthenticated ? userLinks : guestLinks}
           </div>
         </div>

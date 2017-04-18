@@ -10,6 +10,7 @@ import webpackConfig from '../webpack.config.dev';
 import users from './routes/users';
 import auth from './routes/auth';
 import question from './routes/question';
+import answers from './routes/answers';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 app.use('/api/users', users);
 app.use('/api/auth', auth);
 app.use('/api/add-question', question);
+app.use('/api/answers', answers);
 
 const compiler = webpack(webpackConfig);
 

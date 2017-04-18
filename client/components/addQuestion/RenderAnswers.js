@@ -10,7 +10,7 @@ const RenderAnswers = ({ fields, meta: { touched, error, submitFailed } }) => (
 
     {fields.map((answer, index) =>
       <div className="form-group row" key={answer.toString()}>
-        <div className="col-xs-11">
+        <div className="col-xs-10">
           <Field
             label={`Additional answer ${index + 2}`}
             name={`${answer}.text`}
@@ -19,7 +19,7 @@ const RenderAnswers = ({ fields, meta: { touched, error, submitFailed } }) => (
           />
         </div>
 
-        <div className="col-xs-1">
+        <div className="col-xs-2">
           <div className="form-group">
             <button
               type="button"

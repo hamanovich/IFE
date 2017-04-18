@@ -7,6 +7,10 @@ export default (values) => {
     errors.question = { _error: 'Question field is required' };
   }
 
+  if (Validator.isEmpty(values.theory)) {
+    errors.theory = { _error: 'Type of question is required' };
+  }
+
   if (Validator.isEmpty(values.answer)) {
     errors.answer = { _error: 'At least one answer should be provided' };
   }

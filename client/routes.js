@@ -6,6 +6,7 @@ import Greetings from './components/Greetings';
 import SignupPage from './components/signup/SignupPage';
 import LoginPage from './components/login/LoginPage';
 import AddQuestionPage from './components/addQuestion/AddQuestionPage';
+import AnswersPage from './components/answers/AnswersPage';
 
 import requireAuth from './utils/requireAuth';
 
@@ -15,5 +16,8 @@ export default (
     <Route path="signup" component={SignupPage} />
     <Route path="login" component={LoginPage} />
     <Route path="add-question" component={requireAuth(AddQuestionPage)} />
+    <Route path="answers" component={AnswersPage}>
+      <Route path="*/:type" component={AnswersPage} />
+    </Route>
   </Route>
 );
