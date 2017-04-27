@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
+import '../style.scss';
+
 import { logout } from '../actions/authActions';
 
 class NavigationBar extends Component {
@@ -16,16 +18,16 @@ class NavigationBar extends Component {
 
     const userLinks = (
       <ul className="nav navbar-nav navbar-right">
-        <li><Link to="/add-question">Add Question</Link></li>
-        <li><Link to="/account">Account</Link></li>
+        <li><Link to="/add-question" activeClassName="active">Add Question</Link></li>
+        <li><Link to="/account" activeClassName="active">Account</Link></li>
         <li><a href="" onClick={this.logout}>Logout</a></li>
       </ul>
     );
 
     const guestLinks = (
       <ul className="nav navbar-nav navbar-right">
-        <li><Link to="/signup">Sign Up</Link></li>
-        <li><Link to="/login">Login</Link></li>
+        <li><Link to="/signup" activeClassName="active">Sign Up</Link></li>
+        <li><Link to="/login" activeClassName="active">Login</Link></li>
       </ul>
     );
 
@@ -33,11 +35,11 @@ class NavigationBar extends Component {
       <nav className="navbar navbar-default">
         <div className="container-fluid">
           <div className="navbar-header">
-            <Link to="/" className="navbar-brand">IFE</Link>
+            <Link to="/" activeClassName="active" className="navbar-brand">IFE</Link>
           </div>
           <div className="collapse navbar-collapse">
             <ul className="nav navbar-nav navbar-left">
-              <li><Link to="/questions">Questions</Link></li>
+              <li><Link to="questions" activeClassName="active">Questions</Link></li>
             </ul>
             {isAuthenticated ? userLinks : guestLinks}
           </div>

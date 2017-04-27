@@ -5,7 +5,7 @@ import shortid from 'shortid';
 import classnames from 'classnames';
 
 import Question from './Question';
-import { getQuestionsRequest } from '../../actions/answerActions';
+import { getQuestionsRequest, removeQuestionById } from '../../actions/answerActions';
 import { addFlashMessage } from '../../actions/flashMessages';
 
 class QuestionsPage extends Component {
@@ -34,6 +34,11 @@ class QuestionsPage extends Component {
       },
       err => console.error('ERRROR', err)
     );
+  };
+
+  removeQuestion = (id) => {
+    this.props.removeQuestionById(id);
+    this.getQuestions();
   };
 
   clickHandler = () => {
@@ -104,7 +109,7 @@ class QuestionsPage extends Component {
         <hr />
 
         {this.state.ans && this.state.ans.map(ans => (
-          <Question ans={ans} key={shortid.generate()} />
+          <Question ans={ans} remove={this.removeQuestion} key={shortid.generate()} />
         ))}
       </div>
     );
@@ -113,6 +118,7 @@ class QuestionsPage extends Component {
 
 QuestionsPage.propTypes = {
   getQuestionsRequest: PropTypes.func.isRequired,
+  removeQuestionById: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   params: PropTypes.object.isRequired
 };
@@ -121,4 +127,4 @@ QuestionsPage.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default connect(null, { getQuestionsRequest, addFlashMessage })(QuestionsPage);
+export default connect(null, { getQuestionsRequest, removeQuestionById, addFlashMessage })(QuestionsPage);

@@ -35,6 +35,10 @@ export default {
           path.join(__dirname, 'server/shared')
         ],
         loaders: ['babel-loader']
+      },
+      {
+        test: /\.scss$/,
+        loaders: ['style-loader', 'css-loader', 'sass-loader']
       }
     ]
   },

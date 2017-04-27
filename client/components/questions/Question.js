@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import shortid from 'shortid';
 
-const Question = ({ ans }) => (
+const Question = ({ ans, remove }) => (
   <div>
     <div className="panel panel-info">
       <div className="panel-heading clearfix">
@@ -44,6 +44,8 @@ const Question = ({ ans }) => (
         </ul>
         {ans.notes && <div className="well">{ans.notes}</div>}
         <small><strong>Author</strong>: {ans.author}</small>
+        <br />
+        <button className="btn btn-danger" onClick={() => remove(ans._id)}>Remove</button>
       </div>
       <div className="panel-footer clearfix">
         <h5 className="pull-left">
@@ -64,7 +66,8 @@ const Question = ({ ans }) => (
 );
 
 Question.propTypes = {
-  ans: PropTypes.object.isRequired
+  ans: PropTypes.object.isRequired,
+  remove: PropTypes.func.isRequired
 };
 
 export default Question;

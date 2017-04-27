@@ -19,7 +19,9 @@ export default (
     <Route path="login" component={LoginPage} />
     <Route path="add-question" component={requireAuth(AddQuestionPage)} />
     <Route path="account" component={requireAuth(AccountPage)} />
-    <Route path="questions(/:type)" component={QuestionsPage} />
+    <Route path="questions" component={QuestionsPage} >
+      <Route path=":type" component={QuestionsPage} />
+    </Route>
     <Route path="*" name="not-found" component={NotFound} />
   </Route>
 );

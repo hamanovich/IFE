@@ -29,6 +29,14 @@ const questionSchema = new Schema({
     type: String,
     required: [true, 'Author field is required'],
     lowercase: true
+  },
+  date: {
+    type: Date,
+    default: Date.now
+  },
+  lastModified: {
+    type: Date,
+    default: Date.now
   }
 });
 
