@@ -9,18 +9,23 @@ const router = express.Router();
 
 function validateInput(data, otherValidations) {
   const { errors } = otherValidations(data);
+  const { username, email } = data;
 
-  return User.query({
-    where: { username: data.username },
-    orWhere: { email: data.email }
-  }).fetch().then((user) => {
+  return User.find({
+    $or: [
+      { username },
+      { email }
+    ]
+  }).then((user) => {
     if (user) {
-      if (user.get('username') === data.username) {
-        errors.username = 'There is user with such username';
-      }
+      if (user) {
+        if (user.username === data.username) {
+          errors.username = 'There is user with such username';
+        }
 
-      if (user.get('email') === data.email) {
-        errors.email = 'There is user with such email';
+        if (user.email === data.email) {
+          errors.email = 'There is user with such email';
+        }
       }
     }
 
@@ -32,11 +37,11 @@ function validateInput(data, otherValidations) {
 }
 
 router.get('/:id', (req, res) => {
-  User.query({
-    select: ['username', 'email'],
-    where: { username: req.params.id },
-    orWhere: { email: req.params.id }
-  }).fetch().then(user => res.json({ user }));
+  User.find({
+    $or: [
+      { username: req.params.id },
+      { email: req.params.id }]
+  }).then(user => res.json({ user }));
 });
 
 router.post('/', (req, res) => {
@@ -45,10 +50,8 @@ router.post('/', (req, res) => {
       const { username, email, password } = req.body;
       const password_digest = bcrypt.hashSync(password, 10);
 
-      User.forge({
-        username, email, password_digest
-      }, { hasTimestamps: true }).save()
-        .then(() => res.json({ success: true }))
+      User.create({ username, email, password_digest })
+        .then(user => res.send(user))
         .catch(err => res.status(500).json({ error: err }));
     } else {
       res.status(400).json(errors);

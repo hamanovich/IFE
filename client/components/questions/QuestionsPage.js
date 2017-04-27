@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import shortid from 'shortid';
 import classnames from 'classnames';
 
-import Answer from './Answer';
-import { getAnswersRequest, getAnswersByType } from '../../actions/answerActions';
+import Question from './Question';
+import { getQuestionsRequest } from '../../actions/answerActions';
+import { addFlashMessage } from '../../actions/flashMessages';
 
-class AnswersPage extends Component {
+class QuestionsPage extends Component {
   state = {
     ans: [],
     errors: {},
@@ -15,30 +16,28 @@ class AnswersPage extends Component {
   };
 
   componentDidMount() {
-    const { router } = this.context;
-    router.push(router.routes[1].path);
-    this.getAnswers();
+    this.getQuestions();
   }
 
-  getAnswers = () => {
-    this.props.getAnswersRequest().then(
-      req => this.setState({ ans: req.data.ans }),
+  getQuestions = () => {
+    const { params } = this.props;
+    this.props.getQuestionsRequest(params.type).then(
+      (req) => {
+        if (req.data.ans.length !== 0) {
+          this.setState({ ans: req.data.ans });
+        } else {
+          this.props.addFlashMessage({
+            type: 'error',
+            text: 'Answers not found'
+          });
+        }
+      },
       err => console.error('ERRROR', err)
     );
   };
 
-  clickHandler = (type) => {
-    this.props.getAnswersByType(type).then(
-      (req) => {
-        const { router } = this.context;
-        this.setState({
-          ans: req.data.ans,
-          active: type
-        });
-        router.push(`${router.routes[1].path}/${type}`);
-      },
-      err => this.setState({ errors: err.response.data.errors })
-    );
+  clickHandler = () => {
+
   };
 
   render() {
@@ -104,21 +103,22 @@ class AnswersPage extends Component {
 
         <hr />
 
-        {this.state.ans.map(ans => (
-          <Answer ans={ans} key={shortid.generate()} />
+        {this.state.ans && this.state.ans.map(ans => (
+          <Question ans={ans} key={shortid.generate()} />
         ))}
       </div>
     );
   }
 }
 
-AnswersPage.propTypes = {
-  getAnswersRequest: PropTypes.func.isRequired,
-  getAnswersByType: PropTypes.func.isRequired
+QuestionsPage.propTypes = {
+  getQuestionsRequest: PropTypes.func.isRequired,
+  addFlashMessage: PropTypes.func.isRequired,
+  params: PropTypes.object.isRequired
 };
 
-AnswersPage.contextTypes = {
+QuestionsPage.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default connect(null, { getAnswersRequest, getAnswersByType })(AnswersPage);
+export default connect(null, { getQuestionsRequest, addFlashMessage })(QuestionsPage);

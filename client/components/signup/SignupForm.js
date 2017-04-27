@@ -32,7 +32,8 @@ class SignupForm extends Component {
         const errors = this.state.errors;
         let invalid;
 
-        if (res.data.user) {
+
+        if (res.data.user.length) {
           errors[field] = `There is user with such ${field}`;
           invalid = true;
         } else {
@@ -155,3 +156,5 @@ SignupForm.contextTypes = {
 };
 
 export default SignupForm;
+
+// checkUserExists={this.checkUserExists}

@@ -10,15 +10,15 @@ export default (req, res, next) => {
     token = authorizationHeader.split(' ')[1];
   }
 
+  console.log('HERE -------------------------');
+
   if (token) {
     jwt.verify(token, config.jwtSecret, (err, decoded) => {
       if (err) {
         res.status(401).json({ error: 'Failed to authenticate' });
       } else {
-        User.query({
-          where: { id: decoded.id },
-          select: ['email', 'id', 'username']
-        }).fetch().then((user) => {
+        User.findById(decoded.id)
+        .fetch().then((user) => {
           if (!user) {
             res.status(404).json({ error: 'No such user' });
           } else {

@@ -3,11 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 class FlashMessage extends Component {
-  componentDidMount() {
-    setTimeout(this.onClick.bind(this), 2500);
-  }
-
-  onClick = () => {
+  close = () => {
     this.props.deleteFlashMessage(this.props.message.id);
   }
 
@@ -22,7 +18,7 @@ class FlashMessage extends Component {
         })}
       >
         {text}
-        <button onClick={this.onClick} className="close"><span>&times;</span></button>
+        <button onClick={this.close} className="close"><span>&times;</span></button>
       </div>
     );
   }

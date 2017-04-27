@@ -50,11 +50,11 @@ const AddQuestionForm = (props) => {
             type="select-multiple"
             multiple
           >
-            <option value="1">Junior</option>
-            <option value="2">Middle</option>
-            <option value="3">Senior</option>
-            <option value="4">Lead</option>
-            <option value="5">Chief</option>
+            <option value="junior">Junior</option>
+            <option value="middle">Middle</option>
+            <option value="senior">Senior</option>
+            <option value="lead">Lead</option>
+            <option value="chief">Chief</option>
           </Field>
         </div>
       </div>

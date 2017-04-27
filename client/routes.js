@@ -3,10 +3,12 @@ import { Route, IndexRoute } from 'react-router';
 
 import App from './components/App';
 import Greetings from './components/Greetings';
+import NotFound from './components/NotFound';
 import SignupPage from './components/signup/SignupPage';
 import LoginPage from './components/login/LoginPage';
 import AddQuestionPage from './components/addQuestion/AddQuestionPage';
-import AnswersPage from './components/answers/AnswersPage';
+import QuestionsPage from './components/questions/QuestionsPage';
+import AccountPage from './components/account/AccountPage';
 
 import requireAuth from './utils/requireAuth';
 
@@ -16,8 +18,8 @@ export default (
     <Route path="signup" component={SignupPage} />
     <Route path="login" component={LoginPage} />
     <Route path="add-question" component={requireAuth(AddQuestionPage)} />
-    <Route path="answers" component={AnswersPage}>
-      <Route path="*/:type" component={AnswersPage} />
-    </Route>
+    <Route path="account" component={requireAuth(AccountPage)} />
+    <Route path="questions(/:type)" component={QuestionsPage} />
+    <Route path="*" name="not-found" component={NotFound} />
   </Route>
 );

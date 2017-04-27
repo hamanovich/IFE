@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import shortid from 'shortid';
 
-const Answer = ({ ans }) => (
+const Question = ({ ans }) => (
   <div>
     <div className="panel panel-info">
       <div className="panel-heading clearfix">
         <h3 className="panel-title pull-left"><strong>Question</strong>: {ans.question}</h3>
         <div className="pull-right">
-          {ans.level && JSON.parse(ans.level).map(level => (
+          {ans.level && ans.level.map(level => (
             <span
               style={{ margin: '0 3px' }}
               key={shortid.generate()}
@@ -33,7 +33,7 @@ const Answer = ({ ans }) => (
             >
               {ans.answer}
             </li>}
-          {ans.answers && ans.answers.length > 2 && JSON.parse(ans.answers).map(ans => (
+          {ans.answers && ans.answers.length > 2 && ans.answers.map(ans => (
             <li
               className="list-group-item"
               key={shortid.generate()}
@@ -42,13 +42,13 @@ const Answer = ({ ans }) => (
             </li>
           ))}
         </ul>
-        <div className="well">{ans.notes}</div>
-        <small><strong>Author</strong>: {ans.username}</small>
+        {ans.notes && <div className="well">{ans.notes}</div>}
+        <small><strong>Author</strong>: {ans.author}</small>
       </div>
       <div className="panel-footer clearfix">
         <h5 className="pull-left">
           <strong>Section</strong>:
-          {ans.section && JSON.parse(ans.section).map(section => (
+          {ans.section && ans.section.map(section => (
             <span key={shortid.generate()}>{section}{' '}</span>
           ))}
         </h5>
@@ -63,8 +63,8 @@ const Answer = ({ ans }) => (
   </div>
 );
 
-Answer.propTypes = {
+Question.propTypes = {
   ans: PropTypes.object.isRequired
 };
 
-export default Answer;
+export default Question;

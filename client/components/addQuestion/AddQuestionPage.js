@@ -7,13 +7,8 @@ import { addQuestionRequest } from '../../actions/questionActions';
 
 class AddQuestionPage extends Component {
   submit = (values) => {
-    const { section, level, answers } = values;
-
     this.props.addQuestionRequest({
       ...values,
-      section: JSON.stringify(section),
-      level: JSON.stringify(level),
-      answers: JSON.stringify(answers),
       username: this.props.username
     });
   }
@@ -36,7 +31,11 @@ const mapStateToProps = state => ({
 
 AddQuestionPage.propTypes = {
   addQuestionRequest: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired
+  username: PropTypes.string
+};
+
+AddQuestionPage.defaultProps = {
+  username: 'Anonim'
 };
 
 export default connect(mapStateToProps, { addQuestionRequest })(AddQuestionPage);
