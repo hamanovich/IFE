@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import shortid from 'shortid';
-import classnames from 'classnames';
+
+import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
+import Badge from 'react-bootstrap/lib/Badge';
+import ListGroup from 'react-bootstrap/lib/ListGroup';
+import ListGroupItem from 'react-bootstrap/lib/ListGroupItem';
 
 import Question from './Question';
-import { getQuestionsRequest, removeQuestionById, changeQuestionField } from '../../actions/answerActions';
-import { addFlashMessage } from '../../actions/flashMessages';
+import { getQuestions, removeQuestionById, changeQuestionField } from '../../actions/answerActions';
+import { addFlashMessage, deleteFlashMessages } from '../../actions/flashMessages';
 
 class QuestionsPage extends Component {
   state = {
@@ -22,13 +27,14 @@ class QuestionsPage extends Component {
   getQuestions = (route) => {
     const { params } = this.props;
 
-    this.props.getQuestionsRequest(route || params.type).then(
-      (req) => {
-        if (req.data.ans.length !== 0) {
+    this.props.getQuestions(route || params.type).then(
+      (ans) => {
+        if (ans.length !== 0) {
           this.setState({
-            ans: req.data.ans,
+            ans,
             active: route || params.type
           });
+          this.props.deleteFlashMessages();
         } else {
           this.setState({
             ans: [],
@@ -64,110 +70,50 @@ class QuestionsPage extends Component {
 
   render() {
     return (
-      <div>
-        <h3>Filter by Author:</h3>
-        <div className="btn-group btn-group-justified">
-          <div className="btn-group">
-            <button
-              className={classnames('btn btn-default', { active: this.state.active === 'author:hamanovich' })}
-              onClick={() => this.clickHandler('author:hamanovich')}
-            >
-              Hamanovich
-            </button>
-          </div>
-          <div className="btn-group">
-            <button
-              className={classnames('btn btn-default', { active: this.state.active === 'author:admin' })}
-              onClick={() => this.clickHandler('author:admin')}
-            >
-              Admin
-            </button>
-          </div>
-        </div>
+      <Row className="show-grid">
+        <Col md={3} sm={4}>
+          <ListGroup>
+            <ListGroupItem header="Author:" />
+            <ListGroupItem active={this.state.active === 'author:hamanovich'} onClick={() => this.clickHandler('author:hamanovich')}>Hamanovich <Badge>42</Badge></ListGroupItem>
+            <ListGroupItem active={this.state.active === 'author:admin'} onClick={() => this.clickHandler('author:admin')}>Admin <Badge>42</Badge></ListGroupItem>
+          </ListGroup>
 
-        <hr />
+          <ListGroup>
+            <ListGroupItem header="Type:" />
+            <ListGroupItem active={this.state.active === 'theory:theory'} onClick={() => this.clickHandler('theory:theory')}>Theory <Badge>42</Badge></ListGroupItem>
+            <ListGroupItem active={this.state.active === 'theory:practice'} onClick={() => this.clickHandler('theory:practice')}>Practice <Badge>42</Badge></ListGroupItem>
+          </ListGroup>
 
-        <h3>Filter by Type:</h3>
-        <div className="btn-group btn-group-justified">
-          <div className="btn-group">
-            <button
-              className={classnames('btn btn-default', { active: this.state.active === 'theory:theory' })}
-              onClick={this.clickHandler.bind(null, 'theory:theory')}
-            >
-              Theory
-            </button>
-          </div>
-          <div className="btn-group">
-            <button
-              className={classnames('btn btn-default', { active: this.state.active === 'theory:practice' })}
-              onClick={this.clickHandler.bind(null, 'theory:practice')}
-            >
-              Practice
-            </button>
-          </div>
-        </div>
-
-        <hr />
-
-        <h3>Filter by Level:</h3>
-        <div className="btn-group btn-group-justified">
-          <div className="btn-group">
-            <button
-              className={classnames('btn btn-default', { active: this.state.active === 'level:junior' })}
-              onClick={this.clickHandler.bind(null, 'level:junior')}
-            >
-              Junior
-            </button>
-          </div>
-          <div className="btn-group">
-            <button
-              className={classnames('btn btn-default', { active: this.state.active === 'level:middle' })}
-              onClick={this.clickHandler.bind(null, 'level:middle')}
-            >
-              Middle
-            </button>
-          </div>
-          <div className="btn-group">
-            <button
-              className={classnames('btn btn-default', { active: this.state.active === 'level:senior' })}
-              onClick={this.clickHandler.bind(null, 'level:senior')}
-            >
-              Senior
-            </button>
-          </div>
-          <div className="btn-group">
-            <button
-              className={classnames('btn btn-default', { active: this.state.active === 'level:lead' })}
-              onClick={this.clickHandler.bind(null, 'level:lead')}
-            >
-              Lead
-            </button>
-          </div>
-          <div className="btn-group">
-            <button
-              className={classnames('btn btn-default', { active: this.state.active === 'level:chief' })}
-              onClick={this.clickHandler.bind(null, 'level:chief')}
-            >
-              Chief
-            </button>
-          </div>
-        </div>
-
-        <hr />
-
-        {this.state.ans && this.state.ans.map(ans => (
-          <Question ans={ans} remove={this.removeQuestion} changeQuestionField={this.changeQuestionField} key={shortid.generate()} />
-        ))}
-      </div>
+          <ListGroup>
+            <ListGroupItem header="Level:" />
+            <ListGroupItem active={this.state.active === 'level:junior'} onClick={() => this.clickHandler('level:junior')}>Junior <Badge>42</Badge></ListGroupItem>
+            <ListGroupItem active={this.state.active === 'level:middle'} onClick={() => this.clickHandler('level:middle')}>Middle <Badge>42</Badge></ListGroupItem>
+            <ListGroupItem active={this.state.active === 'level:senior'} onClick={() => this.clickHandler('level:senior')}>Senior <Badge>42</Badge></ListGroupItem>
+            <ListGroupItem active={this.state.active === 'level:lead'} onClick={() => this.clickHandler('level:lead')}>Lead <Badge>42</Badge></ListGroupItem>
+            <ListGroupItem active={this.state.active === 'level:chief'} onClick={() => this.clickHandler('level:chief')}>Chief <Badge>42</Badge></ListGroupItem>
+          </ListGroup>
+        </Col>
+        <Col md={9} sm={8}>
+          {this.state.ans && this.state.ans.map(ans => (
+            <Question
+              ans={ans}
+              remove={this.removeQuestion}
+              changeQuestionField={this.changeQuestionField}
+              key={shortid.generate()}
+            />
+          ))}
+        </Col>
+      </Row >
     );
   }
 }
 
 QuestionsPage.propTypes = {
-  getQuestionsRequest: PropTypes.func.isRequired,
+  getQuestions: PropTypes.func.isRequired,
   removeQuestionById: PropTypes.func.isRequired,
   changeQuestionField: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
+  deleteFlashMessages: PropTypes.func.isRequired,
   params: PropTypes.object.isRequired
 };
 
@@ -175,4 +121,4 @@ QuestionsPage.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default connect(null, { getQuestionsRequest, removeQuestionById, changeQuestionField, addFlashMessage })(QuestionsPage);
+export default connect(null, { getQuestions, removeQuestionById, changeQuestionField, addFlashMessage, deleteFlashMessages })(QuestionsPage);

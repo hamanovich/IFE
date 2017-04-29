@@ -3,21 +3,28 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import AddQuestionForm from './AddQuestionForm';
-import { addQuestionRequest } from '../../actions/questionActions';
+import { addQuestion, updateQuestion } from '../../actions/questionActions';
 
 class AddQuestionPage extends Component {
   submit = (values) => {
-    this.props.addQuestionRequest({
-      ...values,
-      username: this.props.username
-    });
+    if (values._id) {
+      this.props.updateQuestion({
+        ...values,
+        username: this.props.username
+      });
+    } else {
+      this.props.addQuestion({
+        ...values,
+        username: this.props.username
+      });
+    }
   }
 
   render() {
     return (
       <div className="row">
         <div className="col-md-6 col-md-offset-3">
-          <AddQuestionForm onSubmit={this.submit} />
+          <AddQuestionForm {...this.props} onSubmit={this.submit} />
         </div>
       </div>
     );
@@ -30,7 +37,8 @@ const mapStateToProps = state => ({
 
 
 AddQuestionPage.propTypes = {
-  addQuestionRequest: PropTypes.func.isRequired,
+  addQuestion: PropTypes.func.isRequired,
+  updateQuestion: PropTypes.func.isRequired,
   username: PropTypes.string
 };
 
@@ -38,4 +46,4 @@ AddQuestionPage.defaultProps = {
   username: 'Anonim'
 };
 
-export default connect(mapStateToProps, { addQuestionRequest })(AddQuestionPage);
+export default connect(mapStateToProps, { addQuestion, updateQuestion })(AddQuestionPage);

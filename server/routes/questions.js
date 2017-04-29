@@ -10,6 +10,14 @@ router.get('/', (req, res) => {
     .then(ans => res.json({ ans }));
 });
 
+router.get('/id/:id', (req, res) => {
+  console.log('GET ID', req.params.id);
+  Question.findOne({ _id: req.params.id })
+    .then(ans => res.json({ ans }));
+  // Question.find()
+  // .then(ans => res.json({ ans }));
+});
+
 router.get('/:filter', (req, res) => {
   const { filter } = req.params;
   const splitted = filter.split(':');

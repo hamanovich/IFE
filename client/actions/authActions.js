@@ -12,13 +12,14 @@ export function setCurrentUser(user) {
 }
 
 export function login(userData) {
-  return dispatch => axios.post('/api/auth', userData).then((res) => {
-    const token = res.data.token;
+  return dispatch => axios.post('/api/auth', userData)
+    .then((res) => {
+      const token = res.data.token;
 
-    localStorage.setItem('jwtToken', token);
-    setAuthorizationToken(token);
-    dispatch(setCurrentUser(jwtDecode(token)));
-  });
+      localStorage.setItem('jwtToken', token);
+      setAuthorizationToken(token);
+      dispatch(setCurrentUser(jwtDecode(token)));
+    });
 }
 
 export function logout() {
