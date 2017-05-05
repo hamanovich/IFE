@@ -11,7 +11,10 @@ const TextFieldGroup = ({
   error,
   type,
   onChange,
-  checkUserExists }) => (
+  checkUserExists,
+  min,
+  max,
+  step }) => (
     <div className={classnames('form-group', { 'has-error': error })}>
       <label htmlFor={htmlFor} className="control-label">{label}</label>
       <input
@@ -23,6 +26,9 @@ const TextFieldGroup = ({
         id={htmlFor}
         className="form-control"
         placeholder={placeholder}
+        min={min}
+        max={max}
+        step={step}
       />
       {error && <span className="help-block">{error}</span>}
     </div>
@@ -30,19 +36,27 @@ const TextFieldGroup = ({
 
 TextFieldGroup.propTypes = {
   field: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   label: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
   htmlFor: PropTypes.string.isRequired,
   error: PropTypes.string,
   type: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
-  checkUserExists: PropTypes.func
+  checkUserExists: PropTypes.func,
+  min: PropTypes.string,
+  max: PropTypes.string,
+  step: PropTypes.string
 };
 
 TextFieldGroup.defaultProps = {
   type: 'text',
+  placeholder: '',
+  value: '',
   error: null,
+  min: null,
+  max: null,
+  step: null,
   checkUserExists: () => { }
 };
 

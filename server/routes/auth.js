@@ -17,12 +17,21 @@ router.post('/', (req, res) => {
   }).then((user) => {
     if (typeof user[0] !== 'undefined') {
       if (bcrypt.compareSync(password, user[0].password_digest)) {
+        const ava = user[0].avatar_image ? user[0].avatar_image.toString('base64') : null;
+
         const token = jwt.sign({
           id: user[0].id,
-          username: user[0].username
+          username: user[0].username,
+          email: user[0].email,
+          avatar_image: ava
         }, config.jwtSecret);
 
-        res.json({ token, username: user[0].username });
+        res.json({
+          token,
+          username: user[0].username,
+          email: user[0].email,
+          avatar_image: ava
+        });
       } else {
         res.status(401).json({ errors: { form: 'Invalid Credentials' } });
       }

@@ -30,6 +30,10 @@ const questionSchema = new Schema({
     required: [true, 'Author field is required'],
     lowercase: true
   },
+  visible: {
+    type: Boolean,
+    default: true
+  },
   date: {
     type: Date,
     default: Date.now

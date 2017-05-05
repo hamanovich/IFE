@@ -129,13 +129,13 @@ AddQuestionForm.defaultProps = {
 };
 
 function mapStateToProps(state, props) {
-  if (props.params._id && typeof state.questions.questions !== 'undefined') {
+  if (props.params._id && typeof state.questions !== 'undefined') {
     return {
-      initialValues: state.questions.questions.find(q => q._id === props.params._id)
+      initialValues: state.questions.find(q => q._id === props.params._id)
     };
   }
 
-  return { initialValues: state.questions[0] };
+  return { initialValues: {} };
 }
 
 export default connect(mapStateToProps, { getQuestion })(

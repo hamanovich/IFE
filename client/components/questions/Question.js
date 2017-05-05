@@ -47,12 +47,12 @@ class Question extends Component {
   };
 
   render() {
-    const { ans, remove, changeQuestionField } = this.props;
+    const { ans, index, remove, changeQuestionField } = this.props;
 
     const panelHeader = (
       <div className="clearfix">
         <h3 className="panel-title pull-left">
-          <strong>Question</strong>:
+          <strong>Question {index + 1}</strong>: {' '}
             <span className="edit-field" onClick={() => this.open(ans.question, 'question')}>{ans.question}</span>
         </h3>
         <div className="pull-right">
@@ -91,12 +91,13 @@ class Question extends Component {
       <Panel header={panelHeader} footer={panelFooter}>
         <ListGroup>
           {ans.answer &&
-            <ListGroupItem className="active" onClick={() => this.open(ans.answer, 'answer')}>
+            <ListGroupItem className="active" style={{ whiteSpace: 'pre' }} onClick={() => this.open(ans.answer, 'answer')}>
               {ans.answer}
             </ListGroupItem>}
           {ans.answers && ans.answers.map((ans, index) => (
             <ListGroupItem
               key={shortid.generate()}
+              style={{ whiteSpace: 'pre' }}
               onClick={() => this.open(ans, `answers.${index}.text`)}
             >
               {ans.text}
@@ -161,6 +162,7 @@ class Question extends Component {
 
 Question.propTypes = {
   ans: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
   remove: PropTypes.func.isRequired,
   changeQuestionField: PropTypes.func.isRequired
 };

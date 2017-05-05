@@ -11,6 +11,9 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'Email field is required']
   },
+  avatar_image: {
+    type: String
+  },
   password_digest: {
     type: String,
     required: [true, 'Password field is required']

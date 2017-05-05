@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Button from 'react-bootstrap/lib/Button';
+import Alert from 'react-bootstrap/lib/Alert';
 
 import TextFieldGroup from '../common/TextFieldGroup';
 import validateInput from '../../../server/shared/validations/login';
 
 class LoginForm extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      identifier: '',
-      password: '',
-      errors: {},
-      isLoading: false
-    };
-  }
+  state = {
+    identifier: '',
+    password: '',
+    errors: {},
+    isLoading: false
+  };
 
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
@@ -44,11 +42,12 @@ class LoginForm extends Component {
 
   render() {
     const { identifier, password, errors, isLoading } = this.state;
+
     return (
       <form onSubmit={this.onSubmit}>
-        <h1>Login</h1>
+        <h1>Authorize</h1>
 
-        {errors.form && <div className="alert alert-danger">{errors.form}</div>}
+        {errors.form && <Alert bsStyle="danger">{errors.form}</Alert>}
 
         <TextFieldGroup
           error={errors.identifier}
@@ -72,9 +71,9 @@ class LoginForm extends Component {
         />
 
         <div className="form-group">
-          <button disabled={isLoading} type="submit" className="btn btn-primary btn-lg">
+          <Button disabled={isLoading} type="submit" bsStyle="primary">
             Login
-          </button>
+          </Button>
         </div>
       </form>
     );

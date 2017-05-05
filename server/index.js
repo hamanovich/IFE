@@ -18,7 +18,10 @@ const app = express();
 mongoose.connect('mongodb://localhost/ife');
 mongoose.Promise = global.Promise;
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
+
+app.use(express.static('public'));
 
 app.use('/api/users', users);
 app.use('/api/auth', auth);

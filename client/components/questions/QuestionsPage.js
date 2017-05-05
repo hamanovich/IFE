@@ -2,101 +2,91 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import shortid from 'shortid';
-
 import Col from 'react-bootstrap/lib/Col';
 import Row from 'react-bootstrap/lib/Row';
-import Badge from 'react-bootstrap/lib/Badge';
-import ListGroup from 'react-bootstrap/lib/ListGroup';
-import ListGroupItem from 'react-bootstrap/lib/ListGroupItem';
 
 import Question from './Question';
-import { getQuestions, removeQuestionById, changeQuestionField } from '../../actions/answerActions';
+import QuestionsBar from './QuestionsBar';
+import { getQuestions, filterQuestions, removeQuestionById, changeQuestionField } from '../../actions/answerActions';
 import { addFlashMessage, deleteFlashMessages } from '../../actions/flashMessages';
 
 class QuestionsPage extends Component {
   state = {
-    ans: [],
+    questions: [],
     errors: {},
     active: ''
   };
 
   componentDidMount() {
-    this.getQuestions();
+    console.log('cdm');
+    this.getQuestions(this.props.params.type || '');
   }
 
-  getQuestions = (route) => {
-    const { params } = this.props;
+  componentWillReceiveProps(nextProps) {
+    const { questions, params, addFlashMessage, deleteFlashMessages } = this.props;
+    if (nextProps.questions !== questions && params.type !== undefined) {
+      console.log('here', nextProps.params.type);
+      this.setState({
+        questions: nextProps.questions,
+        active: nextProps.params.type
+      }, () => {
+        const visible = this.state.questions.filter(question => question.visible === true);
 
-    this.props.getQuestions(route || params.type).then(
-      (ans) => {
-        if (ans.length !== 0) {
-          this.setState({
-            ans,
-            active: route || params.type
-          });
-          this.props.deleteFlashMessages();
-        } else {
-          this.setState({
-            ans: [],
-            active: ''
-          });
-          this.props.addFlashMessage({
+        if (visible.length === 0) {
+          addFlashMessage({
             type: 'error',
             text: 'Answers not found'
           });
+        } else {
+          deleteFlashMessages();
         }
+      });
+    }
+  }
+
+  getQuestions = (filter) => {
+    this.props.getQuestions(filter).then(
+      () => {
+        const { questions } = this.props;
+        this.setState({ questions });
       },
       err => console.error('ERRROR', err)
     );
   };
 
   removeQuestion = (id) => {
+    const { params } = this.props;
+
     this.props.removeQuestionById(id);
-    this.getQuestions();
+    this.getQuestions(params.type || '');
   };
 
   changeQuestionField = (id, field, value) => {
+    const { params } = this.props;
     this.props.changeQuestionField(id, field, value);
-    this.getQuestions();
+    this.getQuestions(params.type || '');
   }
 
-  clickHandler = (route) => {
+  filter = (route) => {
     const { routes } = this.context.router;
     const path = routes[1].path;
 
     this.context.router.push(`${path}/${route}`);
-    this.getQuestions(route);
+    this.props.filterQuestions(route);
+    this.setState({ active: route });
   };
 
   render() {
     return (
       <Row className="show-grid">
         <Col md={3} sm={4}>
-          <ListGroup>
-            <ListGroupItem header="Author:" />
-            <ListGroupItem active={this.state.active === 'author:hamanovich'} onClick={() => this.clickHandler('author:hamanovich')}>Hamanovich <Badge>42</Badge></ListGroupItem>
-            <ListGroupItem active={this.state.active === 'author:admin'} onClick={() => this.clickHandler('author:admin')}>Admin <Badge>42</Badge></ListGroupItem>
-          </ListGroup>
-
-          <ListGroup>
-            <ListGroupItem header="Type:" />
-            <ListGroupItem active={this.state.active === 'theory:theory'} onClick={() => this.clickHandler('theory:theory')}>Theory <Badge>42</Badge></ListGroupItem>
-            <ListGroupItem active={this.state.active === 'theory:practice'} onClick={() => this.clickHandler('theory:practice')}>Practice <Badge>42</Badge></ListGroupItem>
-          </ListGroup>
-
-          <ListGroup>
-            <ListGroupItem header="Level:" />
-            <ListGroupItem active={this.state.active === 'level:junior'} onClick={() => this.clickHandler('level:junior')}>Junior <Badge>42</Badge></ListGroupItem>
-            <ListGroupItem active={this.state.active === 'level:middle'} onClick={() => this.clickHandler('level:middle')}>Middle <Badge>42</Badge></ListGroupItem>
-            <ListGroupItem active={this.state.active === 'level:senior'} onClick={() => this.clickHandler('level:senior')}>Senior <Badge>42</Badge></ListGroupItem>
-            <ListGroupItem active={this.state.active === 'level:lead'} onClick={() => this.clickHandler('level:lead')}>Lead <Badge>42</Badge></ListGroupItem>
-            <ListGroupItem active={this.state.active === 'level:chief'} onClick={() => this.clickHandler('level:chief')}>Chief <Badge>42</Badge></ListGroupItem>
-          </ListGroup>
+          <QuestionsBar active={this.state.active} filter={this.filter} />
         </Col>
         <Col md={9} sm={8}>
-          {this.state.ans && this.state.ans.map(ans => (
+          {this.state.questions && this.state.questions.filter(q => q.visible === true).map((question, index) => (
             <Question
-              ans={ans}
+              ans={question}
+              index={index}
               remove={this.removeQuestion}
               changeQuestionField={this.changeQuestionField}
               key={shortid.generate()}
@@ -110,15 +100,21 @@ class QuestionsPage extends Component {
 
 QuestionsPage.propTypes = {
   getQuestions: PropTypes.func.isRequired,
+  filterQuestions: PropTypes.func.isRequired,
   removeQuestionById: PropTypes.func.isRequired,
   changeQuestionField: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
   deleteFlashMessages: PropTypes.func.isRequired,
-  params: PropTypes.object.isRequired
+  params: PropTypes.object.isRequired,
+  questions: PropTypes.array.isRequired
 };
 
 QuestionsPage.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default connect(null, { getQuestions, removeQuestionById, changeQuestionField, addFlashMessage, deleteFlashMessages })(QuestionsPage);
+const mapStateToProps = state => ({
+  questions: state.questions
+});
+
+export default connect(mapStateToProps, { getQuestions, filterQuestions, removeQuestionById, changeQuestionField, addFlashMessage, deleteFlashMessages })(QuestionsPage);

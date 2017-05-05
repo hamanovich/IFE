@@ -1,29 +1,33 @@
-import { ADD_QUESTIONS, QUESTION_GOT } from '../actions/types';
+import { ADD_QUESTIONS, FILTER_QUESTIONS, QUESTION_GOT } from '../actions/types';
 
-const initialState = {
-  questions: []
-};
-
-export default (state = initialState, action = {}) => {
+export default (state = [], action = {}) => {
   switch (action.type) {
     case ADD_QUESTIONS:
-      return {
-        ...state,
-        questions: action.payload
-      };
+      return action.questions;
+
+    case FILTER_QUESTIONS:
+      const splitted = action.filter.split(':');
+      const type = splitted[0];
+      const value = splitted[1];
+      const filtered = state.map(question => ({
+        ...question,
+        visible: question[type] === value || question[type].indexOf(value) > -1
+      }));
+
+      return filtered;
 
     case QUESTION_GOT:
-      const index = state.questions.findIndex(q => q._id === action.question._id);
+
+      const index = state.findIndex(q => q._id === action.question._id);
       if (index > -1) {
-        return state.questions.map((q) => {
+        return state.map((q) => {
           if (q._id === action.question._id) {
-            return { questions: action.question };
+            return action.question;
           }
-          return { questions: q };
+          return q;
         });
       }
-
-      return { questions: [action.question] };
+      return [action.question];
 
     default:
       return state;

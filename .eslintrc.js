@@ -19,6 +19,7 @@ module.exports = {
         "jsx-a11y/no-static-element-interactions": 0,
         "import/prefer-default-export": 0,
         "react/no-array-index-key": 0,
+        "max-len": 0,
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "react/jsx-boolean-value": 2,
         "react/jsx-curly-spacing":  [2, "never"],

@@ -2,44 +2,49 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
+import Button from 'react-bootstrap/lib/Button';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
+import ListGroup from 'react-bootstrap/lib/ListGroup';
 
 import { logout } from '../../actions/authActions';
 
 class AccountPage extends Component {
-  logout = (e) => {
-    e.preventDefault();
-    this.props.logout();
-  };
-
   render() {
+    const { logout, user } = this.props;
+
     return (
-      <div className="row">
-        <aside className="col-md-3 col-sm-4">
-          <div className="list-group">
-            <Link to={`/questions/author:${this.props.username}`} className="list-group-item">Questions</Link>
+      <Row>
+        <Col md={3} sm={4}>
+          <ListGroup>
+            <Link to={`/questions/author:${user.username}`} className="list-group-item">Questions</Link>
             <Link to="/add-question" className="list-group-item">Add question</Link>
-            <a href="" className="list-group-item" onClick={this.logout}>Logout</a>
-          </div>
-        </aside>
-        <div className="col-md-9 col-sm-8">
-          <h1>Account: {this.props.username}</h1>
-        </div>
-      </div>
+            <Button block bsStyle="danger" onClick={logout}>Logout</Button>
+          </ListGroup>
+        </Col>
+        <Col md={9} sm={8}>
+          <h1>Account: {user.username || 'Anonim'}</h1>
+          <h3>Email: {user.email}</h3>
+          <p>Img:
+            <img src={user.avatar_image} alt="" />
+          </p>
+        </Col>
+      </Row>
     );
   }
 }
 
 AccountPage.propTypes = {
-  username: PropTypes.string.isRequired,
+  user: PropTypes.shape({
+    username: PropTypes.string,
+    email: PropTypes.string,
+    avatar_image: PropTypes.string
+  }).isRequired,
   logout: PropTypes.func.isRequired
 };
 
-AccountPage.defaultProps = {
-  username: 'Anonim'
-};
-
 const mapStateToProps = state => ({
-  username: state.auth.user.username
+  user: state.auth.user
 });
 
 export default connect(mapStateToProps, { logout })(AccountPage);

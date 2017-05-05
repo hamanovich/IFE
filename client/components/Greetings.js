@@ -1,23 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Jumbotron from 'react-bootstrap/lib/Jumbotron';
 
 const Greetings = ({ username }) => (
-  <div className="jumbotron">
+  <Jumbotron>
     <h1>Welcome, {username}</h1>
-  </div>
+  </Jumbotron>
 );
 
 Greetings.propTypes = {
   username: PropTypes.string.isRequired
 };
 
-Greetings.defaultProps = {
-  username: 'Anonim'
-};
-
 const mapStateToProps = state => ({
-  username: state.auth.user.username
+  username: state.auth.user.username || 'Anonim'
 });
 
 export default connect(mapStateToProps)(Greetings);

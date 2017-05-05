@@ -1,26 +1,74 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import AvatarEditor from 'react-avatar-editor';
 
 import TextFieldGroup from '../common/TextFieldGroup';
 import validateInput from '../../../server/shared/validations/signup';
 
 class SignupForm extends Component {
-  constructor(props) {
-    super(props);
+  state = {
+    username: '',
+    email: '',
+    password: '',
+    passwordConfirmation: '',
+    errors: {},
+    isLoading: false,
+    invalid: false,
+    avatar: {
+      image: '/images/noImg.jpg',
+      scale: 1,
+      border: 0,
+      width: 200,
+      height: 200,
+      img: null,
+      rect: null
+    }
+  };
 
-    this.state = {
-      username: '',
-      email: '',
-      password: '',
-      passwordConfirmation: '',
-      errors: {},
-      isLoading: false,
-      invalid: false
-    };
-  }
+  handleScale = (e) => {
+    const scale = parseFloat(e.target.value);
+    this.setState({ avatar: { ...this.state.avatar, scale } });
+  };
 
-  onChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+  onSubmit = (e) => {
+    e.preventDefault();
+
+    const img = this.ava.getImageScaledToCanvas().toDataURL();
+    const rect = this.ava.getCroppingRect();
+
+    if (this.isValid()) {
+      this.setState({
+        errors: {},
+        isLoading: true,
+        avatar: {
+          ...this.state.avatar,
+          img,
+          rect
+        }
+      }, () => {
+        console.log(this.state.avatar.img);
+        this.props.userSignupRequest(this.state).then(
+          () => {
+            this.props.addFlashMessage({
+              type: 'success',
+              text: 'You have signed up successfully'
+            });
+            this.context.router.push('/');
+          },
+          err => this.setState({ errors: err.response.data, isLoading: false })
+        );
+      });
+    }
+  };
+
+  isValid = () => {
+    const { errors, isValid } = validateInput(this.state);
+
+    if (!isValid) {
+      this.setState({ errors });
+    }
+
+    return isValid;
   };
 
   checkUserExists = (e) => {
@@ -46,33 +94,8 @@ class SignupForm extends Component {
     }
   };
 
-  isValid = () => {
-    const { errors, isValid } = validateInput(this.state);
-
-    if (!isValid) {
-      this.setState({ errors });
-    }
-
-    return isValid;
-  };
-
-  onSubmit = (e) => {
-    e.preventDefault();
-
-    if (this.isValid()) {
-      this.setState({ errors: {}, isLoading: true });
-
-      this.props.userSignupRequest(this.state).then(
-        () => {
-          this.props.addFlashMessage({
-            type: 'success',
-            text: 'You have signed up successfully'
-          });
-          this.context.router.push('/');
-        },
-        err => this.setState({ errors: err.response.data, isLoading: false })
-      );
-    }
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.value });
   };
 
   render() {
@@ -83,12 +106,36 @@ class SignupForm extends Component {
       password,
       passwordConfirmation,
       isLoading,
-      invalid
+      invalid,
+      avatar
     } = this.state;
 
     return (
       <form onSubmit={this.onSubmit} noValidate>
         <h1>Register</h1>
+
+        <h4>Avatar (drag & drop your image):</h4>
+        <AvatarEditor
+          image={avatar.image}
+          width={avatar.width}
+          height={avatar.height}
+          border={avatar.border}
+          scale={avatar.scale}
+          crossOrigin="anonymous"
+          ref={(ava) => { this.ava = ava; }}
+        />
+
+        <TextFieldGroup
+          label="Zoom"
+          onChange={this.handleScale}
+          htmlFor="zoom"
+          field="zoom"
+          type="range"
+          min="1"
+          max="3"
+          step="0.01"
+          value={avatar.scale.toString()}
+        />
 
         <TextFieldGroup
           error={errors.username}
@@ -156,5 +203,3 @@ SignupForm.contextTypes = {
 };
 
 export default SignupForm;
-
-// checkUserExists={this.checkUserExists}

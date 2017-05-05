@@ -1,32 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
+import Alert from 'react-bootstrap/lib/Alert';
 
-class FlashMessage extends Component {
-  close = () => {
-    this.props.deleteFlashMessage(this.props.message.id);
-  }
-
-  render() {
-    const { type, text } = this.props.message;
-
-    return (
-      <div
-        className={classnames('alert', {
-          'alert-success': type === 'success',
-          'alert-danger': type === 'error'
-        })}
-      >
-        {text}
-        <button onClick={this.close} className="close"><span>&times;</span></button>
-      </div>
-    );
-  }
-}
+const FlashMessage = ({ close, message }) => (
+  <Alert bsStyle={message.type === 'error' ? 'danger' : 'success'}>
+    {message.text}
+    <button onClick={close} className="close"><span>&times;</span></button>
+  </Alert>
+);
 
 FlashMessage.propTypes = {
-  message: PropTypes.object.isRequired,
-  deleteFlashMessage: PropTypes.func.isRequired
+  message: PropTypes.shape({
+    type: PropTypes.string,
+    text: PropTypes.string
+  }).isRequired,
+  close: PropTypes.func.isRequired
 };
 
 export default FlashMessage;

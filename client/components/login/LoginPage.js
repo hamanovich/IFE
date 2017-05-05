@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { login } from '../../actions/authActions';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 
+import { login } from '../../actions/authActions';
 import LoginForm from './LoginForm';
 
 class LoginPage extends Component {
@@ -10,11 +12,11 @@ class LoginPage extends Component {
     const { login } = this.props;
 
     return (
-      <div className="row">
-        <div className="col-md-6 col-md-offset-3">
+      <Row>
+        <Col md={6} mdOffset={3}>
           <LoginForm login={login} />
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }

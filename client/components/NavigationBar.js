@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
+import { LinkContainer } from 'react-router-bootstrap';
 import { connect } from 'react-redux';
-
-import '../style.scss';
+import Navbar from 'react-bootstrap/lib/Navbar';
+import Nav from 'react-bootstrap/lib/Nav';
+import NavItem from 'react-bootstrap/lib/NavItem';
 
 import { logout } from '../actions/authActions';
 
@@ -17,34 +19,42 @@ class NavigationBar extends Component {
     const { isAuthenticated } = this.props.auth;
 
     const userLinks = (
-      <ul className="nav navbar-nav navbar-right">
-        <li><Link to="/add-question" activeClassName="active">Add Question</Link></li>
-        <li><Link to="/account" activeClassName="active">Account</Link></li>
-        <li><a href="" onClick={this.logout}>Logout</a></li>
-      </ul>
+      <Nav pullRight>
+        <LinkContainer to="/add-question">
+          <NavItem>Add Question</NavItem>
+        </LinkContainer>
+        <LinkContainer to="/account">
+          <NavItem>Account</NavItem>
+        </LinkContainer>
+        <NavItem onClick={this.logout}>Logout</NavItem>
+      </Nav>
     );
 
     const guestLinks = (
-      <ul className="nav navbar-nav navbar-right">
-        <li><Link to="/signup" activeClassName="active">Sign Up</Link></li>
-        <li><Link to="/login" activeClassName="active">Login</Link></li>
-      </ul>
+      <Nav pullRight>
+        <LinkContainer to="/signup">
+          <NavItem>Sign Up</NavItem>
+        </LinkContainer>
+        <LinkContainer to="/login">
+          <NavItem>Login</NavItem>
+        </LinkContainer>
+      </Nav>
     );
 
     return (
-      <nav className="navbar navbar-default">
-        <div className="container-fluid">
-          <div className="navbar-header">
-            <Link to="/" activeClassName="active" className="navbar-brand">IFE</Link>
-          </div>
-          <div className="collapse navbar-collapse">
-            <ul className="nav navbar-nav navbar-left">
-              <li><Link to="questions" activeClassName="active">Questions</Link></li>
-            </ul>
-            {isAuthenticated ? userLinks : guestLinks}
-          </div>
-        </div>
-      </nav>
+      <Navbar>
+        <Navbar.Header>
+          <Navbar.Brand>
+            <Link to="/">IFE</Link>
+          </Navbar.Brand>
+        </Navbar.Header>
+        <Nav>
+          <LinkContainer to="/questions">
+            <NavItem>Questions</NavItem>
+          </LinkContainer>
+        </Nav>
+        {isAuthenticated ? userLinks : guestLinks}
+      </Navbar>
     );
   }
 }
@@ -56,4 +66,6 @@ NavigationBar.propTypes = {
 
 const mapStateToProps = state => ({ auth: state.auth });
 
-export default connect(mapStateToProps, { logout })(NavigationBar);
+export default connect(mapStateToProps, { logout }, null, {
+  pure: false
+})(NavigationBar);

@@ -14,24 +14,6 @@ router.get('/id/:id', (req, res) => {
   console.log('GET ID', req.params.id);
   Question.findOne({ _id: req.params.id })
     .then(ans => res.json({ ans }));
-  // Question.find()
-  // .then(ans => res.json({ ans }));
-});
-
-router.get('/:filter', (req, res) => {
-  const { filter } = req.params;
-  const splitted = filter.split(':');
-  const type = splitted[0];
-  let value = splitted[1];
-
-  console.log('FILTER----', filter, type, value);
-
-  if (type === 'level' || type === 'section') {
-    value = { $eq: value };
-  }
-
-  Question.find({ [type]: value })
-    .then(ans => res.json({ ans }));
 });
 
 router.put('/:id', (req, res) => {

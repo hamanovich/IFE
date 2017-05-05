@@ -1,3 +1,15 @@
+h1{
+    margin-top: 0;
+}
+
+.navbar {
+    border-radius: 0;
+    
+    .container{
+        width: auto;
+    }
+}
+
 .navbar-default .navbar-nav a.active, 
 .navbar-default .navbar-nav a.active:focus, 
 .navbar-default .navbar-nav a.active:hover {

@@ -47,10 +47,11 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
   validateInput(req.body, commonValidation).then(({ errors, isValid }) => {
     if (isValid) {
-      const { username, email, password } = req.body;
+      const { username, email, avatar, password } = req.body;
       const password_digest = bcrypt.hashSync(password, 10);
+      const avatar_image = avatar.img.toString('base64');
 
-      User.create({ username, email, password_digest })
+      User.create({ username, email, avatar_image, password_digest })
         .then(user => res.send(user))
         .catch(err => res.status(500).json({ error: err }));
     } else {

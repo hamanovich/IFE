@@ -1,10 +1,17 @@
 import axios from 'axios';
-import { ADD_QUESTIONS, QUESTION_GOT } from './types';
+import { ADD_QUESTIONS, FILTER_QUESTIONS, QUESTION_GOT } from './types';
 
-export function addQuestions(payload) {
+export function addQuestions(questions) {
   return {
     type: ADD_QUESTIONS,
-    payload
+    questions
+  };
+}
+
+export function filterQuestions(filter) {
+  return {
+    type: FILTER_QUESTIONS,
+    filter
   };
 }
 
@@ -15,20 +22,19 @@ export function questionGot(question) {
   };
 }
 
-export function getQuestions(type) {
-  return dispatch => axios.get(`/api/questions/${type || ''}`)
+export function getQuestions(filter) {
+  return dispatch => axios.get('/api/questions/')
     .then((res) => {
       dispatch(addQuestions(res.data.ans));
-      return res.data.ans;
+      if (filter) {
+        dispatch(filterQuestions(filter));
+      }
     });
 }
 
 export function getQuestion(id) {
   return dispatch => axios.get(`/api/questions/id/${id}`)
-    .then((res) => {
-      dispatch(questionGot(res.data.ans));
-      return res.data.ans;
-    });
+    .then(res => dispatch(questionGot(res.data.ans)));
 }
 
 export function removeQuestionById(id) {
