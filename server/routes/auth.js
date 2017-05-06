@@ -17,7 +17,7 @@ router.post('/', (req, res) => {
   }).then((user) => {
     if (typeof user[0] !== 'undefined') {
       if (bcrypt.compareSync(password, user[0].password_digest)) {
-        const ava = user[0].avatar_image ? user[0].avatar_image.toString('base64') : null;
+        const ava = user[0].avatar_image ? user[0].avatar_image.toString('binary') : null;
 
         const token = jwt.sign({
           id: user[0].id,

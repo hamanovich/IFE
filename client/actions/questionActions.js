@@ -5,6 +5,5 @@ export function addQuestion(data) {
 }
 
 export function updateQuestion(data) {
-  console.log('update', data);
   return () => axios.put(`/api/add-question/${data._id}`, data);
 }

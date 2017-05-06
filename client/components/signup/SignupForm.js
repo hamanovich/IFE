@@ -18,8 +18,8 @@ class SignupForm extends Component {
       image: '/images/noImg.jpg',
       scale: 1,
       border: 0,
-      width: 200,
-      height: 200,
+      width: 100,
+      height: 100,
       img: null,
       rect: null
     }
@@ -46,7 +46,6 @@ class SignupForm extends Component {
           rect
         }
       }, () => {
-        console.log(this.state.avatar.img);
         this.props.userSignupRequest(this.state).then(
           () => {
             this.props.addFlashMessage({

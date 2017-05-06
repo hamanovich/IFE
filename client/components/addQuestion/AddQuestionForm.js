@@ -43,10 +43,10 @@ class AddQuestionForm extends Component {
               type="select-multiple"
               multiple
             >
-              <option value="html">HTML</option>
-              <option value="css">CSS</option>
-              <option value="js">JS</option>
-              <option value="soft">Soft</option>
+              <option value="HTML">HTML</option>
+              <option value="CSS">CSS</option>
+              <option value="JS">JS</option>
+              <option value="Soft">Soft</option>
             </Field>
           </div>
 

@@ -3,11 +3,11 @@ import express from 'express';
 import Question from '../models/question';
 
 const router = express.Router();
-
 router.get('/', (req, res) => {
   console.log('GET ALL');
   Question.find()
-    .then(ans => res.json({ ans }));
+    .then(ans => res.json({ ans }))
+    .catch(err => console.log('ERRR', err));
 });
 
 router.get('/id/:id', (req, res) => {

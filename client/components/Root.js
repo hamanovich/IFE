@@ -1,5 +1,6 @@
 import React from 'react';
 import { Router, browserHistory } from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
@@ -25,9 +26,11 @@ if (localJwtToken) {
   store.dispatch(setCurrentUser(jwtDecode(localJwtToken)));
 }
 
+const history = syncHistoryWithStore(browserHistory, store);
+
 const Root = () => (
   <Provider store={store}>
-    <Router history={browserHistory} routes={routes} />
+    <Router history={history} routes={routes} />
   </Provider>
 );
 

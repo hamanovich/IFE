@@ -18,14 +18,12 @@ class QuestionsPage extends Component {
   };
 
   componentDidMount() {
-    console.log('cdm');
     this.getQuestions(this.props.params.type || '');
   }
 
   componentWillReceiveProps(nextProps) {
     const { questions, params, addFlashMessage, deleteFlashMessages } = this.props;
     if (nextProps.questions !== questions && params.type !== undefined) {
-      console.log('here', nextProps.params.type);
       this.setState({
         questions: nextProps.questions,
         active: nextProps.params.type
@@ -50,7 +48,7 @@ class QuestionsPage extends Component {
         const { questions } = this.props;
         this.setState({ questions });
       },
-      err => console.error('ERRROR', err)
+      err => console.error(err)
     );
   };
 
@@ -80,7 +78,7 @@ class QuestionsPage extends Component {
     return (
       <Row className="show-grid">
         <Col md={3} sm={4}>
-          <QuestionsBar active={this.state.active} filter={this.filter} />
+          <QuestionsBar active={this.state.active} filter={this.filter} questions={this.props.questions} />
         </Col>
         <Col md={9} sm={8}>
           {this.state.questions && this.state.questions.filter(q => q.visible === true).map((question, index) => (

@@ -12,6 +12,12 @@ const userSchema = new Schema({
     required: [true, 'Email field is required']
   },
   avatar_image: {
+    type: Buffer
+  },
+  primary_skill: {
+    type: String
+  },
+  job_function: {
     type: String
   },
   password_digest: {

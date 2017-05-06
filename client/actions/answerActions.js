@@ -23,7 +23,7 @@ export function questionGot(question) {
 }
 
 export function getQuestions(filter) {
-  return dispatch => axios.get('/api/questions/')
+  return dispatch => axios.get('/api/questions')
     .then((res) => {
       dispatch(addQuestions(res.data.ans));
       if (filter) {

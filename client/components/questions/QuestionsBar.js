@@ -45,7 +45,8 @@ class QuestionsBar extends Component {
 
 QuestionsBar.propTypes = {
   active: PropTypes.string.isRequired,
-  filter: PropTypes.func.isRequired
+  filter: PropTypes.func.isRequired,
+  questions: PropTypes.array.isRequired
 };
 
 export default QuestionsBar;
