@@ -1,17 +1,15 @@
-import Validator from 'validator';
-
 export default (values) => {
   const errors = {};
 
-  if (values.question && Validator.isEmpty(values.question)) {
-    errors.question = { _error: 'Question field is required' };
+  if (!values.question) {
+    errors.question = 'Question field is required';
   }
-  if (values.theory && Validator.isEmpty(values.theory)) {
-    errors.theory = { _error: 'Type of question is required' };
+  if (!values.theory) {
+    errors.theory = 'Type of question is required';
   }
 
-  if (values.answer && Validator.isEmpty(values.answer)) {
-    errors.answer = { _error: 'At least one answer should be provided' };
+  if (!values.answer) {
+    errors.answer = 'At least one answer should be provided';
   }
 
   if (values.answers !== undefined) {

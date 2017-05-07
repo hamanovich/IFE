@@ -1,32 +1,34 @@
 import Validator from 'validator';
 import isEmpty from 'lodash/isEmpty';
 
-export default function validateInput(data) {
+export default (values) => {
   const errors = {};
 
-  if (Validator.isEmpty(data.username)) {
+  if (!values.username) {
     errors.username = 'Username is required';
   }
 
-  if (Validator.isEmpty(data.email)) {
+  if (!values.email) {
     errors.email = 'Email is required';
   }
 
-  if (!Validator.isEmail(data.email)) {
+  if (values.email && !Validator.isEmail(values.email)) {
     errors.email = 'Email is invalid';
   }
 
-  if (Validator.isEmpty(data.password)) {
+  if (!values.password) {
     errors.password = 'Password is required';
   }
 
-  if (Validator.isEmpty(data.passwordConfirmation)) {
+  if (!values.passwordConfirmation) {
     errors.passwordConfirmation = 'Confirmation is required';
   }
 
-  if (!Validator.equals(data.password, data.passwordConfirmation)) {
+  if (values.password && values.passwordConfirmation && !Validator.equals(values.password, values.passwordConfirmation)) {
     errors.passwordConfirmation = 'Passwords must match';
   }
 
-  return { errors, isValid: isEmpty(errors) };
-}
+  errors.isValid = isEmpty(errors);
+
+  return errors;
+};

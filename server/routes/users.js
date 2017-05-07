@@ -18,14 +18,12 @@ function validateInput(data, otherValidations) {
     ]
   }).then((user) => {
     if (user) {
-      if (user) {
-        if (user.username === data.username) {
-          errors.username = 'There is user with such username';
-        }
+      if (user.username === data.username) {
+        errors.username = 'There is user with such username';
+      }
 
-        if (user.email === data.email) {
-          errors.email = 'There is user with such email';
-        }
+      if (user.email === data.email) {
+        errors.email = 'There is user with such email';
       }
     }
 
@@ -47,11 +45,11 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res) => {
   validateInput(req.body, commonValidation).then(({ errors, isValid }) => {
     if (isValid) {
-      const { username, email, avatar, password } = req.body;
+      const { username, email, primary_skill, job_function, avatar, password } = req.body;
       const password_digest = bcrypt.hashSync(password, 10);
       const avatar_image = avatar.img.toString('base64');
 
-      User.create({ username, email, avatar_image, password_digest })
+      User.create({ username, email, primary_skill, job_function, avatar_image, password_digest })
         .then(user => res.send(user))
         .catch(err => res.status(500).json({ error: err }));
     } else {

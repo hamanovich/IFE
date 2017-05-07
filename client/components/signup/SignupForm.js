@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AvatarEditor from 'react-avatar-editor';
+import { Field, reduxForm } from 'redux-form';
 
-import TextFieldGroup from '../common/TextFieldGroup';
-import validateInput from '../../../server/shared/validations/signup';
+import Button from 'react-bootstrap/lib/Button';
+import Form from 'react-bootstrap/lib/Form';
+import Media from 'react-bootstrap/lib/Media';
+import Well from 'react-bootstrap/lib/Well';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+
+import validate from '../../../server/shared/validations/signup';
+import renderRangeField from '../common/renderRangeField';
+import renderTextField from '../common/renderTextField';
+import renderTextareaField from '../common/renderTextareaField';
 
 class SignupForm extends Component {
   state = {
@@ -16,7 +27,7 @@ class SignupForm extends Component {
     invalid: false,
     avatar: {
       image: '/images/noImg.jpg',
-      scale: 1,
+      scale: '1',
       border: 0,
       width: 100,
       height: 100,
@@ -61,13 +72,13 @@ class SignupForm extends Component {
   };
 
   isValid = () => {
-    const { errors, isValid } = validateInput(this.state);
+    const errors = validate(this.state);
 
-    if (!isValid) {
+    if (!errors.isValid) {
       this.setState({ errors });
     }
 
-    return isValid;
+    return errors.isValid;
   };
 
   checkUserExists = (e) => {
@@ -78,7 +89,6 @@ class SignupForm extends Component {
       this.props.isUserExists(val).then((res) => {
         const errors = this.state.errors;
         let invalid;
-
 
         if (res.data.user.length) {
           errors[field] = `There is user with such ${field}`;
@@ -98,95 +108,128 @@ class SignupForm extends Component {
   };
 
   render() {
-    const {
-      errors,
-      username,
-      email,
-      password,
-      passwordConfirmation,
-      isLoading,
-      invalid,
-      avatar
-    } = this.state;
+    const { errors, username, email, primary_skill, job_function, notes, isLoading, invalid, avatar } = this.state;
 
     return (
-      <form onSubmit={this.onSubmit} noValidate>
+      <Form onSubmit={this.onSubmit} noValidate>
         <h1>Register</h1>
+        <Well>
+          <Media>
+            <Media.Left>
+              <AvatarEditor
+                image={avatar.image}
+                width={avatar.width}
+                height={avatar.height}
+                border={avatar.border}
+                scale={Number(avatar.scale)}
+                crossOrigin="anonymous"
+                ref={(ava) => { this.ava = ava; }}
+                style={{ cursor: 'move' }}
+              />
+            </Media.Left>
+            <Media.Body>
+              <Field
+                label="Drag and drop image, then zoom:"
+                component={renderRangeField}
+                name="zoom"
+                onChange={this.handleScale}
+                min="1"
+                max="3"
+                step="0.01"
+                defaultValue={avatar.scale.toString()}
+              />
+            </Media.Body>
+          </Media>
+        </Well>
 
-        <h4>Avatar (drag & drop your image):</h4>
-        <AvatarEditor
-          image={avatar.image}
-          width={avatar.width}
-          height={avatar.height}
-          border={avatar.border}
-          scale={avatar.scale}
-          crossOrigin="anonymous"
-          ref={(ava) => { this.ava = ava; }}
-        />
-
-        <TextFieldGroup
-          label="Zoom"
-          onChange={this.handleScale}
-          htmlFor="zoom"
-          field="zoom"
-          type="range"
-          min="1"
-          max="3"
-          step="0.01"
-          value={avatar.scale.toString()}
-        />
-
-        <TextFieldGroup
-          error={errors.username}
-          label="Username"
-          onChange={this.onChange}
-          checkUserExists={this.checkUserExists}
-          value={username}
-          htmlFor="username"
+        <Field
+          label="Username*:"
+          component={renderTextField}
+          type="text"
+          name="username"
           placeholder="Type your name"
-          field="username"
-        />
-
-        <TextFieldGroup
-          error={errors.email}
-          label="Email"
           onChange={this.onChange}
           checkUserExists={this.checkUserExists}
-          value={email}
-          htmlFor="email"
-          placeholder="Type your email"
-          field="email"
+          defaultValue={username}
+          errorState={errors.username}
+        />
+
+        <Field
+          label="Email*:"
+          component={renderTextField}
           type="email"
+          name="email"
+          placeholder="Type your email"
+          onChange={this.onChange}
+          checkUserExists={this.checkUserExists}
+          defaultValue={email}
+          errorState={errors.email}
         />
 
-        <TextFieldGroup
-          error={errors.password}
-          label="Password"
+        <Row>
+          <Col sm={6}>
+            <Field
+              label="Primary skill:"
+              component={renderTextField}
+              type="text"
+              name="primary_skill"
+              placeholder="Type your primary skill"
+              onChange={this.onChange}
+              defaultValue={primary_skill}
+            />
+          </Col>
+          <Col sm={6}>
+            <Field
+              label="Job function:"
+              component={renderTextField}
+              type="text"
+              name="job_function"
+              placeholder="Type your job function (level)"
+              onChange={this.onChange}
+              defaultValue={job_function}
+            />
+          </Col>
+        </Row>
+
+        <Field
+          label="Notes:"
+          component={renderTextareaField}
+          name="notes"
+          placeholder="Please add some notes about yourself"
           onChange={this.onChange}
-          value={password}
-          htmlFor="password"
+          defaultValue={notes}
+          rows={5}
+        />
+
+        <Field
+          label="Password*:"
+          component={renderTextField}
+          type="password"
+          name="password"
           placeholder="Come up with a password"
-          field="password"
-          type="password"
-        />
-
-        <TextFieldGroup
-          error={errors.passwordConfirmation}
-          label="Confirm your Password"
           onChange={this.onChange}
-          value={passwordConfirmation}
-          htmlFor="passwordConfirmation"
-          placeholder="Repeat your password"
-          field="passwordConfirmation"
-          type="password"
+          errorState={errors.password}
         />
 
-        <div className="form-group">
-          <button disabled={isLoading || invalid} type="submit" className="btn btn-primary btn-lg">
-            Sign up
-          </button>
-        </div>
-      </form>
+        <Field
+          label="Confirm your Password*:"
+          component={renderTextField}
+          type="password"
+          name="passwordConfirmation"
+          placeholder="Repeat your password"
+          onChange={this.onChange}
+          errorState={errors.passwordConfirmation}
+        />
+
+        <FormGroup>
+          <Button
+            disabled={isLoading || invalid}
+            type="submit"
+            bsStyle="info"
+            bsSize="large"
+          >Sign Up</Button>
+        </FormGroup>
+      </Form>
     );
   }
 }
@@ -201,4 +244,7 @@ SignupForm.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default SignupForm;
+export default reduxForm({
+  form: 'signUp',
+  validate
+})(SignupForm);

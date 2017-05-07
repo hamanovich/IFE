@@ -23,11 +23,11 @@ class QuestionsBar extends Component {
         </ListGroup>
 
         <ListGroup>
-          <ListGroupItem header="Section:" />
-          <ListGroupItem active={active === 'section:html'} onClick={() => filter('section:html')}>HTML</ListGroupItem>
-          <ListGroupItem active={active === 'section:js'} onClick={() => filter('section:js')}>JS</ListGroupItem>
-          <ListGroupItem active={active === 'section:css'} onClick={() => filter('section:css')}>CSS</ListGroupItem>
-          <ListGroupItem active={active === 'section:soft'} onClick={() => filter('section:soft')}>Soft</ListGroupItem>
+          <ListGroupItem header="Skill:" />
+          <ListGroupItem active={active === 'skill:html'} onClick={() => filter('skill:html')}>HTML</ListGroupItem>
+          <ListGroupItem active={active === 'skill:js'} onClick={() => filter('skill:js')}>JS</ListGroupItem>
+          <ListGroupItem active={active === 'skill:css'} onClick={() => filter('skill:css')}>CSS</ListGroupItem>
+          <ListGroupItem active={active === 'skill:soft'} onClick={() => filter('skill:soft')}>Soft</ListGroupItem>
         </ListGroup>
 
         <ListGroup>
@@ -45,8 +45,7 @@ class QuestionsBar extends Component {
 
 QuestionsBar.propTypes = {
   active: PropTypes.string.isRequired,
-  filter: PropTypes.func.isRequired,
-  questions: PropTypes.array.isRequired
+  filter: PropTypes.func.isRequired
 };
 
 export default QuestionsBar;

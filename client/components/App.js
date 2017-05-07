@@ -7,7 +7,7 @@ import FlashMessagesList from './flash/FlashMessagesList';
 
 import '../style.scss';
 
-class App extends Component {  
+class App extends Component {
   render() {
     return (
       <Grid>

@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Button from 'react-bootstrap/lib/Button';
-import Alert from 'react-bootstrap/lib/Alert';
+import { Field, reduxForm } from 'redux-form';
 
-import TextFieldGroup from '../common/TextFieldGroup';
-import validateInput from '../../../server/shared/validations/login';
+import Button from 'react-bootstrap/lib/Button';
+import Form from 'react-bootstrap/lib/Form';
+import Alert from 'react-bootstrap/lib/Alert';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+
+import validate from '../../../server/shared/validations/login';
+import renderTextField from '../common/renderTextField';
 
 class LoginForm extends Component {
   state = {
@@ -19,13 +23,13 @@ class LoginForm extends Component {
   };
 
   isValid = () => {
-    const { errors, isValid } = validateInput(this.state);
+    const errors = validate(this.state);
 
-    if (!isValid) {
+    if (!errors.isValid) {
       this.setState({ errors });
     }
 
-    return isValid;
+    return errors.isValid;
   };
 
   onSubmit = (e) => {
@@ -44,38 +48,42 @@ class LoginForm extends Component {
     const { identifier, password, errors, isLoading } = this.state;
 
     return (
-      <form onSubmit={this.onSubmit}>
+      <Form onSubmit={this.onSubmit} noValidate>
         <h1>Authorize</h1>
 
         {errors.form && <Alert bsStyle="danger">{errors.form}</Alert>}
 
-        <TextFieldGroup
-          error={errors.identifier}
-          field="identifier"
-          label="Username / Email"
-          onChange={this.onChange}
+        <Field
+          label="Username / Email*:"
+          component={renderTextField}
+          type="text"
           htmlFor="identifier"
-          value={identifier}
+          name="identifier"
           placeholder="Type your Username or Email"
-        />
-
-        <TextFieldGroup
-          error={errors.password}
-          field="password"
-          label="Password"
           onChange={this.onChange}
-          htmlFor="password"
-          value={password}
-          placeholder="Type your Password"
-          type="password"
+          defaultValue={identifier}
         />
 
-        <div className="form-group">
-          <Button disabled={isLoading} type="submit" bsStyle="primary">
-            Login
-          </Button>
-        </div>
-      </form>
+        <Field
+          label="Password*:"
+          component={renderTextField}
+          type="password"
+          htmlFor="password"
+          name="password"
+          placeholder="Type your Password"
+          onChange={this.onChange}
+          defaultValue={password}
+        />
+
+        <FormGroup>
+          <Button
+            disabled={isLoading}
+            type="submit"
+            bsStyle="info"
+            bsSize="large"
+          >Login</Button>
+        </FormGroup>
+      </Form>
     );
   }
 }
@@ -88,4 +96,7 @@ LoginForm.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default LoginForm;
+export default reduxForm({
+  form: 'login',
+  validate
+})(LoginForm);

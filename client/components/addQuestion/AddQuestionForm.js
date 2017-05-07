@@ -3,8 +3,14 @@ import PropTypes from 'prop-types';
 import { Field, FieldArray, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 
-import { getQuestion } from '../../actions/answerActions';
+import Button from 'react-bootstrap/lib/Button';
+import Form from 'react-bootstrap/lib/Form';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
+import { getQuestion } from '../../actions/answerActions';
 import RenderAnswers from './RenderAnswers';
 import renderTextField from '../common/renderTextField';
 import renderTextareaField from '../common/renderTextareaField';
@@ -13,8 +19,10 @@ import validate from '../../../server/shared/validations/question';
 
 class AddQuestionForm extends Component {
   componentDidMount = () => {
-    if (this.props.params._id) {
-      this.props.getQuestion(this.props.params._id);
+    const { params, getQuestion } = this.props;
+
+    if (params._id) {
+      getQuestion(params._id);
     }
   };
 
@@ -22,7 +30,7 @@ class AddQuestionForm extends Component {
     const { handleSubmit, submitting } = this.props;
 
     return (
-      <form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} noValidate>
         <h1>{this.props.params._id ? 'Update question' : 'Add new question'}</h1>
         <Field
           label="Question*:"
@@ -32,45 +40,49 @@ class AddQuestionForm extends Component {
           placeholder="Type new question"
         />
 
-        <div className="row">
-          <div className="form-group col-sm-6">
-            <label htmlFor="section">Choose type* (multiple):</label>
-            <Field
-              name="section"
-              component="select"
-              className="form-control"
-              id="section"
-              type="select-multiple"
-              multiple
-            >
-              <option value="HTML">HTML</option>
-              <option value="CSS">CSS</option>
-              <option value="JS">JS</option>
-              <option value="Soft">Soft</option>
-            </Field>
-          </div>
+        <Row>
+          <Col sm={6}>
+            <FormGroup>
+              <label htmlFor="skill">Choose skill* (multiple):</label>
+              <Field
+                name="skill"
+                component="select"
+                className="form-control"
+                id="skill"
+                type="select-multiple"
+                multiple
+              >
+                <option value="HTML">HTML</option>
+                <option value="CSS">CSS</option>
+                <option value="JS">JS</option>
+                <option value="Soft">Soft</option>
+              </Field>
+            </FormGroup>
+          </Col>
 
-          <div className="form-group col-sm-6">
-            <label htmlFor="level">Choose level* (multiple):</label>
-            <Field
-              name="level"
-              component="select"
-              id="level"
-              className="form-control"
-              type="select-multiple"
-              multiple
-            >
-              <option value="junior">Junior</option>
-              <option value="middle">Middle</option>
-              <option value="senior">Senior</option>
-              <option value="lead">Lead</option>
-              <option value="chief">Chief</option>
-            </Field>
-          </div>
-        </div>
+          <Col sm={6}>
+            <FormGroup>
+              <label htmlFor="level">Choose level* (multiple):</label>
+              <Field
+                name="level"
+                component="select"
+                id="level"
+                className="form-control"
+                type="select-multiple"
+                multiple
+              >
+                <option value="junior">Junior</option>
+                <option value="middle">Middle</option>
+                <option value="senior">Senior</option>
+                <option value="lead">Lead</option>
+                <option value="chief">Chief</option>
+              </Field>
+            </FormGroup>
+          </Col>
+        </Row>
 
-        <div className="form-group">
-          <label htmlFor="theory-practice">Choose type of question*:</label>
+        <FormGroup controlId="theory-practice">
+          <ControlLabel>Choose type of question*:</ControlLabel>
           <Field
             component={renderRadioButton}
             name="theory"
@@ -80,7 +92,7 @@ class AddQuestionForm extends Component {
               { title: 'Practical', value: 'practice' }
             ]}
           />
-        </div>
+        </FormGroup>
 
         <hr />
 
@@ -105,14 +117,15 @@ class AddQuestionForm extends Component {
           placeholder="Add some notes, if needed"
         />
 
-        <br />
-
-        <div className="form-group text-center">
-          <button type="submit" disabled={submitting} className="btn btn-primary btn-lg">
-            {this.props.params._id ? 'Update question' : 'Add new question'}
-          </button>
-        </div>
-      </form >
+        <FormGroup>
+          <Button
+            disabled={submitting}
+            type="submit"
+            bsStyle="info"
+            bsSize="large"
+          >{this.props.params._id ? 'Update question' : 'Add new question'}</Button>
+        </FormGroup>
+      </Form>
     );
   }
 }

@@ -20,6 +20,9 @@ const userSchema = new Schema({
   job_function: {
     type: String
   },
+  notes: {
+    type: String
+  },
   password_digest: {
     type: String,
     required: [true, 'Password field is required']

@@ -73,12 +73,12 @@ class Question extends Component {
     const panelFooter = (
       <div className="clearfix">
         <h5 className="pull-left">
-          <strong>Section</strong>:
-            {ans.section && ans.section.map(section => (
-            <span
-              key={shortid.generate()}
-            >{' '}{section}</span>
-          ))}
+          <strong>Skill</strong>:
+            {ans.skill && ans.skill.map(skill => (
+              <span
+                key={shortid.generate()}
+              >{' '}{skill}</span>
+            ))}
         </h5>
         <Label
           bsStyle="warning"

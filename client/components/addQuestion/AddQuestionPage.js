@@ -2,31 +2,31 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
+
 import AddQuestionForm from './AddQuestionForm';
 import { addQuestion, updateQuestion } from '../../actions/questionActions';
 
 class AddQuestionPage extends Component {
   submit = (values) => {
+    const { username, addQuestion, updateQuestion } = this.props;
+    const query = { ...values, username };
+
     if (values._id) {
-      this.props.updateQuestion({
-        ...values,
-        username: this.props.username
-      });
+      updateQuestion(query);
     } else {
-      this.props.addQuestion({
-        ...values,
-        username: this.props.username
-      });
+      addQuestion(query);
     }
   }
 
   render() {
     return (
-      <div className="row">
-        <div className="col-md-6 col-md-offset-3">
+      <Row>
+        <Col md={6} mdOffset={3}>
           <AddQuestionForm {...this.props} onSubmit={this.submit} />
-        </div>
-      </div>
+        </Col>
+      </Row>
     );
   }
 }

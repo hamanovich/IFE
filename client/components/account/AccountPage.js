@@ -25,7 +25,7 @@ class AccountPage extends Component {
         <Col md={9} sm={8}>
           <h1>Account: {user.username || 'Anonim'}</h1>
           <h3>Email: {user.email}</h3>
-          <p>Img:
+          <p>Img: <br />
             <img src={user.avatar_image} alt="" />
           </p>
         </Col>

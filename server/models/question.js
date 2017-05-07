@@ -7,9 +7,9 @@ const questionSchema = new Schema({
     type: String,
     required: [true, 'Question field is required']
   },
-  section: {
+  skill: {
     type: [String],
-    required: [true, 'Section field is required']
+    required: [true, 'Skill field is required']
   },
   level: {
     type: [String],
