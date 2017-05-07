@@ -23,14 +23,20 @@ router.post('/', (req, res) => {
           id: user[0].id,
           username: user[0].username,
           email: user[0].email,
-          avatar_image: ava
+          avatar_image: ava,
+          job_function: user[0].job_function,
+          primary_skill: user[0].primary_skill,
+          notes: user[0].notes
         }, config.jwtSecret);
 
         res.json({
           token,
           username: user[0].username,
           email: user[0].email,
-          avatar_image: ava
+          avatar_image: ava,
+          job_function: user[0].job_function,
+          primary_skill: user[0].primary_skill,
+          notes: user[0].notes
         });
       } else {
         res.status(401).json({ errors: { form: 'Invalid Credentials' } });

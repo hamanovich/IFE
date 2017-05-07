@@ -114,7 +114,7 @@ class Question extends Component {
         <hr />
 
         <Link to={`/question/${ans._id}`} className="btn btn-warning">Edit</Link> {' '}
-        <button className="btn btn-danger" onClick={() => this.openRemoveModel(ans._id)}>Remove</button>
+        <Button bsStyle="danger" onClick={() => this.openRemoveModel(ans._id)}>Remove</Button>
 
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>

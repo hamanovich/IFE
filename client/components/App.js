@@ -4,6 +4,7 @@ import Grid from 'react-bootstrap/lib/Grid';
 
 import NavigationBar from './NavigationBar';
 import FlashMessagesList from './flash/FlashMessagesList';
+import Footer from './footer/Footer';
 
 import '../style.scss';
 
@@ -14,6 +15,7 @@ class App extends Component {
         <NavigationBar />
         <FlashMessagesList />
         {this.props.children}
+        <Footer />
       </Grid>
     );
   }
