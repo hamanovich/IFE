@@ -10,12 +10,13 @@ import Col from 'react-bootstrap/lib/Col';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
-import { getQuestion } from '../../actions/answerActions';
+import { getQuestion } from '../../actions/questionActions';
 import RenderAnswers from './RenderAnswers';
-import renderTextField from '../common/renderTextField';
-import renderTextareaField from '../common/renderTextareaField';
-import renderRadioButton from '../common/renderRadioButton';
-import validate from '../../../server/shared/validations/question';
+import TextField from '../formFields/TextField';
+import TextareaField from '../formFields/TextareaField';
+import RadioButton from '../formFields/RadioButton';
+import SelectField from '../formFields/SelectField';
+import validate from '../../../server/validations/question';
 
 class AddQuestionForm extends Component {
   componentDidMount = () => {
@@ -27,14 +28,14 @@ class AddQuestionForm extends Component {
   };
 
   render() {
-    const { handleSubmit, submitting } = this.props;
+    const { handleSubmit, submitting, params } = this.props;
 
     return (
       <Form onSubmit={handleSubmit} noValidate>
-        <h1>{this.props.params._id ? 'Update question' : 'Add new question'}</h1>
+        <h1>{params._id ? 'Update question' : 'Add new question'}</h1>
         <Field
           label="Question*:"
-          component={renderTextField}
+          component={TextField}
           type="text"
           name="question"
           placeholder="Type new question"
@@ -43,48 +44,47 @@ class AddQuestionForm extends Component {
         <Row>
           <Col sm={6}>
             <FormGroup>
-              <label htmlFor="skill">Choose skill* (multiple):</label>
+              <ControlLabel>Choose skill* (multiple):</ControlLabel>
               <Field
+                component={SelectField}
                 name="skill"
-                component="select"
-                className="form-control"
                 id="skill"
-                type="select-multiple"
+                type="select"
                 multiple
-              >
-                <option value="HTML">HTML</option>
-                <option value="CSS">CSS</option>
-                <option value="JS">JS</option>
-                <option value="Soft">Soft</option>
-              </Field>
+                options={[
+                  { title: 'HTML', value: 'HTML' },
+                  { title: 'CSS', value: 'CSS' },
+                  { title: 'JS', value: 'JS' },
+                  { title: 'Soft', value: 'Soft' },
+                  { title: 'Other', value: 'Other' }
+                ]}
+              />
             </FormGroup>
           </Col>
 
           <Col sm={6}>
-            <FormGroup>
-              <label htmlFor="level">Choose level* (multiple):</label>
-              <Field
-                name="level"
-                component="select"
-                id="level"
-                className="form-control"
-                type="select-multiple"
-                multiple
-              >
-                <option value="junior">Junior</option>
-                <option value="middle">Middle</option>
-                <option value="senior">Senior</option>
-                <option value="lead">Lead</option>
-                <option value="chief">Chief</option>
-              </Field>
-            </FormGroup>
+            <ControlLabel>Choose level* (multiple):</ControlLabel>
+            <Field
+              component={SelectField}
+              name="level"
+              id="level"
+              type="select"
+              multiple
+              options={[
+                { title: 'Junior', value: 'Junior' },
+                { title: 'Middle', value: 'Middle' },
+                { title: 'Senior', value: 'Senior' },
+                { title: 'Lead', value: 'Lead' },
+                { title: 'Chief', value: 'Chief' }
+              ]}
+            />
           </Col>
         </Row>
 
         <FormGroup controlId="theory-practice">
           <ControlLabel>Choose type of question*:</ControlLabel>
           <Field
-            component={renderRadioButton}
+            component={RadioButton}
             name="theory"
             required
             options={[
@@ -99,21 +99,18 @@ class AddQuestionForm extends Component {
         <Field
           label="Answer"
           name="answer"
-          component={renderTextareaField}
+          component={TextareaField}
           placeholder="Write down the answer"
         />
 
-        <FieldArray
-          name="answers"
-          component={RenderAnswers}
-        />
+        <FieldArray name="answers" component={RenderAnswers} />
 
         <hr />
 
         <Field
           label="Notes"
           name="notes"
-          component={renderTextareaField}
+          component={TextareaField}
           placeholder="Add some notes, if needed"
         />
 
@@ -123,7 +120,7 @@ class AddQuestionForm extends Component {
             type="submit"
             bsStyle="info"
             bsSize="large"
-          >{this.props.params._id ? 'Update question' : 'Add new question'}</Button>
+          >{params._id ? 'Update question' : 'Add new question'}</Button>
         </FormGroup>
       </Form>
     );
@@ -135,10 +132,6 @@ AddQuestionForm.propTypes = {
   getQuestion: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired,
   params: PropTypes.object.isRequired
-};
-
-AddQuestionForm.defaultProps = {
-  question: null
 };
 
 function mapStateToProps(state, props) {

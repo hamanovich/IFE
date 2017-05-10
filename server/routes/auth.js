@@ -10,41 +10,25 @@ const router = express.Router();
 router.post('/', (req, res) => {
   const { identifier, password } = req.body;
 
-  User.find({
-    $or: [
-      { username: identifier },
-      { email: identifier }]
-  }).then((user) => {
-    if (typeof user[0] !== 'undefined') {
-      if (bcrypt.compareSync(password, user[0].password_digest)) {
-        const ava = user[0].avatar_image ? user[0].avatar_image.toString('binary') : null;
+  User.findOne({ $or: [{ username: identifier }, { email: identifier }] })
+    .then((user) => {
+      if (user && bcrypt.compareSync(password, user.password_digest)) {
+        const userData = {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          avatar_image: user.avatar_image.toString('binary'),
+          job_function: user.job_function,
+          primary_skill: user.primary_skill,
+          notes: user.notes
+        };
+        const token = jwt.sign(userData, config.jwtSecret);
 
-        const token = jwt.sign({
-          id: user[0].id,
-          username: user[0].username,
-          email: user[0].email,
-          avatar_image: ava,
-          job_function: user[0].job_function,
-          primary_skill: user[0].primary_skill,
-          notes: user[0].notes
-        }, config.jwtSecret);
-
-        res.json({
-          token,
-          username: user[0].username,
-          email: user[0].email,
-          avatar_image: ava,
-          job_function: user[0].job_function,
-          primary_skill: user[0].primary_skill,
-          notes: user[0].notes
-        });
+        res.json({ ...userData, token });
       } else {
         res.status(401).json({ errors: { form: 'Invalid Credentials' } });
       }
-    } else {
-      res.status(401).json({ errors: { form: 'Invalid Credentials' } });
-    }
-  });
+    });
 });
 
 export default router;

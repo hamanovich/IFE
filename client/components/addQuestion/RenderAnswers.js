@@ -2,47 +2,51 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 
-import renderTextareaField from '../common/renderTextareaField';
+import Button from 'react-bootstrap/lib/Button';
+import Col from 'react-bootstrap/lib/Col';
+import Row from 'react-bootstrap/lib/Row';
+import FormGroup from 'react-bootstrap/lib/FormGroup';
+
+import TextareaField from '../formFields/TextareaField';
 
 const RenderAnswers = ({ fields, meta: { touched, error, submitFailed } }) => (
   <div>
     {(touched || submitFailed) && error && <span>{error}</span>}
 
     {fields.map((answer, index) =>
-      <div className="form-group row" key={answer.toString()}>
-        <div className="col-xs-10">
-          <Field
-            label={`Additional answer ${index + 2}`}
-            name={`${answer}.text`}
-            component={renderTextareaField}
-            placeholder="Add more answers"
-          />
-        </div>
+      <Row key={answer.toString()}>
+        <FormGroup>
+          <Col xs={10}>
+            <Field
+              label={`Additional answer ${index + 2}`}
+              name={`${answer}.text`}
+              component={TextareaField}
+              placeholder="Add more answers"
+            />
+          </Col>
 
-        <div className="col-xs-2">
-          <div className="form-group">
-            <button
+          <Col xs={2}>
+            <Button
               type="button"
-              className="btn btn-danger"
+              bsStyle="danger"
               onClick={() => fields.remove(index)}
               style={{ marginTop: 24 }}
             >
               &times;
-          </button>
-          </div>
-        </div>
-      </div>
+            </Button>
+          </Col>
+        </FormGroup>
+      </Row>
     )}
 
-    <div className="form-group">
-      <button
-        type="button"
-        className="btn btn-default"
+    <FormGroup>
+      <Button
+        bsStyle="success"
         onClick={() => fields.push({})}
       >
-          Add Answer
-      </button>
-    </div>
+        Add Answer
+      </Button>
+    </FormGroup>
   </div>
 );
 

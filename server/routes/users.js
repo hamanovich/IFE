@@ -1,49 +1,26 @@
 import express from 'express';
 import bcrypt from 'bcrypt';
-import isEmpty from 'lodash/isEmpty';
 
-import commonValidation from '../shared/validations/signup';
+import validate from '../validations/signup';
+import validateUser from '../validations/user';
 import User from '../models/user';
 
 const router = express.Router();
 
-function validateInput(data, otherValidations) {
-  const { errors } = otherValidations(data);
-  const { username, email } = data;
-
-  return User.find({
-    $or: [
-      { username },
-      { email }
-    ]
-  }).then((user) => {
-    if (user) {
-      if (user.username === data.username) {
-        errors.username = 'There is user with such username';
-      }
-
-      if (user.email === data.email) {
-        errors.email = 'There is user with such email';
-      }
-    }
-
-    return {
-      errors,
-      isValid: isEmpty(errors)
-    };
-  });
-}
-
 router.get('/:id', (req, res) => {
-  User.find({
-    $or: [
-      { username: req.params.id },
-      { email: req.params.id }]
-  }).then(user => res.json({ user }));
+  User.findOne({ $or: [{ username: req.params.id }, { email: req.params.id }] })
+    .then(user => res.json({ user }))
+    .catch(error => res.status(500).json({ error }));
+});
+
+router.get('/id/:id', (req, res) => {
+  User.findOne({ _id: req.params.id })
+    .then(user => res.json({ user }))
+    .catch(error => res.status(500).json({ error }));
 });
 
 router.post('/', (req, res) => {
-  validateInput(req.body, commonValidation).then(({ errors, isValid }) => {
+  validateUser(req.body, validate).then(({ errors, isValid }) => {
     if (isValid) {
       const { username, email, primary_skill, job_function, avatar, password, notes } = req.body;
       const password_digest = bcrypt.hashSync(password, 10);
@@ -51,11 +28,37 @@ router.post('/', (req, res) => {
 
       User.create({ username, email, primary_skill, job_function, avatar_image, password_digest, notes })
         .then(user => res.send(user))
-        .catch(err => res.status(500).json({ error: err }));
+        .catch(error => res.status(500).json({ error }));
     } else {
       res.status(400).json(errors);
     }
   });
+});
+
+router.put('/:id', (req, res) => {
+  validateUser(req.body, validate).then(({ errors, isValid }) => {
+    if (isValid) {
+      const { username, email, primary_skill, job_function, avatar, password, notes } = req.body;
+      const password_digest = bcrypt.hashSync(password, 10);
+      const avatar_image = avatar.img.toString('base64');
+
+      User.findByIdAndUpdate(
+        { _id: req.params.id },
+        { $set: { username, email, job_function, primary_skill, notes, password_digest, avatar_image } })
+        .then(() => {
+          User.findOne({ _id: req.params.id }).then(user => res.json({ user }));
+        })
+        .catch(error => res.status(500).json({ error }));
+    } else {
+      res.status(400).json(errors);
+    }
+  });
+});
+
+router.delete('/:id', (req, res) => {
+  User.findByIdAndRemove({ _id: req.params.id })
+    .then(user => res.json({ user }))
+    .catch(error => res.status(500).json({ error }));
 });
 
 export default router;

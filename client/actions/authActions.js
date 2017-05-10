@@ -4,15 +4,13 @@ import setAuthorizationToken from '../utils/setAuthorizationToken';
 
 import { SET_CURRENT_USER } from './types';
 
-export function setCurrentUser(user) {
-  return {
-    type: SET_CURRENT_USER,
-    user
-  };
-}
+export const setCurrentUser = user => ({
+  type: SET_CURRENT_USER,
+  user
+});
 
-export function login(userData) {
-  return dispatch => axios.post('/api/auth', userData)
+export const login = userData =>
+  dispatch => axios.post('/api/auth', userData)
     .then((res) => {
       const token = res.data.token;
 
@@ -20,12 +18,10 @@ export function login(userData) {
       setAuthorizationToken(token);
       dispatch(setCurrentUser(jwtDecode(token)));
     });
-}
 
-export function logout() {
-  return (dispatch) => {
+export const logout = () =>
+  (dispatch) => {
     localStorage.removeItem('jwtToken');
     setAuthorizationToken(false);
     dispatch(setCurrentUser({}));
   };
-}

@@ -10,10 +10,10 @@ import webpackConfig from '../webpack.config.dev';
 
 import users from './routes/users';
 import auth from './routes/auth';
-import addQuestion from './routes/addQuestion';
 import questions from './routes/questions';
 
 const app = express();
+const compiler = webpack(webpackConfig);
 
 mongoose.connect('mongodb://localhost/ife');
 mongoose.Promise = global.Promise;
@@ -25,10 +25,7 @@ app.use(express.static(path.join(__dirname, '/../public')));
 
 app.use('/api/users', users);
 app.use('/api/auth', auth);
-app.use('/api/add-question', addQuestion);
 app.use('/api/questions', questions);
-
-const compiler = webpack(webpackConfig);
 
 app.use(webpackMiddleware(compiler, {
   hot: true,

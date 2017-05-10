@@ -24,10 +24,12 @@ class QuestionsBar extends Component {
 
         <ListGroup>
           <ListGroupItem header="Skill:" />
-          <ListGroupItem active={active === 'skill:html'} onClick={() => filter('skill:html')}>HTML</ListGroupItem>
-          <ListGroupItem active={active === 'skill:js'} onClick={() => filter('skill:js')}>JS</ListGroupItem>
-          <ListGroupItem active={active === 'skill:css'} onClick={() => filter('skill:css')}>CSS</ListGroupItem>
-          <ListGroupItem active={active === 'skill:soft'} onClick={() => filter('skill:soft')}>Soft</ListGroupItem>
+          <ListGroupItem active={active === 'skill:HTML'} onClick={() => filter('skill:HTML')}>HTML</ListGroupItem>
+          <ListGroupItem active={active === 'skill:JS'} onClick={() => filter('skill:JS')}>JS</ListGroupItem>
+          <ListGroupItem active={active === 'skill:CSS'} onClick={() => filter('skill:CSS')}>CSS</ListGroupItem>
+          <ListGroupItem active={active === 'skill:Soft'} onClick={() => filter('skill:Soft')}>Soft</ListGroupItem>
+          <ListGroupItem active={active === 'skill:Soft'} onClick={() => filter('skill:Soft')}>Soft</ListGroupItem>
+          <ListGroupItem active={active === 'skill:Other'} onClick={() => filter('skill:Other')}>Other</ListGroupItem>
         </ListGroup>
 
         <ListGroup>

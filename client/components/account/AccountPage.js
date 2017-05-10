@@ -5,16 +5,43 @@ import { connect } from 'react-redux';
 
 import Button from 'react-bootstrap/lib/Button';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
-import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import ListGroup from 'react-bootstrap/lib/ListGroup';
 import Image from 'react-bootstrap/lib/Image';
 import Well from 'react-bootstrap/lib/Well';
+import Modal from 'react-bootstrap/lib/Modal';
 
 import { logout } from '../../actions/authActions';
+import { removeUserById } from '../../actions/signupActions';
 
 class AccountPage extends Component {
+  state = {
+    showRemoveModal: false,
+    id: ''
+  };
+
+  close = () => {
+    this.setState({
+      showRemoveModal: false,
+      id: ''
+    });
+  };
+
+  openRemoveModel = (id) => {
+    this.setState({
+      showRemoveModal: true,
+      id
+    });
+  };
+
+  remove = (id) => {
+    this.props.removeUserById(id).then(
+      () => this.props.logout(),
+      err => console.error(err)
+    );
+  };
+
   render() {
     const { logout, user } = this.props;
 
@@ -36,21 +63,40 @@ class AccountPage extends Component {
             <dt>Email:</dt>
             <dd>{user.email}</dd>
             <dt>Primary Skill:</dt>
-            <dd>{user.primary_skill}</dd>
+            <dd>{user.primary_skill || 'N/a'}</dd>
             <dt>Job Function:</dt>
-            <dd>{user.job_function}</dd>
+            <dd>{user.job_function || 'N/a'}</dd>
           </dl>
-          <Well>
-            {user.notes}
-          </Well>
+          <Well>{user.notes || 'Add some notes about yourself'}</Well>
 
           <hr />
-          <ButtonToolbar>
-            <ButtonGroup bsSize="small" className="pull-right">
-              <Button bsStyle="warning">Edit profile</Button>
-              <Button bsStyle="danger">Remove profile</Button>
-            </ButtonGroup>
-          </ButtonToolbar>
+
+          <ButtonGroup bsSize="small" className="pull-right">
+            <Link to={`/user/${user.id}`} className="btn btn-warning">Edit profile</Link>
+            <Button bsStyle="danger" onClick={() => this.openRemoveModel(user.id)}>Remove profile</Button>
+          </ButtonGroup>
+
+          <Modal bsSize="sm" show={this.state.showRemoveModal} onHide={this.close}>
+            <Modal.Header closeButton>
+              <Modal.Title>Are you sure?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>If so, you will not be able to restore you private date. And you will also lost access to adding questions.</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <ButtonGroup>
+                <Button
+                  bsStyle="danger"
+                  onClick={() => this.remove(this.state.id)}
+                >Remove</Button>
+                {' '}
+                <Button
+                  bsStyle="default"
+                  onClick={this.close}
+                >Cancel</Button>
+              </ButtonGroup>
+            </Modal.Footer>
+          </Modal>
         </Col>
       </Row>
     );
@@ -66,11 +112,12 @@ AccountPage.propTypes = {
     primary_skill: PropTypes.string,
     notes: PropTypes.string
   }).isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  removeUserById: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps, { logout })(AccountPage);
+export default connect(mapStateToProps, { logout, removeUserById })(AccountPage);

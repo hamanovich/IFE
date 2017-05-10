@@ -5,7 +5,7 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
-const renderRangeField = ({
+const RangeField = ({
   input,
   label,
   min,
@@ -27,7 +27,7 @@ const renderRangeField = ({
   </FormGroup>
 );
 
-renderRangeField.propTypes = {
+RangeField.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string,
     value: PropTypes.string
@@ -39,7 +39,7 @@ renderRangeField.propTypes = {
   defaultValue: PropTypes.string
 };
 
-renderRangeField.defaultProps = {
+RangeField.defaultProps = {
   checkUserExists: () => { },
   min: null,
   max: null,
@@ -47,4 +47,4 @@ renderRangeField.defaultProps = {
   defaultValue: '1'
 };
 
-export default renderRangeField;
+export default RangeField;

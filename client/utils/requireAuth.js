@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addFlashMessage } from '../actions/flashMessages';
 
-export default function (ComposedComponent) {
+export default (ComposedComponent) => {
   class Authenticate extends Component {
     componentWillMount() {
       if (!this.props.isAuthenticated) {
@@ -43,4 +43,4 @@ export default function (ComposedComponent) {
   });
 
   return connect(mapStateToProps, { addFlashMessage })(Authenticate);
-}
+};

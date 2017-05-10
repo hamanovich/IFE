@@ -6,50 +6,59 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
-const renderTextareaField = ({
+const TextField = ({
   input,
   label,
   placeholder,
-  rows,
+  type,
+  checkUserExists,
+  errorState,
+  readonly,
   meta: { touched, error, warning }
 }) => (
   <FormGroup
     controlId={`label-${input.name}`}
-    validationState={touched && error ? 'error' :
-        touched && !error ? 'success' : null}
+    validationState={(touched && error) || errorState ? 'error' :
+      touched && !error && !errorState ? 'success' : null}
   >
     <ControlLabel>{label}</ControlLabel>
     <FormControl
       {...input}
-      componentClass="textarea"
       placeholder={placeholder}
       id={`label-${input.name}`}
-      rows={rows}
+      type={type}
+      readOnly={readonly}
+      onBlur={(e) => { checkUserExists(e); input.onBlur(e); }}
     />
+    {errorState && <HelpBlock>{errorState}</HelpBlock>}
     {touched &&
       ((error && <HelpBlock>{error}</HelpBlock>) ||
         (warning && <span>{warning}</span>))}
   </FormGroup>
 );
 
-renderTextareaField.propTypes = {
+TextField.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string,
     value: PropTypes.string
   }).isRequired,
+  readonly: PropTypes.bool,
   label: PropTypes.string.isRequired,
   placeholder: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  errorState: PropTypes.string,
+  checkUserExists: PropTypes.func,
   meta: PropTypes.shape({
     touched: PropTypes.bool,
     error: PropTypes.string,
     warning: PropTypes.string
-  }).isRequired,
-  rows: PropTypes.number
+  }).isRequired
 };
 
-renderTextareaField.defaultProps = {
-  rows: null,
-  errorState: null
+TextField.defaultProps = {
+  checkUserExists: () => { },
+  errorState: null,
+  readonly: false
 };
 
-export default renderTextareaField;
+export default TextField;

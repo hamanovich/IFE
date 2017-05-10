@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 import { LinkContainer } from 'react-router-bootstrap';
 import { connect } from 'react-redux';
+
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 
-import { logout } from '../actions/authActions';
+import { logout } from '../../actions/authActions';
 
 class NavigationBar extends Component {
   logout = (e) => {

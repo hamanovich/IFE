@@ -1,14 +1,14 @@
 {
   "name": "interview-for-everyone",
   "version": "1.0.0",
-  "description": "",
+  "description": "IFE: Interview for Everyone. It's pretty simple website for adding, editing and asking any kind of questions in an Technical Interview",
   "main": "index.js",
   "scripts": {
     "start": "nodemon --watch server --exec babel-node -- server/index.js",
     "lint": "eslint **/*.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["react", "redux", "express", "node", "mongodb"],
+  "author": "Siarhei Hamanovich",
   "license": "ISC",
   "devDependencies": {
     "babel-cli": "^6.24.1",

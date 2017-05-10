@@ -2,9 +2,9 @@ import { combineReducers } from 'redux';
 import { reducer as reduxFormReducer } from 'redux-form';
 import { routerReducer } from 'react-router-redux';
 
-import flashMessages from './reducers/flashMessages';
-import auth from './reducers/auth';
-import questions from './reducers/questions';
+import flashMessages from './flashMessages';
+import auth from './auth';
+import questions from './questions';
 
 export default combineReducers({
   flashMessages,

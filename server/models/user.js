@@ -11,24 +11,14 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'Email field is required']
   },
-  avatar_image: {
-    type: Buffer
-  },
-  primary_skill: {
-    type: String
-  },
-  job_function: {
-    type: String
-  },
-  notes: {
-    type: String
-  },
   password_digest: {
     type: String,
     required: [true, 'Password field is required']
-  }
+  },
+  avatar_image: Buffer,
+  primary_skill: String,
+  job_function: String,
+  notes: String
 });
 
-const User = mongoose.model('user', userSchema);
-
-export default User;
+export default mongoose.model('user', userSchema);

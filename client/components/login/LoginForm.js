@@ -7,8 +7,8 @@ import Form from 'react-bootstrap/lib/Form';
 import Alert from 'react-bootstrap/lib/Alert';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 
-import validate from '../../../server/shared/validations/login';
-import renderTextField from '../common/renderTextField';
+import validate from '../../../server/validations/login';
+import TextField from '../formFields/TextField';
 
 class LoginForm extends Component {
   state = {
@@ -55,7 +55,7 @@ class LoginForm extends Component {
 
         <Field
           label="Username / Email*:"
-          component={renderTextField}
+          component={TextField}
           type="text"
           htmlFor="identifier"
           name="identifier"
@@ -66,7 +66,7 @@ class LoginForm extends Component {
 
         <Field
           label="Password*:"
-          component={renderTextField}
+          component={TextField}
           type="password"
           htmlFor="password"
           name="password"

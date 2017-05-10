@@ -27,8 +27,7 @@ const questionSchema = new Schema({
   notes: String,
   author: {
     type: String,
-    required: [true, 'Author field is required'],
-    lowercase: true
+    required: [true, 'Author field is required']
   },
   visible: {
     type: Boolean,
@@ -44,7 +43,4 @@ const questionSchema = new Schema({
   }
 });
 
-const Question = mongoose.model('question', questionSchema);
-
-export default Question;
-
+export default mongoose.model('question', questionSchema);

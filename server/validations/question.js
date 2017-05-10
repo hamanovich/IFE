@@ -4,6 +4,15 @@ export default (values) => {
   if (!values.question) {
     errors.question = 'Question field is required';
   }
+
+  if (!values.skill) {
+    errors.skill = 'Skill of question is required';
+  }
+
+  if (!values.level) {
+    errors.level = 'Level of question is required';
+  }
+
   if (!values.theory) {
     errors.theory = 'Type of question is required';
   }

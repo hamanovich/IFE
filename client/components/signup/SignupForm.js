@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AvatarEditor from 'react-avatar-editor';
 import { Field, reduxForm } from 'redux-form';
+import { connect } from 'react-redux';
 
 import Button from 'react-bootstrap/lib/Button';
 import Form from 'react-bootstrap/lib/Form';
@@ -11,17 +12,23 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 
-import validate from '../../../server/shared/validations/signup';
-import renderRangeField from '../common/renderRangeField';
-import renderTextField from '../common/renderTextField';
-import renderTextareaField from '../common/renderTextareaField';
+import { logout } from '../../actions/authActions';
+import { getUser, updateUser } from '../../actions/signupActions';
+import validate from '../../../server/validations/signup';
+import RangeField from '../formFields/RangeField';
+import TextField from '../formFields/TextField';
+import TextareaField from '../formFields/TextareaField';
 
 class SignupForm extends Component {
   state = {
+    id: '',
     username: '',
     email: '',
     password: '',
     passwordConfirmation: '',
+    primary_skill: '',
+    job_function: '',
+    notes: '',
     errors: {},
     isLoading: false,
     invalid: false,
@@ -33,6 +40,18 @@ class SignupForm extends Component {
       height: 100,
       img: null,
       rect: null
+    }
+  };
+
+  componentDidMount = () => {
+    const { params, getUser, initialValues } = this.props;
+    const { id, username, email, primary_skill, job_function, notes, avatar_image } = initialValues;
+
+    if (params.id) {
+      getUser(params.id);
+      this.setState({
+        id, username, email, primary_skill, job_function, notes, avatar: { ...this.state.avatar, image: avatar_image }
+      });
     }
   };
 
@@ -57,16 +76,31 @@ class SignupForm extends Component {
           rect
         }
       }, () => {
-        this.props.userSignupRequest(this.state).then(
-          () => {
-            this.props.addFlashMessage({
-              type: 'success',
-              text: 'You have signed up successfully'
-            });
-            this.context.router.push('/');
-          },
-          err => this.setState({ errors: err.response.data, isLoading: false })
-        );
+        if (this.props.params.id) {
+          this.props.updateUser(this.state).then(
+            () => {
+              this.props.addFlashMessage({
+                type: 'success',
+                text: 'You have updated profile successfully. Please login again.'
+              });
+              this.context.router.push('/');
+            },
+            err => this.setState({ errors: err.response.data, isLoading: false })
+          );
+        } else {
+          this.props.userSignupRequest(this.state).then(
+            () => {
+              this.props.addFlashMessage({
+                type: 'success',
+                text: 'You have signed up successfully'
+              });
+              this.context.router.push('/');
+            },
+            err => this.setState({ errors: err.response.data, isLoading: false })
+          );
+        }
+
+        this.props.logout();
       });
     }
   };
@@ -82,15 +116,16 @@ class SignupForm extends Component {
   };
 
   checkUserExists = (e) => {
+    const { params, isUserExists } = this.props;
     const field = e.target.name;
     const val = e.target.value;
 
-    if (val !== '') {
-      this.props.isUserExists(val).then((res) => {
+    if (val !== '' && !params.id) {
+      isUserExists(val).then((res) => {
         const errors = this.state.errors;
         let invalid;
 
-        if (res.data.user.length) {
+        if (res.data.user) {
           errors[field] = `There is user with such ${field}`;
           invalid = true;
         } else {
@@ -109,28 +144,29 @@ class SignupForm extends Component {
 
   render() {
     const { errors, username, email, primary_skill, job_function, notes, isLoading, invalid, avatar } = this.state;
+    const { params, initialValues } = this.props;
 
     return (
       <Form onSubmit={this.onSubmit} noValidate>
-        <h1>Register</h1>
+        <h1>{params.id ? 'Edit profile' : 'Register'}</h1>
         <Well>
           <Media>
             <Media.Left>
               <AvatarEditor
-                image={avatar.image}
+                image={params.id ? initialValues.avatar_image : avatar.image}
                 width={avatar.width}
                 height={avatar.height}
                 border={avatar.border}
                 scale={Number(avatar.scale)}
                 crossOrigin="anonymous"
                 ref={(ava) => { this.ava = ava; }}
-                style={{ cursor: 'move' }}
+                style={{ cursor: 'move', border: '1px solid gray' }}
               />
             </Media.Left>
             <Media.Body>
               <Field
                 label="Drag and drop image, then zoom:"
-                component={renderRangeField}
+                component={RangeField}
                 name="zoom"
                 onChange={this.handleScale}
                 min="1"
@@ -144,7 +180,7 @@ class SignupForm extends Component {
 
         <Field
           label="Username*:"
-          component={renderTextField}
+          component={TextField}
           type="text"
           name="username"
           placeholder="Type your name"
@@ -152,11 +188,12 @@ class SignupForm extends Component {
           checkUserExists={this.checkUserExists}
           defaultValue={username}
           errorState={errors.username}
+          readonly={!!params.id}
         />
 
         <Field
           label="Email*:"
-          component={renderTextField}
+          component={TextField}
           type="email"
           name="email"
           placeholder="Type your email"
@@ -164,13 +201,14 @@ class SignupForm extends Component {
           checkUserExists={this.checkUserExists}
           defaultValue={email}
           errorState={errors.email}
+          readonly={!!params.id}
         />
 
         <Row>
           <Col sm={6}>
             <Field
               label="Primary skill:"
-              component={renderTextField}
+              component={TextField}
               type="text"
               name="primary_skill"
               placeholder="Type your primary skill"
@@ -181,7 +219,7 @@ class SignupForm extends Component {
           <Col sm={6}>
             <Field
               label="Job function:"
-              component={renderTextField}
+              component={TextField}
               type="text"
               name="job_function"
               placeholder="Type your job function (level)"
@@ -193,7 +231,7 @@ class SignupForm extends Component {
 
         <Field
           label="Notes:"
-          component={renderTextareaField}
+          component={TextareaField}
           name="notes"
           placeholder="Please add some notes about yourself"
           onChange={this.onChange}
@@ -203,7 +241,7 @@ class SignupForm extends Component {
 
         <Field
           label="Password*:"
-          component={renderTextField}
+          component={TextField}
           type="password"
           name="password"
           placeholder="Come up with a password"
@@ -213,7 +251,7 @@ class SignupForm extends Component {
 
         <Field
           label="Confirm your Password*:"
-          component={renderTextField}
+          component={TextField}
           type="password"
           name="passwordConfirmation"
           placeholder="Repeat your password"
@@ -227,7 +265,7 @@ class SignupForm extends Component {
             type="submit"
             bsStyle="info"
             bsSize="large"
-          >Sign Up</Button>
+          >{params.id ? 'Update profile' : 'Sign Up'}</Button>
         </FormGroup>
       </Form>
     );
@@ -236,15 +274,30 @@ class SignupForm extends Component {
 
 SignupForm.propTypes = {
   userSignupRequest: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
   addFlashMessage: PropTypes.func.isRequired,
-  isUserExists: PropTypes.func.isRequired
+  isUserExists: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
+  getUser: PropTypes.func.isRequired,
+  params: PropTypes.object.isRequired,
+  initialValues: PropTypes.object.isRequired
 };
 
 SignupForm.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default reduxForm({
+function mapStateToProps(state, props) {
+  if (props.params.id && typeof state.auth.user !== 'undefined') {
+    return {
+      initialValues: state.auth.user
+    };
+  }
+
+  return { initialValues: {} };
+}
+
+export default connect(mapStateToProps, { getUser, updateUser, logout })(reduxForm({
   form: 'signUp',
   validate
-})(SignupForm);
+})(SignupForm));

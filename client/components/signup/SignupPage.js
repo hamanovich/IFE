@@ -17,6 +17,7 @@ class SignupPage extends Component {
       <Row>
         <Col md={6} mdOffset={3}>
           <SignupForm
+            {...this.props}
             userSignupRequest={userSignupRequest}
             isUserExists={isUserExists}
             addFlashMessage={addFlashMessage}
