@@ -1,3 +1,5 @@
 export default {
-  jwtSecret: 'jwtife'
+  jwtSecret: 'jwtife',
+  localMongodbURL: 'mongodb://localhost/ife',
+  PORT: 3000
 };

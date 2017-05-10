@@ -49,8 +49,8 @@ class AddQuestionForm extends Component {
                 component={SelectField}
                 name="skill"
                 id="skill"
-                type="select"
                 multiple
+                type="select-multiple"
                 options={[
                   { title: 'HTML', value: 'HTML' },
                   { title: 'CSS', value: 'CSS' },
@@ -68,8 +68,8 @@ class AddQuestionForm extends Component {
               component={SelectField}
               name="level"
               id="level"
-              type="select"
               multiple
+              type="select-multiple"
               options={[
                 { title: 'Junior', value: 'Junior' },
                 { title: 'Middle', value: 'Middle' },
