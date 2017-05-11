@@ -1,3 +1,5 @@
+import map from 'lodash/map';
+
 import { ADD_QUESTIONS, QUESTION_ADDED, QUESTION_UPDATED, FILTER_QUESTIONS, QUESTION_GOT, REMOVE_QUESTION, EDIT_QUESTION } from '../actions/types';
 
 export default (state = [], action) => {
@@ -15,7 +17,7 @@ export default (state = [], action) => {
       const splitted = action.filter.split(':');
       const type = splitted[0];
       const value = splitted[1];
-      const filtered = state.map(question => ({
+      const filtered = map(state, question => ({
         ...question,
         visible: question[type] === value || question[type].indexOf(value) > -1
       }));
@@ -26,7 +28,7 @@ export default (state = [], action) => {
       const gotIndex = state.findIndex(question => question._id === action.question._id);
 
       if (gotIndex > -1) {
-        return state.map((question) => {
+        return map(state, (question) => {
           if (question._id === action.question._id) {
             return action.question;
           }
@@ -54,7 +56,7 @@ export default (state = [], action) => {
       const editIndex = state.findIndex(question => question._id === action.question._id);
 
       if (editIndex > -1) {
-        return state.map((question) => {
+        return map(state, (question) => {
           if (question._id === action.question._id) {
             return action.question;
           }

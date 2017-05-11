@@ -11,12 +11,6 @@ class QuestionsBar extends Component {
     return (
       <div>
         <ListGroup>
-          <ListGroupItem header="Author:" />
-          <ListGroupItem active={active === 'author:hamanovich'} onClick={() => filter('author:hamanovich')}>Hamanovich</ListGroupItem>
-          <ListGroupItem active={active === 'author:admin'} onClick={() => filter('author:admin')}>Admin</ListGroupItem>
-        </ListGroup>
-
-        <ListGroup>
           <ListGroupItem header="Type:" />
           <ListGroupItem active={active === 'theory:theory'} onClick={() => filter('theory:theory')}>Theory</ListGroupItem>
           <ListGroupItem active={active === 'theory:practice'} onClick={() => filter('theory:practice')}>Practice</ListGroupItem>
@@ -27,7 +21,6 @@ class QuestionsBar extends Component {
           <ListGroupItem active={active === 'skill:HTML'} onClick={() => filter('skill:HTML')}>HTML</ListGroupItem>
           <ListGroupItem active={active === 'skill:JS'} onClick={() => filter('skill:JS')}>JS</ListGroupItem>
           <ListGroupItem active={active === 'skill:CSS'} onClick={() => filter('skill:CSS')}>CSS</ListGroupItem>
-          <ListGroupItem active={active === 'skill:Soft'} onClick={() => filter('skill:Soft')}>Soft</ListGroupItem>
           <ListGroupItem active={active === 'skill:Soft'} onClick={() => filter('skill:Soft')}>Soft</ListGroupItem>
           <ListGroupItem active={active === 'skill:Other'} onClick={() => filter('skill:Other')}>Other</ListGroupItem>
         </ListGroup>

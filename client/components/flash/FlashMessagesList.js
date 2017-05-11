@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import map from 'lodash/map';
+import delay from 'lodash/delay';
 
+import { FLASH_TIMEOUT } from '../../utils/constants';
 import FlashMessage from './FlashMessage';
 import { deleteFlashMessage, deleteFlashMessages } from '../../actions/flashMessages';
 
 class FlashMessagesList extends Component {
   componentDidUpdate() {
-    setTimeout(() => {
-      if (this.props.messages.length > 0) {
-        this.props.deleteFlashMessages();
-      }
-    }, 2500);
+    const { messages, deleteFlashMessages } = this.props;
+    delay(() => [...messages] && deleteFlashMessages(), FLASH_TIMEOUT);
   }
 
   render() {
-    const { deleteFlashMessage } = this.props;
-    const messages = this.props.messages.map(message =>
+    const { deleteFlashMessage, messages } = this.props;
+    const flashMessages = map(messages, message =>
       <FlashMessage key={message.id} message={message} close={() => deleteFlashMessage(message.id)} />
     );
 
     return (
       <div>
-        {messages}
+        {flashMessages}
       </div>
     );
   }

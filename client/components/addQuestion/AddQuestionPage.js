@@ -6,10 +6,27 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
 import AddQuestionForm from './AddQuestionForm';
-import { addQuestion, updateQuestion } from '../../actions/questionActions';
+import { addQuestion, updateQuestion, getQuestion } from '../../actions/questionActions';
 import { addFlashMessage } from '../../actions/flashMessages';
 
 class AddQuestionPage extends Component {
+  static propTypes = {
+    addQuestion: PropTypes.func.isRequired,
+    updateQuestion: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired,
+    getQuestion: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
+    username: PropTypes.string
+  };
+
+  componentDidMount = () => {
+    const { params, getQuestion } = this.props;
+
+    if (params._id) {
+      getQuestion(params._id);
+    }
+  };
+
   submit = (values) => {
     const { username, addQuestion, updateQuestion, addFlashMessage } = this.props;
     const query = { ...values, username };
@@ -47,13 +64,6 @@ const mapStateToProps = state => ({
 });
 
 
-AddQuestionPage.propTypes = {
-  addQuestion: PropTypes.func.isRequired,
-  updateQuestion: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired,
-  username: PropTypes.string
-};
-
 AddQuestionPage.defaultProps = {
   username: 'Anonim'
 };
@@ -62,4 +72,4 @@ AddQuestionPage.contextTypes = {
   router: PropTypes.object.isRequired
 };
 
-export default connect(mapStateToProps, { addQuestion, updateQuestion, addFlashMessage })(AddQuestionPage);
+export default connect(mapStateToProps, { getQuestion, addQuestion, updateQuestion, addFlashMessage })(AddQuestionPage);

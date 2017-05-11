@@ -6,8 +6,10 @@ import { addFlashMessage } from '../actions/flashMessages';
 export default (ComposedComponent) => {
   class Authenticate extends Component {
     componentWillMount() {
-      if (!this.props.isAuthenticated) {
-        this.props.addFlashMessage({
+      const { addFlashMessage, isAuthenticated } = this.props;
+
+      if (!isAuthenticated) {
+        addFlashMessage({
           type: 'error',
           text: 'You need to login to access this page'
         });
@@ -22,6 +24,18 @@ export default (ComposedComponent) => {
       }
     }
 
+    componentDidUpdate() {
+      const { isAuthenticated, addFlashMessage, username, author } = this.props;
+      if (username !== author && isAuthenticated) {
+        addFlashMessage({
+          type: 'error',
+          text: 'You have no access to edit not your quesiton.'
+        });
+
+        this.context.router.push('/questions');
+      }
+    }
+
     render() {
       return (
         <ComposedComponent {...this.props} />
@@ -31,16 +45,29 @@ export default (ComposedComponent) => {
 
   Authenticate.propTypes = {
     isAuthenticated: PropTypes.bool.isRequired,
-    addFlashMessage: PropTypes.func.isRequired
+    addFlashMessage: PropTypes.func.isRequired,
+    username: PropTypes.string,
+    author: PropTypes.string
   };
 
   Authenticate.contextTypes = {
     router: PropTypes.object.isRequired
   };
 
-  const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
-  });
+  Authenticate.defaultProps = {
+    username: null,
+    author: null
+  };
+
+  const mapStateToProps = (state, props) => {
+    const question = state.questions.find(question => question._id === props.params._id);
+
+    return {
+      isAuthenticated: state.auth.isAuthenticated,
+      username: state.auth.user.username,
+      author: question && question.author
+    };
+  };
 
   return connect(mapStateToProps, { addFlashMessage })(Authenticate);
 };

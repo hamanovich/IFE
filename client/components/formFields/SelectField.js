@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import map from 'lodash/map';
 
 import HelpBlock from 'react-bootstrap/lib/HelpBlock';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
@@ -21,7 +22,7 @@ const SelectField = ({
       multiple={multiple}
       className="form-control"
     >
-      {options.map(o =>
+      {map(options, o =>
         <option value={o.value} key={o.value}>{o.title}</option>
       )}
     </select>

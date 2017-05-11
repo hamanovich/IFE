@@ -16,6 +16,19 @@ import { logout } from '../../actions/authActions';
 import { removeUserById } from '../../actions/signupActions';
 
 class AccountPage extends Component {
+  static propTypes = {
+    user: PropTypes.shape({
+      username: PropTypes.string,
+      email: PropTypes.string,
+      avatar_image: PropTypes.string,
+      job_function: PropTypes.string,
+      primary_skill: PropTypes.string,
+      notes: PropTypes.string
+    }).isRequired,
+    logout: PropTypes.func.isRequired,
+    removeUserById: PropTypes.func.isRequired
+  };
+
   state = {
     showRemoveModal: false,
     id: ''
@@ -81,19 +94,18 @@ class AccountPage extends Component {
               <Modal.Title>Are you sure?</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <p>If so, you will not be able to restore you private date. And you will also lost access to adding questions.</p>
+              <p>If so, you will not be able to restore your private data. And you will also lost access to adding questions.</p>
             </Modal.Body>
             <Modal.Footer>
               <ButtonGroup>
                 <Button
-                  bsStyle="danger"
-                  onClick={() => this.remove(this.state.id)}
-                >Remove</Button>
-                {' '}
-                <Button
                   bsStyle="default"
                   onClick={this.close}
                 >Cancel</Button>
+                <Button
+                  bsStyle="danger"
+                  onClick={() => this.remove(this.state.id)}
+                >Remove</Button>
               </ButtonGroup>
             </Modal.Footer>
           </Modal>
@@ -102,19 +114,6 @@ class AccountPage extends Component {
     );
   }
 }
-
-AccountPage.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string,
-    email: PropTypes.string,
-    avatar_image: PropTypes.string,
-    job_function: PropTypes.string,
-    primary_skill: PropTypes.string,
-    notes: PropTypes.string
-  }).isRequired,
-  logout: PropTypes.func.isRequired,
-  removeUserById: PropTypes.func.isRequired
-};
 
 const mapStateToProps = state => ({
   user: state.auth.user

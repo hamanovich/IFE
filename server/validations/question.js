@@ -1,3 +1,5 @@
+import isEmpty from 'lodash/isEmpty';
+
 export default (values) => {
   const errors = {};
 
@@ -37,6 +39,8 @@ export default (values) => {
       errors.answers = answersArrayErrors;
     }
   }
+
+  errors.isValid = isEmpty(errors);
 
   return errors;
 };

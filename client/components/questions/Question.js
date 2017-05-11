@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import shortid from 'shortid';
 import { Link } from 'react-router';
 import MarkdownRenderer from 'react-markdown-renderer';
+import map from 'lodash/map';
 
 import Button from 'react-bootstrap/lib/Button';
+import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Label from 'react-bootstrap/lib/Label';
 import Well from 'react-bootstrap/lib/Well';
 import ListGroup from 'react-bootstrap/lib/ListGroup';
@@ -40,15 +42,19 @@ class Question extends Component {
   };
 
   open = (answerField, field) => {
-    this.setState({
-      showModal: true,
-      answerField,
-      textField: field
-    });
+    const { user, ans } = this.props;
+
+    if (user.username === ans.author) {
+      this.setState({
+        showModal: true,
+        answerField,
+        textField: field
+      });
+    }
   };
 
   render() {
-    const { ans, index, remove, changeQuestionField } = this.props;
+    const { ans, index, remove, changeQuestionField, user } = this.props;
 
     const panelHeader = (
       <div className="clearfix">
@@ -59,7 +65,7 @@ class Question extends Component {
           </span>
         </h3>
         <div className="pull-right">
-          {ans.level && ans.level.map(level => (
+          {ans.level && map(ans.level, level => (
             <Label
               style={{ margin: '0 3px' }}
               bsStyle="primary"
@@ -74,11 +80,11 @@ class Question extends Component {
       <div className="clearfix">
         <h5 className="pull-left">
           <strong>Skill</strong>:
-            {ans.skill && ans.skill.map(skill => (
-              <span
-                key={shortid.generate()}
-              >{' '}{skill}</span>
-            ))}
+            {ans.skill && map(ans.skill, skill => (
+            <span
+              key={shortid.generate()}
+            >{' '}{skill}</span>
+          ))}
         </h5>
         <Label
           bsStyle="warning"
@@ -94,7 +100,7 @@ class Question extends Component {
             <ListGroupItem bsStyle="success" style={{ whiteSpace: 'pre-wrap' }} onClick={() => this.open(ans.answer, 'answer')}>
               <MarkdownRenderer markdown={ans.answer} />
             </ListGroupItem>}
-          {ans.answers && ans.answers.map((ans, index) => (
+          {ans.answers && map(ans.answers, (ans, index) => (
             <ListGroupItem
               key={shortid.generate()}
               style={{ whiteSpace: 'pre-wrap' }}
@@ -113,8 +119,12 @@ class Question extends Component {
 
         <hr />
 
-        <Link to={`/question/${ans._id}`} className="btn btn-warning">Edit</Link> {' '}
-        <Button bsStyle="danger" onClick={() => this.openRemoveModel(ans._id)}>Remove</Button>
+        {user.username === ans.author &&
+          <ButtonGroup bsSize="small" className="pull-right">
+            <Link to={`/question/${ans._id}`} className="btn btn-warning">Edit</Link>
+            <Button bsStyle="danger" onClick={() => this.openRemoveModel(ans._id)}>Remove</Button>
+          </ButtonGroup>
+        }
 
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
@@ -147,16 +157,20 @@ class Question extends Component {
             <Modal.Title>Are you sure?</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Button
-              bsStyle="danger"
-              onClick={() => remove(this.state._id)}
-            >Remove</Button>
-            {' '}
-            <Button
-              bsStyle="default"
-              onClick={this.close}
-            >Cancel</Button>
+            <p>If so, you will not be able to restore this question.</p>
           </Modal.Body>
+          <Modal.Footer>
+            <ButtonGroup>
+              <Button
+                bsStyle="default"
+                onClick={this.close}
+              >Cancel</Button>
+              <Button
+                bsStyle="danger"
+                onClick={() => remove(this.state._id)}
+              >Remove</Button>
+            </ButtonGroup>
+          </Modal.Footer>
         </Modal>
       </Panel>
     );
@@ -165,6 +179,7 @@ class Question extends Component {
 
 Question.propTypes = {
   ans: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   remove: PropTypes.func.isRequired,
   changeQuestionField: PropTypes.func.isRequired

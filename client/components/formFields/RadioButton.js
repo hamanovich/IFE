@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import map from 'lodash/map';
 
 import HelpBlock from 'react-bootstrap/lib/HelpBlock';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
@@ -14,7 +15,7 @@ const RadioButton = ({
     validationState={touched && error ? 'error' :
       touched && !error ? 'success' : null}
   >
-    {options.map(o =>
+    {map(options, o =>
       <Radio
         {...input}
         id={o.value}
