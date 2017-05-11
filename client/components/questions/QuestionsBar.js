@@ -1,46 +1,58 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import map from 'lodash/map';
 
+import Badge from 'react-bootstrap/lib/Badge';
 import ListGroup from 'react-bootstrap/lib/ListGroup';
 import ListGroupItem from 'react-bootstrap/lib/ListGroupItem';
 
-class QuestionsBar extends Component {
-  render() {
-    const { active, filter } = this.props;
+const QuestionsBar = ({ active, filter, authors, types, skills, levels }) => (
+  <aside>
+    <ListGroup>
+      <ListGroupItem header="Authors:" />
+      {map(authors, (count, author) =>
+        <ListGroupItem active={active === `author:${author}`} onClick={() => filter(`author:${author}`)} key={author}>
+          {author} <Badge>{(count.match(/\+/g) || []).length}</Badge>
+        </ListGroupItem>
+      )}
+    </ListGroup>
 
-    return (
-      <div>
-        <ListGroup>
-          <ListGroupItem header="Type:" />
-          <ListGroupItem active={active === 'theory:theory'} onClick={() => filter('theory:theory')}>Theory</ListGroupItem>
-          <ListGroupItem active={active === 'theory:practice'} onClick={() => filter('theory:practice')}>Practice</ListGroupItem>
-        </ListGroup>
+    <ListGroup>
+      <ListGroupItem header="Type:" />
+      {map(types, (count, theory) =>
+        <ListGroupItem active={active === `theory:${theory}`} onClick={() => filter(`theory:${theory}`)} key={theory}>
+          {theory} <Badge>{(count.match(/\+/g) || []).length}</Badge>
+        </ListGroupItem>
+      )}
+    </ListGroup>
 
-        <ListGroup>
-          <ListGroupItem header="Skill:" />
-          <ListGroupItem active={active === 'skill:HTML'} onClick={() => filter('skill:HTML')}>HTML</ListGroupItem>
-          <ListGroupItem active={active === 'skill:JS'} onClick={() => filter('skill:JS')}>JS</ListGroupItem>
-          <ListGroupItem active={active === 'skill:CSS'} onClick={() => filter('skill:CSS')}>CSS</ListGroupItem>
-          <ListGroupItem active={active === 'skill:Soft'} onClick={() => filter('skill:Soft')}>Soft</ListGroupItem>
-          <ListGroupItem active={active === 'skill:Other'} onClick={() => filter('skill:Other')}>Other</ListGroupItem>
-        </ListGroup>
+    <ListGroup>
+      <ListGroupItem header="Skill:" />
+      {map(skills, (count, skill) =>
+        <ListGroupItem active={active === `skill:${skill}`} onClick={() => filter(`skill:${skill}`)} key={skill}>
+          {skill} <Badge>{(count.match(/\+/g) || []).length}</Badge>
+        </ListGroupItem>
+      )}
+    </ListGroup>
 
-        <ListGroup>
-          <ListGroupItem header="Level:" />
-          <ListGroupItem active={active === 'level:junior'} onClick={() => filter('level:junior')}>Junior</ListGroupItem>
-          <ListGroupItem active={active === 'level:middle'} onClick={() => filter('level:middle')}>Middle</ListGroupItem>
-          <ListGroupItem active={active === 'level:senior'} onClick={() => filter('level:senior')}>Senior</ListGroupItem>
-          <ListGroupItem active={active === 'level:lead'} onClick={() => filter('level:lead')}>Lead</ListGroupItem>
-          <ListGroupItem active={active === 'level:chief'} onClick={() => filter('level:chief')}>Chief</ListGroupItem>
-        </ListGroup>
-      </div>
-    );
-  }
-}
+    <ListGroup>
+      <ListGroupItem header="Level:" />
+      {map(levels, (count, level) =>
+        <ListGroupItem active={active === `level:${level}`} onClick={() => filter(`level:${level}`)} key={level}>
+          {level} <Badge>{(count.match(/\+/g) || []).length}</Badge>
+        </ListGroupItem>
+      )}
+    </ListGroup>
+  </aside>
+);
 
 QuestionsBar.propTypes = {
   active: PropTypes.string.isRequired,
-  filter: PropTypes.func.isRequired
+  filter: PropTypes.func.isRequired,
+  authors: PropTypes.object.isRequired,
+  types: PropTypes.object.isRequired,
+  skills: PropTypes.object.isRequired,
+  levels: PropTypes.object.isRequired
 };
 
 export default QuestionsBar;

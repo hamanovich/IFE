@@ -5,14 +5,7 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
-const RangeField = ({
-  input,
-  label,
-  min,
-  max,
-  step,
-  defaultValue
-}) => (
+const RangeField = ({ input, label, min, max, step, defaultValue }) => (
   <FormGroup controlId={`label-${input.name}`}>
     <ControlLabel>{label}</ControlLabel>
     <FormControl

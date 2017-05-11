@@ -20,6 +20,21 @@ import TextField from '../formFields/TextField';
 import TextareaField from '../formFields/TextareaField';
 
 class SignupForm extends Component {
+  static propTypes = {
+    userSignupRequest: PropTypes.func.isRequired,
+    updateUser: PropTypes.func.isRequired,
+    addFlashMessage: PropTypes.func.isRequired,
+    isUserExists: PropTypes.func.isRequired,
+    logout: PropTypes.func.isRequired,
+    getUser: PropTypes.func.isRequired,
+    params: PropTypes.object.isRequired,
+    initialValues: PropTypes.object.isRequired
+  };
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  };
+  
   state = {
     id: '',
     username: '',
@@ -271,21 +286,6 @@ class SignupForm extends Component {
     );
   }
 }
-
-SignupForm.propTypes = {
-  userSignupRequest: PropTypes.func.isRequired,
-  updateUser: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired,
-  isUserExists: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
-  getUser: PropTypes.func.isRequired,
-  params: PropTypes.object.isRequired,
-  initialValues: PropTypes.object.isRequired
-};
-
-SignupForm.contextTypes = {
-  router: PropTypes.object.isRequired
-};
 
 function mapStateToProps(state, props) {
   if (props.params.id && typeof state.auth.user !== 'undefined') {

@@ -6,18 +6,8 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 
-const TextareaField = ({
-  input,
-  label,
-  placeholder,
-  rows,
-  meta: { touched, error, warning }
-}) => (
-  <FormGroup
-    controlId={`label-${input.name}`}
-    validationState={touched && error ? 'error' :
-        touched && !error ? 'success' : null}
-  >
+const TextareaField = ({ input, label, placeholder, rows, meta: { touched, error, warning } }) => (
+  <FormGroup controlId={`label-${input.name}`} validationState={touched && error ? 'error' : touched && !error ? 'success' : null}>
     <ControlLabel>{label}</ControlLabel>
     <FormControl
       {...input}
@@ -26,9 +16,7 @@ const TextareaField = ({
       id={`label-${input.name}`}
       rows={rows}
     />
-    {touched &&
-      ((error && <HelpBlock>{error}</HelpBlock>) ||
-        (warning && <span>{warning}</span>))}
+    {touched && ((error && <HelpBlock>{error}</HelpBlock>) || (warning && <span>{warning}</span>))}
   </FormGroup>
 );
 

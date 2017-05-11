@@ -9,6 +9,7 @@ import QuestionsList from './QuestionsList';
 import QuestionsBar from './QuestionsBar';
 import { getQuestions, filterQuestions, removeQuestionById, changeQuestionField } from '../../actions/questionActions';
 import { addFlashMessage, deleteFlashMessages } from '../../actions/flashMessages';
+import { selectAllAuthors, selectAllTypes, selectAllSkills, selectAllLevels } from '../../selectors';
 
 class QuestionsPage extends Component {
   static propTypes = {
@@ -19,7 +20,11 @@ class QuestionsPage extends Component {
     addFlashMessage: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
     questions: PropTypes.arrayOf(PropTypes.object).isRequired,
-    user: PropTypes.object.isRequired
+    user: PropTypes.object.isRequired,
+    authors: PropTypes.object.isRequired,
+    types: PropTypes.object.isRequired,
+    skills: PropTypes.object.isRequired,
+    levels: PropTypes.object.isRequired
   };
 
   static contextTypes = {
@@ -64,16 +69,24 @@ class QuestionsPage extends Component {
   };
 
   render() {
-    const { questions, user, removeQuestionById, changeQuestionField } = this.props;
+    const { questions, user, removeQuestionById, changeQuestionField, authors, types, skills, levels } = this.props;
+    const filteredQuestions = questions.filter(q => q.visible === true);
 
     return (
       <Row>
         <Col md={3} sm={4}>
-          <QuestionsBar active={this.state.active} filter={this.filter} questions={this.props.questions} />
+          <QuestionsBar
+            active={this.state.active}
+            filter={this.filter}
+            authors={authors}
+            types={types}
+            skills={skills}
+            levels={levels}
+          />
         </Col>
         <Col md={9} sm={8} style={{ minHeight: 300 }}>
           <QuestionsList
-            questions={questions}
+            questions={filteredQuestions}
             user={user}
             removeQuestionById={removeQuestionById}
             changeQuestionField={changeQuestionField}
@@ -87,7 +100,11 @@ class QuestionsPage extends Component {
 const mapStateToProps = state => ({
   user: state.auth.user,
   questions: state.questions,
-  flashMessages: state.flashMessages
+  flashMessages: state.flashMessages,
+  authors: selectAllAuthors(state),
+  types: selectAllTypes(state),
+  skills: selectAllSkills(state),
+  levels: selectAllLevels(state)
 });
 
 export default connect(mapStateToProps, { getQuestions, filterQuestions, removeQuestionById, changeQuestionField, addFlashMessage, deleteFlashMessages })(QuestionsPage);

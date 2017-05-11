@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import Grid from 'react-bootstrap/lib/Grid';
 
@@ -7,16 +8,30 @@ import NavigationBar from './overall//NavigationBar';
 import FlashMessagesList from './flash/FlashMessagesList';
 import Footer from './overall/Footer';
 
+import { logout } from '../actions/authActions';
+
 import '../style.scss';
 
 class App extends Component {
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    logout: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired
+  };
+
+  logout = (e) => {
+    e.preventDefault();
+    this.props.logout();
+  };
+
   render() {
+    const { auth } = this.props;
     return (
       <div className="wrapper">
-        <NavigationBar />
+        <NavigationBar isAuthenticated={auth.isAuthenticated} logout={this.logout} />
         <Grid>
           <FlashMessagesList />
-          {this.props.children}
+          {React.cloneElement(this.props.children, { user: auth.user })}
         </Grid>
         <Footer />
       </div>
@@ -24,8 +39,6 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-  children: PropTypes.node.isRequired
-};
+const mapStateToProps = state => ({ auth: state.auth });
 
-export default App;
+export default connect(mapStateToProps, { logout })(App);

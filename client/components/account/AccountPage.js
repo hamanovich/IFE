@@ -115,8 +115,4 @@ class AccountPage extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.auth.user
-});
-
-export default connect(mapStateToProps, { logout, removeUserById })(AccountPage);
+export default connect(null, { logout, removeUserById })(AccountPage);

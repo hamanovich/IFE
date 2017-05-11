@@ -6,10 +6,12 @@ import flashMessages from './flashMessages';
 import auth from './auth';
 import questions from './questions';
 
-export default combineReducers({
+const reducer = combineReducers({
   flashMessages,
   auth,
   questions,
   form: reduxFormReducer,
   routing: routerReducer
 });
+
+export default reducer;

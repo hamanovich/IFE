@@ -5,24 +5,20 @@ import map from 'lodash/map';
 import Loader from '../overall/Loader';
 import Question from './Question';
 
-const QuestionsList = ({ questions, user, removeQuestionById, changeQuestionField }) => {
-  const filteredQuestions = questions.filter(q => q.visible === true);
-
-  return (
-    <div>
-      {map(filteredQuestions, (question, index) => (
-        <Question
-          ans={question}
-          index={index}
-          remove={removeQuestionById}
-          changeQuestionField={changeQuestionField}
-          key={question._id}
-          user={user}
-        />
-      ))}
-    </div>
-  );
-};
+const QuestionsList = ({ questions, user, removeQuestionById, changeQuestionField }) => (
+  <div>
+    {map(questions, (question, index) => (
+      <Question
+        ans={question}
+        index={index}
+        remove={removeQuestionById}
+        changeQuestionField={changeQuestionField}
+        key={question._id}
+        user={user}
+      />
+    ))}
+  </div>
+);
 
 QuestionsList.propTypes = {
   removeQuestionById: PropTypes.func.isRequired,
