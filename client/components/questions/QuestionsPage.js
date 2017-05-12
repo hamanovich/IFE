@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/lib/Row';
 import QuestionsList from './QuestionsList';
 import QuestionsBar from './QuestionsBar';
 import { getQuestions, filterQuestions, removeQuestionById, changeQuestionField } from '../../actions/questionActions';
-import { addFlashMessage, deleteFlashMessages } from '../../actions/flashMessages';
+import { addFlashMessage } from '../../actions/flashMessages';
 import { selectAllAuthors, selectAllTypes, selectAllSkills, selectAllLevels } from '../../selectors';
 
 class QuestionsPage extends Component {
@@ -32,7 +32,6 @@ class QuestionsPage extends Component {
   };
 
   state = {
-    errors: {},
     active: ''
   };
 
@@ -78,10 +77,7 @@ class QuestionsPage extends Component {
           <QuestionsBar
             active={this.state.active}
             filter={this.filter}
-            authors={authors}
-            types={types}
-            skills={skills}
-            levels={levels}
+            selector={{ authors, types, skills, levels }}
           />
         </Col>
         <Col md={9} sm={8} style={{ minHeight: 300 }}>
@@ -107,4 +103,4 @@ const mapStateToProps = state => ({
   levels: selectAllLevels(state)
 });
 
-export default connect(mapStateToProps, { getQuestions, filterQuestions, removeQuestionById, changeQuestionField, addFlashMessage, deleteFlashMessages })(QuestionsPage);
+export default connect(mapStateToProps, { getQuestions, filterQuestions, removeQuestionById, changeQuestionField, addFlashMessage })(QuestionsPage);
