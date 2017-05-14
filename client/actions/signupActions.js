@@ -20,4 +20,4 @@ export const removeUserById = id =>
   () => axios.delete(`/api/users/${id}`);
 
 export const updateUser = user =>
-  () => axios.put(`/api/users/${user.id}`, user);
+  () => axios.put(`/api/users/${user._id}`, user);

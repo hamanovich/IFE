@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import autopopulate from 'mongoose-autopopulate';
 
 const Schema = mongoose.Schema;
 
@@ -26,8 +27,9 @@ const questionSchema = new Schema({
   answers: [Schema.Types.Mixed],
   notes: String,
   author: {
-    type: String,
-    required: [true, 'Author field is required']
+    type: Schema.Types.ObjectId,
+    ref: 'user',
+    autopopulate: true
   },
   visible: {
     type: Boolean,
@@ -40,7 +42,13 @@ const questionSchema = new Schema({
   lastModified: {
     type: Date,
     default: Date.now
+  },
+  votes: {
+    like: [Schema.Types.ObjectId],
+    dislike: [Schema.Types.ObjectId]
   }
 });
+
+questionSchema.plugin(autopopulate);
 
 export default mongoose.model('question', questionSchema);

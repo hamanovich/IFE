@@ -16,8 +16,20 @@ import Panel from 'react-bootstrap/lib/Panel';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
+
+import Toolbar from '../overall/Toolbar';
 
 class Question extends Component {
+  static propTypes = {
+    ans: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired,
+    index: PropTypes.number.isRequired,
+    remove: PropTypes.func.isRequired,
+    voteQuestion: PropTypes.func.isRequired,
+    changeQuestionField: PropTypes.func.isRequired
+  };
+
   state = {
     showModal: false,
     showRemoveModal: false,
@@ -44,7 +56,7 @@ class Question extends Component {
   open = (answerField, field) => {
     const { user, ans } = this.props;
 
-    if (user.username === ans.author) {
+    if (user.username === ans.author.username) {
       this.setState({
         showModal: true,
         answerField,
@@ -54,7 +66,7 @@ class Question extends Component {
   };
 
   render() {
-    const { ans, index, remove, changeQuestionField, user } = this.props;
+    const { ans, index, remove, changeQuestionField, user, voteQuestion } = this.props;
 
     const panelHeader = (
       <div className="clearfix">
@@ -115,16 +127,22 @@ class Question extends Component {
           <Well onClick={() => this.open(ans.notes, 'notes')}>
             <MarkdownRenderer markdown={ans.notes} />
           </Well>}
-        <small><strong>Author</strong>: {ans.author}</small>
+        <small><strong>Author</strong>: {ans.author.username}</small>
 
         <hr />
 
-        {user.username === ans.author &&
+        {user.username === ans.author.username &&
           <ButtonGroup bsSize="small" className="pull-right">
-            <Link to={`/question/${ans._id}`} className="btn btn-warning">Edit</Link>
-            <Button bsStyle="danger" onClick={() => this.openRemoveModel(ans._id)}>Remove</Button>
+            <Link to={`/question/${ans._id}`} className="btn btn-warning"><Glyphicon glyph="pencil" /> Edit</Link>
+            <Button bsStyle="danger" onClick={() => this.openRemoveModel(ans._id)}><Glyphicon glyph="remove" /> Remove</Button>
           </ButtonGroup>
         }
+
+        {user.username && <Toolbar
+          user={user}
+          question={ans}
+          voteQuestion={voteQuestion}
+        />}
 
         <Modal show={this.state.showModal} onHide={this.close}>
           <Modal.Header closeButton>
@@ -146,7 +164,7 @@ class Question extends Component {
               </FormGroup>
               <Button
                 bsStyle="primary"
-                onClick={() => changeQuestionField(ans._id, this.state.textField, this.textField.value)}
+                onClick={() => { changeQuestionField(ans._id, this.state.textField, this.textField.value); this.close(); }}
               >Update</Button>
             </form>
           </Modal.Body>
@@ -172,17 +190,9 @@ class Question extends Component {
             </ButtonGroup>
           </Modal.Footer>
         </Modal>
-      </Panel>
+      </Panel >
     );
   }
 }
-
-Question.propTypes = {
-  ans: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  index: PropTypes.number.isRequired,
-  remove: PropTypes.func.isRequired,
-  changeQuestionField: PropTypes.func.isRequired
-};
 
 export default Question;

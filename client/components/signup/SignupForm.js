@@ -12,6 +12,8 @@ import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 
+import { selectUser } from '../../selectors';
+
 import { logout } from '../../actions/authActions';
 import { getUser, updateUser } from '../../actions/signupActions';
 import validate from '../../../server/validations/signup';
@@ -34,9 +36,9 @@ class SignupForm extends Component {
   static contextTypes = {
     router: PropTypes.object.isRequired
   };
-  
+
   state = {
-    id: '',
+    _id: '',
     username: '',
     email: '',
     password: '',
@@ -60,12 +62,12 @@ class SignupForm extends Component {
 
   componentDidMount = () => {
     const { params, getUser, initialValues } = this.props;
-    const { id, username, email, primary_skill, job_function, notes, avatar_image } = initialValues;
+    const { _id, username, email, primary_skill, job_function, notes, avatar_image } = initialValues;
 
     if (params.id) {
       getUser(params.id);
       this.setState({
-        id, username, email, primary_skill, job_function, notes, avatar: { ...this.state.avatar, image: avatar_image }
+        _id, username, email, primary_skill, job_function, notes, avatar: { ...this.state.avatar, image: avatar_image }
       });
     }
   };
@@ -288,9 +290,9 @@ class SignupForm extends Component {
 }
 
 function mapStateToProps(state, props) {
-  if (props.params.id && typeof state.auth.user !== 'undefined') {
+  if (props.params.id && typeof selectUser(state) !== 'undefined') {
     return {
-      initialValues: state.auth.user
+      initialValues: selectUser(state)
     };
   }
 

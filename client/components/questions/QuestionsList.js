@@ -5,7 +5,7 @@ import map from 'lodash/map';
 import Loader from '../overall/Loader';
 import Question from './Question';
 
-const QuestionsList = ({ questions, user, removeQuestionById, changeQuestionField }) => (
+const QuestionsList = ({ questions, user, removeQuestionById, changeQuestionField, voteQuestion }) => (
   <div>
     {map(questions, (question, index) => (
       <Question
@@ -13,6 +13,7 @@ const QuestionsList = ({ questions, user, removeQuestionById, changeQuestionFiel
         index={index}
         remove={removeQuestionById}
         changeQuestionField={changeQuestionField}
+        voteQuestion={voteQuestion}
         key={question._id}
         user={user}
       />
@@ -23,6 +24,7 @@ const QuestionsList = ({ questions, user, removeQuestionById, changeQuestionFiel
 QuestionsList.propTypes = {
   removeQuestionById: PropTypes.func.isRequired,
   changeQuestionField: PropTypes.func.isRequired,
+  voteQuestion: PropTypes.func.isRequired,
   questions: PropTypes.arrayOf(PropTypes.object).isRequired,
   user: PropTypes.object.isRequired
 };

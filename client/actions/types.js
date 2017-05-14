@@ -13,3 +13,6 @@ export const QUESTION_UPDATED = '[QUESTION] UPDATED';
 export const QUESTION_GOT = '[QUESTION] GOT';
 export const REMOVE_QUESTION = '[QUESTION] REMOVE';
 export const EDIT_QUESTION = '[QUESTION] EDIT';
+
+export const VOTE_LIKE = '[VOTE] LIKE';
+export const VOTE_DISLIKE = '[VOTE] DISLIKE';

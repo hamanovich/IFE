@@ -1,10 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
+import { selectUser } from '../selectors';
 import { addFlashMessage } from '../actions/flashMessages';
 
 export default (ComposedComponent) => {
   class Authenticate extends Component {
+    static propTypes = {
+      isAuthenticated: PropTypes.bool.isRequired,
+      addFlashMessage: PropTypes.func.isRequired,
+      authorId: PropTypes.string,
+      author: PropTypes.object
+    };
+
+    static contextTypes = {
+      router: PropTypes.object.isRequired
+    };
+
+    static defaultProps = {
+      authorId: null,
+      author: {}
+    };
+
     componentWillMount() {
       const { addFlashMessage, isAuthenticated } = this.props;
 
@@ -25,8 +43,9 @@ export default (ComposedComponent) => {
     }
 
     componentDidUpdate() {
-      const { isAuthenticated, addFlashMessage, username, author } = this.props;
-      if (username !== author && isAuthenticated) {
+      const { isAuthenticated, addFlashMessage, authorId, author } = this.props;
+      
+      if (authorId !== author._id && isAuthenticated) {
         addFlashMessage({
           type: 'error',
           text: 'You have no access to edit not your quesiton.'
@@ -43,28 +62,12 @@ export default (ComposedComponent) => {
     }
   }
 
-  Authenticate.propTypes = {
-    isAuthenticated: PropTypes.bool.isRequired,
-    addFlashMessage: PropTypes.func.isRequired,
-    username: PropTypes.string,
-    author: PropTypes.string
-  };
-
-  Authenticate.contextTypes = {
-    router: PropTypes.object.isRequired
-  };
-
-  Authenticate.defaultProps = {
-    username: null,
-    author: null
-  };
-
   const mapStateToProps = (state, props) => {
     const question = state.questions.find(question => question._id === props.params._id);
 
     return {
       isAuthenticated: state.auth.isAuthenticated,
-      username: state.auth.user.username,
+      authorId: selectUser(state)._id,
       author: question && question.author
     };
   };

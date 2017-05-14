@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
+import { selectUser } from '../../selectors';
 import AddQuestionForm from './AddQuestionForm';
 import { addQuestion, updateQuestion, getQuestion } from '../../actions/questionActions';
 import { addFlashMessage } from '../../actions/flashMessages';
@@ -16,7 +17,15 @@ class AddQuestionPage extends Component {
     addFlashMessage: PropTypes.func.isRequired,
     getQuestion: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
-    username: PropTypes.string
+    userId: PropTypes.string
+  };
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  };
+
+  static defaultProps = {
+    userId: ''
   };
 
   componentDidMount = () => {
@@ -28,8 +37,8 @@ class AddQuestionPage extends Component {
   };
 
   submit = (values) => {
-    const { username, addQuestion, updateQuestion, addFlashMessage } = this.props;
-    const query = { ...values, username };
+    const { userId, addQuestion, updateQuestion, addFlashMessage } = this.props;
+    const query = { ...values, userId };
 
     if (values._id) {
       updateQuestion(query)
@@ -60,16 +69,8 @@ class AddQuestionPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  username: state.auth.user.username
+  userId: selectUser(state)._id
 });
 
-
-AddQuestionPage.defaultProps = {
-  username: 'Anonim'
-};
-
-AddQuestionPage.contextTypes = {
-  router: PropTypes.object.isRequired
-};
 
 export default connect(mapStateToProps, { getQuestion, addQuestion, updateQuestion, addFlashMessage })(AddQuestionPage);

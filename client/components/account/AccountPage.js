@@ -31,25 +31,25 @@ class AccountPage extends Component {
 
   state = {
     showRemoveModal: false,
-    id: ''
+    _id: ''
   };
 
   close = () => {
     this.setState({
       showRemoveModal: false,
-      id: ''
+      _id: ''
     });
   };
 
-  openRemoveModel = (id) => {
+  openRemoveModel = (_id) => {
     this.setState({
       showRemoveModal: true,
-      id
+      _id
     });
   };
 
-  remove = (id) => {
-    this.props.removeUserById(id).then(
+  remove = (_id) => {
+    this.props.removeUserById(_id).then(
       () => this.props.logout(),
       err => console.error(err)
     );
@@ -85,8 +85,8 @@ class AccountPage extends Component {
           <hr />
 
           <ButtonGroup bsSize="small" className="pull-right">
-            <Link to={`/user/${user.id}`} className="btn btn-warning">Edit profile</Link>
-            <Button bsStyle="danger" onClick={() => this.openRemoveModel(user.id)}>Remove profile</Button>
+            <Link to={`/user/${user._id}`} className="btn btn-warning">Edit profile</Link>
+            <Button bsStyle="danger" onClick={() => this.openRemoveModel(user._id)}>Remove profile</Button>
           </ButtonGroup>
 
           <Modal bsSize="sm" show={this.state.showRemoveModal} onHide={this.close}>
@@ -104,7 +104,7 @@ class AccountPage extends Component {
                 >Cancel</Button>
                 <Button
                   bsStyle="danger"
-                  onClick={() => this.remove(this.state.id)}
+                  onClick={() => this.remove(this.state._id)}
                 >Remove</Button>
               </ButtonGroup>
             </Modal.Footer>

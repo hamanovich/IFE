@@ -28,7 +28,7 @@ class App extends Component {
     const { auth } = this.props;
     return (
       <div className="wrapper">
-        <NavigationBar isAuthenticated={auth.isAuthenticated} logout={this.logout} />
+        <NavigationBar auth={auth} logout={this.logout} />
         <Grid>
           <FlashMessagesList />
           {React.cloneElement(this.props.children, { user: auth.user })}

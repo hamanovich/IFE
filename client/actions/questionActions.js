@@ -1,5 +1,15 @@
 import axios from 'axios';
-import { ADD_QUESTIONS, QUESTION_ADDED, FILTER_QUESTIONS, QUESTION_GOT, QUESTION_UPDATED, REMOVE_QUESTION, EDIT_QUESTION } from './types';
+import {
+  ADD_QUESTIONS,
+  QUESTION_ADDED,
+  FILTER_QUESTIONS,
+  QUESTION_GOT,
+  QUESTION_UPDATED,
+  REMOVE_QUESTION,
+  EDIT_QUESTION,
+  VOTE_LIKE,
+  VOTE_DISLIKE
+} from './types';
 
 export const addQuestions = questions => ({
   type: ADD_QUESTIONS,
@@ -36,6 +46,16 @@ export const editQuestion = question => ({
   question
 });
 
+export const voteLike = question => ({
+  type: VOTE_LIKE,
+  question
+});
+
+export const voteDislike = question => ({
+  type: VOTE_DISLIKE,
+  question
+});
+
 export const getQuestions = filter =>
   dispatch => axios.get('/api/questions')
     .then((res) => {
@@ -55,6 +75,16 @@ export const removeQuestionById = id =>
 export const changeQuestionField = (id, field, value) =>
   dispatch => axios.put(`/api/questions/one/${id}`, { field, value })
     .then(res => dispatch(editQuestion(res.data.que)));
+
+export const voteQuestion = (id, field, value) =>
+  dispatch => axios.put(`/api/questions/vote/${id}`, { field, value })
+    .then((res) => {
+      const like = field.split('.')[1];
+
+      return (like === 'like')
+        ? dispatch(voteLike(res.data.que))
+        : dispatch(voteDislike(res.data.que));
+    });
 
 export const addQuestion = data =>
   dispatch => axios.post('/api/questions/add', data)

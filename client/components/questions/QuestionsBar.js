@@ -6,14 +6,6 @@ import QuestionsBarItem from './QuestionsBarItem';
 const QuestionsBar = ({ active, filter, selector }) => (
   <aside>
     <QuestionsBarItem
-      header="Authors"
-      type={selector.authors}
-      name="author"
-      active={active}
-      filter={filter}
-    />
-
-    <QuestionsBarItem
       header="Type"
       type={selector.types}
       name="theory"

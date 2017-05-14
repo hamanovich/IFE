@@ -6,17 +6,22 @@ import { LinkContainer } from 'react-router-bootstrap';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
+import NavDropdown from 'react-bootstrap/lib/NavDropdown';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
-const NavigationBar = ({ logout, isAuthenticated }) => {
+const NavigationBar = ({ logout, auth }) => {
   const userLinks = (
     <Nav pullRight>
       <LinkContainer to="/add-question">
         <NavItem>Add Question</NavItem>
       </LinkContainer>
-      <LinkContainer to="/account">
-        <NavItem>Account</NavItem>
-      </LinkContainer>
-      <NavItem onClick={logout}>Logout</NavItem>
+      <NavDropdown title={auth.user.username || ''} id="account-dropdown">
+        <LinkContainer to="/account"><MenuItem>Account</MenuItem></LinkContainer>
+        <LinkContainer to={`/user/${auth.user._id}`}><MenuItem>Edit profile</MenuItem></LinkContainer>
+        <MenuItem divider />
+        <MenuItem onClick={logout}><Glyphicon glyph="lock" /> Logout</MenuItem>
+      </NavDropdown>
     </Nav>
   );
 
@@ -43,14 +48,18 @@ const NavigationBar = ({ logout, isAuthenticated }) => {
           <NavItem>Questions</NavItem>
         </LinkContainer>
       </Nav>
-      {isAuthenticated ? userLinks : guestLinks}
+      {auth.isAuthenticated ? userLinks : guestLinks}
     </Navbar>
   );
 };
 
 NavigationBar.propTypes = {
   logout: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired
+  auth: PropTypes.object
+};
+
+NavigationBar.defaultProps = {
+  auth: {}
 };
 
 export default NavigationBar;

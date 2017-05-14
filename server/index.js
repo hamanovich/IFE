@@ -1,4 +1,5 @@
 import express from 'express';
+import bluebird from 'bluebird';
 import path from 'path';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
@@ -26,7 +27,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 5
 
 app.use(express.static(path.join(__dirname, '/../public')));
 
-mongoose.Promise = global.Promise;
+mongoose.Promise = bluebird;
 mongoose.connect(config.localMongodbURL, null).then(
   () => {
     if (isDevelopment) {

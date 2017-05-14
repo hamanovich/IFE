@@ -1,6 +1,16 @@
 import map from 'lodash/map';
 
-import { ADD_QUESTIONS, QUESTION_ADDED, QUESTION_UPDATED, FILTER_QUESTIONS, QUESTION_GOT, REMOVE_QUESTION, EDIT_QUESTION } from '../actions/types';
+import {
+  ADD_QUESTIONS,
+  QUESTION_ADDED,
+  QUESTION_UPDATED,
+  FILTER_QUESTIONS,
+  QUESTION_GOT,
+  REMOVE_QUESTION,
+  EDIT_QUESTION,
+  VOTE_LIKE,
+  VOTE_DISLIKE
+} from '../actions/types';
 
 export default (state = [], action) => {
   switch (action.type) {
@@ -8,10 +18,7 @@ export default (state = [], action) => {
       return action.questions;
 
     case QUESTION_ADDED:
-      return [
-        ...state,
-        action.question
-      ];
+      return [...state, action.question];
 
     case FILTER_QUESTIONS:
       const splitted = action.filter.split(':');
@@ -53,6 +60,8 @@ export default (state = [], action) => {
 
     case EDIT_QUESTION:
     case QUESTION_UPDATED:
+    case VOTE_LIKE:
+    case VOTE_DISLIKE:
       const editIndex = state.findIndex(question => question._id === action.question._id);
 
       if (editIndex > -1) {

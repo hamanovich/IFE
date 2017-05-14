@@ -7,9 +7,9 @@ import Row from 'react-bootstrap/lib/Row';
 
 import QuestionsList from './QuestionsList';
 import QuestionsBar from './QuestionsBar';
-import { getQuestions, filterQuestions, removeQuestionById, changeQuestionField } from '../../actions/questionActions';
+import { getQuestions, filterQuestions, removeQuestionById, changeQuestionField, voteQuestion } from '../../actions/questionActions';
 import { addFlashMessage } from '../../actions/flashMessages';
-import { selectAllAuthors, selectAllTypes, selectAllSkills, selectAllLevels } from '../../selectors';
+import { selectUser, selectAllQuestions, selectAllTypes, selectAllSkills, selectAllLevels } from '../../selectors';
 
 class QuestionsPage extends Component {
   static propTypes = {
@@ -18,10 +18,10 @@ class QuestionsPage extends Component {
     removeQuestionById: PropTypes.func.isRequired,
     changeQuestionField: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
+    voteQuestion: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
     questions: PropTypes.arrayOf(PropTypes.object).isRequired,
     user: PropTypes.object.isRequired,
-    authors: PropTypes.object.isRequired,
     types: PropTypes.object.isRequired,
     skills: PropTypes.object.isRequired,
     levels: PropTypes.object.isRequired
@@ -41,10 +41,10 @@ class QuestionsPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { questions, params, addFlashMessage } = this.props;
-    if (nextProps.questions !== questions && params.type !== undefined) {
+    const { questions, addFlashMessage } = this.props;
+    if (nextProps.questions !== questions) {
       this.setState({
-        active: nextProps.params.type
+        active: nextProps.params.type || ''
       }, () => {
         const visible = nextProps.questions.filter(question => question.visible === true);
 
@@ -68,16 +68,16 @@ class QuestionsPage extends Component {
   };
 
   render() {
-    const { questions, user, removeQuestionById, changeQuestionField, authors, types, skills, levels } = this.props;
+    const { questions, user, removeQuestionById, changeQuestionField, types, skills, levels, voteQuestion } = this.props;
     const filteredQuestions = questions.filter(q => q.visible === true);
 
-    return (
+    const hasQuestions = (
       <Row>
         <Col md={3} sm={4}>
           <QuestionsBar
             active={this.state.active}
             filter={this.filter}
-            selector={{ authors, types, skills, levels }}
+            selector={{ types, skills, levels }}
           />
         </Col>
         <Col md={9} sm={8} style={{ minHeight: 300 }}>
@@ -86,21 +86,27 @@ class QuestionsPage extends Component {
             user={user}
             removeQuestionById={removeQuestionById}
             changeQuestionField={changeQuestionField}
+            voteQuestion={voteQuestion}
           />
         </Col>
       </Row>
+    );
+
+    return (
+      <div>
+        {questions.length === 0 ? <QuestionsList /> : hasQuestions}
+      </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  user: state.auth.user,
-  questions: state.questions,
+  user: selectUser(state),
+  questions: selectAllQuestions(state),
   flashMessages: state.flashMessages,
-  authors: selectAllAuthors(state),
   types: selectAllTypes(state),
   skills: selectAllSkills(state),
   levels: selectAllLevels(state)
 });
 
-export default connect(mapStateToProps, { getQuestions, filterQuestions, removeQuestionById, changeQuestionField, addFlashMessage })(QuestionsPage);
+export default connect(mapStateToProps, { getQuestions, filterQuestions, removeQuestionById, changeQuestionField, addFlashMessage, voteQuestion })(QuestionsPage);
