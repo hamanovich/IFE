@@ -2,9 +2,9 @@ import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';
 
 import {
+  USER_GOT,
   SET_CURRENT_USER,
   QUESTION_ADDED,
-  ADD_QUESTIONS,
   EDIT_QUESTION,
   REMOVE_QUESTION,
   FILTER_QUESTIONS,
@@ -19,36 +19,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case USER_GOT:
     case SET_CURRENT_USER:
       return {
         isAuthenticated: !isEmpty(action.user),
         user: action.user
-      };
-
-    case ADD_QUESTIONS:
-      const userQuestions = action.questions.filter(question => question.author._id === state.user._id);
-      const votes = {
-        like: [],
-        dislike: []
-      };
-
-      action.questions.forEach((question) => {
-        question.votes.like.forEach((like) => {
-          if (state.user._id === like) votes.like.push(like);
-        });
-
-        question.votes.dislike.forEach((dislike) => {
-          if (state.user._id === dislike) votes.dislike.push(dislike);
-        });
-      });
-      
-      return {
-        ...state,
-        user: {
-          ...state.user,
-          questions: userQuestions,
-          votes
-        }
       };
 
     case EDIT_QUESTION:
@@ -122,9 +97,9 @@ export default (state = initialState, action) => {
       const splitted = action.filter.split(':');
       const type = splitted[0];
       const value = splitted[1];
-      const questions = map(state.user.questions, question => ({
+      const questions = map(state.questions, question => ({
         ...question,
-        visible: question[type] === value || question[type].indexOf(value) > -1
+        visible: question[type] === value || question[type].indexOf(value) > -1 || true
       }));
 
       return {
@@ -140,7 +115,10 @@ export default (state = initialState, action) => {
         ...state,
         user: {
           ...state.user,
-          questions: action.question
+          questions: [
+            ...state.user.questions,
+            action.question
+          ]
         }
       };
 

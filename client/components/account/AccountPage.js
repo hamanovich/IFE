@@ -8,7 +8,6 @@ import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import ListGroup from 'react-bootstrap/lib/ListGroup';
-import Image from 'react-bootstrap/lib/Image';
 import Well from 'react-bootstrap/lib/Well';
 import Modal from 'react-bootstrap/lib/Modal';
 
@@ -20,10 +19,11 @@ class AccountPage extends Component {
     user: PropTypes.shape({
       username: PropTypes.string,
       email: PropTypes.string,
-      avatar_image: PropTypes.string,
       job_function: PropTypes.string,
       primary_skill: PropTypes.string,
-      notes: PropTypes.string
+      notes: PropTypes.string,
+      first_name: PropTypes.string,
+      last_name: PropTypes.string
     }).isRequired,
     logout: PropTypes.func.isRequired,
     removeUserById: PropTypes.func.isRequired
@@ -69,9 +69,7 @@ class AccountPage extends Component {
         </Col>
         <Col md={9} sm={8}>
           <h1>Account: {user.username}</h1>
-          <p>
-            <Image src={user.avatar_image} alt={user.username} thumbnail />
-          </p>
+          {<h2>{user.first_name} {user.last_name}</h2>}
           <dl>
             <dt>Email:</dt>
             <dd>{user.email}</dd>

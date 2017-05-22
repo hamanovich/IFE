@@ -1,4 +1,5 @@
 import express from 'express';
+import logger from 'morgan';
 import bluebird from 'bluebird';
 import path from 'path';
 import bodyParser from 'body-parser';
@@ -20,7 +21,17 @@ const isDevelopment = app.get('env') !== 'production';
 const DIST_DIR = path.join(__dirname, 'dist');
 const HTML_FILE = path.join(DIST_DIR, 'index.html');
 
-app.set('port', process.env.PORT || config.PORT);
+app.set('port', config.PORT);
+
+app.use(logger('dev'));
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 50000 }));
@@ -28,7 +39,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 5
 app.use(express.static(path.join(__dirname, '/../public')));
 
 mongoose.Promise = bluebird;
-mongoose.connect(config.localMongodbURL, null).then(
+mongoose.connect(config.database, null).then(
   () => {
     if (isDevelopment) {
       app.use(WebpackDevMiddleWare(compiler, {

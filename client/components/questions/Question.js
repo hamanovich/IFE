@@ -164,7 +164,7 @@ class Question extends Component {
               </FormGroup>
               <Button
                 bsStyle="primary"
-                onClick={() => { changeQuestionField(ans._id, this.state.textField, this.textField.value); this.close(); }}
+                onClick={() => { changeQuestionField(ans._id, this.state.textField, this.textField.value, new Date()); this.close(); }}
               >Update</Button>
             </form>
           </Modal.Body>

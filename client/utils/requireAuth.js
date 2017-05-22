@@ -9,19 +9,19 @@ export default (ComposedComponent) => {
   class Authenticate extends Component {
     static propTypes = {
       isAuthenticated: PropTypes.bool.isRequired,
-      addFlashMessage: PropTypes.func.isRequired,
-      authorId: PropTypes.string,
-      author: PropTypes.object
+      addFlashMessage: PropTypes.func.isRequired
+      // authorId: PropTypes.string,
+      // author: PropTypes.object
     };
 
     static contextTypes = {
       router: PropTypes.object.isRequired
     };
 
-    static defaultProps = {
-      authorId: null,
-      author: {}
-    };
+    // static defaultProps = {
+    //   authorId: null,
+    //   author: {}
+    // };
 
     componentWillMount() {
       const { addFlashMessage, isAuthenticated } = this.props;
@@ -42,18 +42,19 @@ export default (ComposedComponent) => {
       }
     }
 
-    componentDidUpdate() {
-      const { isAuthenticated, addFlashMessage, authorId, author } = this.props;
-      
-      if (authorId !== author._id && isAuthenticated) {
-        addFlashMessage({
-          type: 'error',
-          text: 'You have no access to edit not your quesiton.'
-        });
+    // componentDidUpdate() {
+    //   const { isAuthenticated, addFlashMessage, authorId, author } = this.props;
+    //   console.log(author, authorId, this.context.router.routes);
 
-        this.context.router.push('/questions');
-      }
-    }
+    //   if (authorId !== author._id && isAuthenticated) {
+    //     addFlashMessage({
+    //       type: 'error',
+    //       text: 'You have no access to edit not your quesiton.'
+    //     });
+
+    //     this.context.router.push('/questions');
+    //   }
+    // }
 
     render() {
       return (

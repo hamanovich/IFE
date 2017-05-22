@@ -1,5 +1,5 @@
 export default {
   jwtSecret: 'jwtife',
-  localMongodbURL: 'mongodb://localhost/ife',
-  PORT: 3000
+  database: 'mongodb://hamanovich:admin@ds143201.mlab.com:43201/ife',
+  PORT: process.env.PORT || 3000
 };

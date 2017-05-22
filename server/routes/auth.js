@@ -14,15 +14,9 @@ router.post('/', (req, res) => {
     .then((user) => {
       if (user && bcrypt.compareSync(password, user.password_digest)) {
         const userData = {
-          _id: user.id,
+          _id: user._id,
           username: user.username,
-          email: user.email,
-          avatar_image: user.avatar_image.toString('binary'),
-          job_function: user.job_function,
-          primary_skill: user.primary_skill,
-          notes: user.notes,
-          questions: user.questions,
-          votes: user.votes
+          email: user.email
         };
         const token = jwt.sign(userData, config.jwtSecret);
 

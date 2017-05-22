@@ -19,8 +19,8 @@ router.get('/id/:id', (req, res) => {
 });
 
 router.post('/add', (req, res) => {
-  const { question, skill, level, theory, answer, answers, notes, userId, votes } = req.body;
-  Question.create({ question, skill, level, theory, answer, answers, notes, author: userId, votes })
+  const { question, skill, level, theory, answer, answers, notes, userId, votes, lastModified } = req.body;
+  Question.create({ question, skill, level, theory, answer, answers, notes, author: userId, votes, lastModified })
     .then((question) => {
       User.findByIdAndUpdate({ _id: userId }, { $push: { questions: question._id } }, { safe: true, upsert: true, new: true })
         .then(() => res.send(question))
@@ -30,9 +30,9 @@ router.post('/add', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
-  const { question, skill, level, theory, answer, answers, notes, username } = req.body;
+  const { question, skill, level, theory, answer, answers, notes, username, lastModified } = req.body;
 
-  Question.findByIdAndUpdate({ _id: req.params.id }, { $set: { question, skill, level, theory, answer, answers, notes, username } })
+  Question.findByIdAndUpdate({ _id: req.params.id }, { $set: { question, skill, level, theory, answer, answers, notes, username, lastModified } })
     .then(() => {
       Question.findOne({ _id: req.params.id })
         .then(que => res.json({ que }))
@@ -42,7 +42,7 @@ router.put('/:id', (req, res) => {
 });
 
 router.put('/one/:id', (req, res) => {
-  Question.findByIdAndUpdate({ _id: req.params.id }, { $set: { [req.body.field]: req.body.value } })
+  Question.findByIdAndUpdate({ _id: req.params.id }, { $set: { [req.body.field]: req.body.value, lastModified: req.body.lastModified } })
     .then(() => Question.findOne({ _id: req.params.id })
       .then(que => res.json({ que }))
       .catch(error => res.status(500).json({ error })));

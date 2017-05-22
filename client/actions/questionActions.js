@@ -72,8 +72,8 @@ export const removeQuestionById = id =>
   dispatch => axios.delete(`/api/questions/${id}`)
     .then(res => dispatch(removeQuestion(res.data.ans)));
 
-export const changeQuestionField = (id, field, value) =>
-  dispatch => axios.put(`/api/questions/one/${id}`, { field, value })
+export const changeQuestionField = (id, field, value, lastModified) =>
+  dispatch => axios.put(`/api/questions/one/${id}`, { field, value, lastModified: lastModified || new Date() })
     .then(res => dispatch(editQuestion(res.data.que)));
 
 export const voteQuestion = (id, field, value) =>
