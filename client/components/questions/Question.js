@@ -18,7 +18,7 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
-import Toolbar from '../overall/Toolbar';
+import Toolbar from '../toolbar/Toolbar';
 
 class Question extends Component {
   static propTypes = {

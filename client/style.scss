@@ -42,6 +42,10 @@ select[size]{
     background-color: $color-primary;
 }
 
+.panel-default{
+  box-shadow: none;
+}
+
 .footer {
   position: absolute;
   bottom: 0;

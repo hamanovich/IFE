@@ -30,6 +30,7 @@ const fillIn = (values, type, deep, field) => {
 };
 
 export const selectUser = state => state.auth.user;
+export const selectCandidates = state => state.interview;
 export const selectAllQuestions = state => state.questions;
 export const selectAllAuthors = createSelector(selectAllQuestions, questions => entries(fillIn(questions, 'author', false, 'username')));
 export const selectAllTypes = createSelector(selectAllQuestions, questions => entries(fillIn(questions, 'theory')));

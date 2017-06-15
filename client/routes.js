@@ -9,6 +9,9 @@ import LoginPage from './components/login/LoginPage';
 import AddQuestionPage from './components/addQuestion/AddQuestionPage';
 import QuestionsPage from './components/questions/QuestionsPage';
 import AccountPage from './components/account/AccountPage';
+import InterviewPage from './components/interview/InterviewPage';
+import CandidateForm from './components/interview/CandidateForm';
+import InterviewQuestions from './components/interview/InterviewQuestions';
 
 import requireAuth from './utils/requireAuth';
 
@@ -24,6 +27,9 @@ export default (
     <Route path="questions" component={QuestionsPage}>
       <Route path=":type" component={QuestionsPage} />
     </Route>
+    <Route path="interview" component={InterviewPage} />
+    <Route path="interview/step-1" component={CandidateForm} />
+    <Route path="interview/step-2" component={InterviewQuestions} />
     <Route path="*" name="not-found" component={NotFound} />
   </Route>
 );

@@ -41,6 +41,12 @@ const userSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'question',
     autopopulate: { select: 'questions' }
+  }],
+  lists: Schema.Types.Mixed,
+  candidates: [{
+    type: Schema.Types.ObjectId,
+    ref: 'candidate',
+    autopopulate: true
   }]
 });
 

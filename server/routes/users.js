@@ -35,10 +35,13 @@ router.post('/', (req, res) => {
 });
 
 router.put('/:id', (req, res) => {
+  console.log(req.body);
   validateUser(req.body, validate).then(({ errors, isValid }) => {
     if (isValid) {
       const { username, email, password, first_name, last_name, primary_skill, job_function, notes } = req.body;
       const password_digest = bcrypt.hashSync(password, 10);
+
+      console.log(username);
 
       User.findByIdAndUpdate(
         { _id: req.params.id },

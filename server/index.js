@@ -14,6 +14,7 @@ import config from './config';
 import users from './routes/users';
 import auth from './routes/auth';
 import questions from './routes/questions';
+import interview from './routes/interview';
 
 const app = express();
 const compiler = webpack(webpackConfig);
@@ -42,16 +43,14 @@ mongoose.Promise = bluebird;
 mongoose.connect(config.database, null).then(
   () => {
     if (isDevelopment) {
-      app.use(WebpackDevMiddleWare(compiler, {
-        publicPath: webpackConfig.output.publicPath,
-        noInfo: true
-      }));
+      app.use(WebpackDevMiddleWare(compiler));
 
       app.use(WebpackHotMiddleWare(compiler));
 
       app.use('/api/users', users);
       app.use('/api/auth', auth);
       app.use('/api/questions', questions);
+      app.use('/api/interview', interview);
 
       app.get('/*', (req, res) => {
         res.sendFile(path.join(__dirname, 'index.html'));

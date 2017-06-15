@@ -24,7 +24,7 @@ const SelectField = ({ id, input, multiple, options, meta: { touched, error, war
 SelectField.propTypes = {
   input: PropTypes.shape({
     name: PropTypes.string,
-    value: PropTypes.array
+    value: PropTypes.any
   }).isRequired,
   id: PropTypes.string.isRequired,
   multiple: PropTypes.bool.isRequired,

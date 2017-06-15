@@ -13,6 +13,9 @@ import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 const NavigationBar = ({ logout, auth }) => {
   const userLinks = (
     <Nav pullRight>
+      <LinkContainer to="/interview">
+        <NavItem>Interview</NavItem>
+      </LinkContainer>
       <LinkContainer to="/add-question">
         <NavItem>Add Question</NavItem>
       </LinkContainer>

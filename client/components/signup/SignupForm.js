@@ -64,37 +64,35 @@ class SignupForm extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    if (this.isValid()) {
-      this.setState({
-        errors: {},
-        isLoading: true
-      }, () => {
-        if (this.props.params.id) {
-          this.props.updateUser(this.state).then(
-            () => {
-              this.props.addFlashMessage({
-                type: 'success',
-                text: 'You have updated profile successfully. Please login again.'
-              });
-              this.context.router.push('/');
-            },
-            err => this.setState({ errors: err.response.data, isLoading: false })
-          );
-        } else {
-          this.props.userSignupRequest(this.state).then(
-            () => {
-              this.props.addFlashMessage({
-                type: 'success',
-                text: 'You have signed up successfully'
-              });
-              this.context.router.push('/');
-            },
-            err => this.setState({ errors: err.response.data, isLoading: false })
-          );
-        }
+    const { params, updateUser, addFlashMessage, userSignupRequest, logout } = this.props;
 
-        this.props.logout();
-      });
+    if (this.isValid()) {
+      this.setState({ errors: {}, isLoading: true });
+      if (params.id) {
+        updateUser(this.state).then(
+          () => {
+            addFlashMessage({
+              type: 'success',
+              text: 'You have updated profile successfully. Please login again.'
+            });
+            this.context.router.push('/');
+          },
+          err => this.setState({ errors: err.response.data, isLoading: false })
+        );
+      } else {
+        userSignupRequest(this.state).then(
+          () => {
+            addFlashMessage({
+              type: 'success',
+              text: 'You have signed up successfully'
+            });
+            this.context.router.push('/');
+          },
+          err => this.setState({ errors: err.response.data, isLoading: false })
+        );
+      }
+
+      logout();
     }
   };
 

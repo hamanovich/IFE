@@ -16,3 +16,7 @@ export const EDIT_QUESTION = '[QUESTION] EDIT';
 
 export const VOTE_LIKE = '[VOTE] LIKE';
 export const VOTE_DISLIKE = '[VOTE] DISLIKE';
+
+export const CANDIDATE_ADDED = '[INTERVIEW] ADDED';
+export const CANDIDATE_GOT = '[INTERVIEW] GOT ONE';
+export const CANDIDATES_GOT = '[INTERVIEW] GOT ALL';
