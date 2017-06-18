@@ -15,6 +15,7 @@ const ForgotForm = ({ state, handleSubmit, handleChange }) => (
     <h2>I forgot my password</h2>
 
     {state.emailed && <Alert bsStyle="success">{state.emailed}</Alert>}
+    {state.errorsForgot.form && <Alert bsStyle="danger">{state.errorsForgot.form}</Alert>}
 
     <Field
       label="Email:"
@@ -25,7 +26,7 @@ const ForgotForm = ({ state, handleSubmit, handleChange }) => (
       placeholder="Put Email"
       onChange={handleChange}
       defaultValue={state.forgot}
-      errorState={state.errors.forgot}
+      errorState={state.errorsForgot.forgot}
     />
 
     <FormGroup>
@@ -40,7 +41,7 @@ const ForgotForm = ({ state, handleSubmit, handleChange }) => (
 ForgotForm.propTypes = {
   state: PropTypes.shape({
     forgot: PropTypes.string.isRequired,
-    errors: PropTypes.object.isRequired
+    errorsForgot: PropTypes.object.isRequired
   }).isRequired,
   handleSubmit: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired

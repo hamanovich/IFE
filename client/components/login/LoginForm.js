@@ -14,7 +14,7 @@ const LoginForm = ({ state, handleSubmit, handleChange }) => (
   <Form onSubmit={handleSubmit} noValidate>
     <h1>Authorize</h1>
 
-    {state.errors.form && <Alert bsStyle="danger">{state.errors.form}</Alert>}
+    {state.errorsLogin.form && <Alert bsStyle="danger">{state.errorsLogin.form}</Alert>}
 
     <Field
       label="Username / Email*:"
@@ -25,7 +25,7 @@ const LoginForm = ({ state, handleSubmit, handleChange }) => (
       placeholder="Type your Username or Email"
       onChange={handleChange}
       defaultValue={state.identifier}
-      errorState={state.errors.identifier}
+      errorState={state.errorsLogin.identifier}
     />
 
     <Field
@@ -37,7 +37,7 @@ const LoginForm = ({ state, handleSubmit, handleChange }) => (
       placeholder="Type your Password"
       onChange={handleChange}
       defaultValue={state.password}
-      errorState={state.errors.password}
+      errorState={state.errorsLogin.password}
     />
 
     <FormGroup>
@@ -55,7 +55,7 @@ LoginForm.propTypes = {
   state: PropTypes.shape({
     identifier: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired,
-    errors: PropTypes.object.isRequired,
+    errorsLogin: PropTypes.object.isRequired,
     isLoading: PropTypes.bool.isRequired
   }).isRequired,
   handleSubmit: PropTypes.func.isRequired,

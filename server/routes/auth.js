@@ -31,7 +31,7 @@ router.post('/forgot', (req, res) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
-        res.status(401).json({ errors: { forgot: 'No account with that email exists' } });
+        res.status(401).json({ errors: { form: 'No account with that email exists' } });
         return;
       }
 

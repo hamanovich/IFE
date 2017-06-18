@@ -10,6 +10,13 @@ import { userSignupRequest, isUserExists } from '../../actions/signupActions';
 import { addFlashMessage } from '../../actions/flashMessages';
 
 class SignupPage extends Component {
+  componentDidMount = () => {
+    const { params } = this.props;
+    const { _id, username, email, first_name, last_name, job_function, primary_skill, notes } = initialValues;
+
+    console.log(_id, username, email, first_name, last_name, job_function, primary_skill, notes);
+  };
+
   render() {
     const { userSignupRequest, addFlashMessage, isUserExists } = this.props;
 

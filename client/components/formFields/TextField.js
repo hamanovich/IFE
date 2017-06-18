@@ -30,8 +30,7 @@ const TextField = ({
       readOnly={readonly}
       onBlur={(e) => { checkUserExists(e); input.onBlur(e); }}
     />
-    {errorState && <HelpBlock>{errorState}</HelpBlock>}
-    {touched && ((error && <HelpBlock>{error}</HelpBlock>) || (warning && <span>{warning}</span>))}
+    {(errorState || touched) && ((error && <HelpBlock>{error}</HelpBlock>) || (warning && <span>{warning}</span>))}
   </FormGroup>
 );
 

@@ -53,18 +53,33 @@ class SignupForm extends Component {
     const { params, getUser, initialValues } = this.props;
     const { _id, username, email, first_name, last_name, job_function, primary_skill, notes } = initialValues;
 
+    console.log(_id, username, email, first_name, last_name, job_function, primary_skill, notes);
+
     if (params.id) {
-      getUser(params.id);
-      this.setState({
-        _id, username, email, first_name, last_name, job_function, primary_skill, notes
-      });
+      getUser(params.id)
+        .then((res) => {
+          const { _id, username, email, first_name, last_name, job_function, primary_skill, notes } = res.user;
+          console.log('U', res.user);
+          this.setState({
+            _id, username, email, first_name, last_name, job_function, primary_skill, notes
+          });
+        });
     }
+    // if (params.id) {
+    //   getUser(params.id)
+    //     .then((res) => {
+    //       console.log('U', res.user);
+    //     });
+    //   this.setState({
+    //     _id, username, email, first_name, last_name, job_function, primary_skill, notes
+    //   });
+    // }
   };
 
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { params, updateUser, addFlashMessage, userSignupRequest, logout } = this.props;
+    const { params, updateUser, getUser, addFlashMessage, userSignupRequest, logout } = this.props;
 
     if (this.isValid()) {
       this.setState({
@@ -76,9 +91,10 @@ class SignupForm extends Component {
             () => {
               addFlashMessage({
                 type: 'success',
-                text: 'You have updated profile successfully. Please login again.'
+                text: 'You have updated profile successfully.'
               });
-              this.context.router.push('/');
+              this.context.router.push('/account');
+              getUser(params.id);
             },
             err => this.setState({ errors: err.response.data, isLoading: false })
           );
@@ -95,7 +111,7 @@ class SignupForm extends Component {
           );
         }
 
-        logout();
+        // logout();
       });
     }
   };
@@ -141,6 +157,8 @@ class SignupForm extends Component {
     const { errors, username, email, isLoading, invalid, first_name, last_name, job_function, primary_skill, notes } = this.state;
     const { params } = this.props;
 
+    console.log('render ', errors, username, email, isLoading, invalid, first_name, last_name, job_function, primary_skill, notes);
+
     return (
       <Form onSubmit={this.onSubmit} noValidate>
         <h1>{params.id ? 'Edit profile' : 'Register'}</h1>
@@ -179,9 +197,9 @@ class SignupForm extends Component {
               name="first_name"
               placeholder="What is your name"
               onChange={this.onChange}
-              defaultValue={first_name}
             />
           </Col>
+          TEST {first_name}
           <Col sm={6}>
             <Field
               label="Last name:"

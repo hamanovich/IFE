@@ -32,14 +32,14 @@ class AddQuestionPage extends Component {
     const { params, getQuestion } = this.props;
 
     if (params._id) {
-      getQuestion(params._id);
+      getQuestion(params._id)
+      .then(res => console.log('R', res.question));
     }
   };
 
   submit = (values) => {
     const { userId, addQuestion, updateQuestion, addFlashMessage } = this.props;
     const query = { ...values, userId, lastModified: new Date() };
-    console.log(new Date())
 
     if (values._id) {
       updateQuestion(query)
