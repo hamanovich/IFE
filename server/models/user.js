@@ -1,22 +1,26 @@
 import mongoose from 'mongoose';
 import autopopulate from 'mongoose-autopopulate';
+import md5 from 'md5';
 
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   username: {
     type: String,
-    required: [true, 'Username field is required']
+    unique: true,
+    trim: true,
+    required: 'Username field is required'
   },
   email: {
     type: String,
-    required: [true, 'Email field is required'],
     unique: true,
-    lowercase: true
+    lowercase: true,
+    trim: true,
+    required: 'Email field is required'
   },
   password_digest: {
     type: String,
-    required: [true, 'Password field is required']
+    required: 'Password field is required'
   },
   first_name: String,
   last_name: String,
@@ -31,8 +35,8 @@ const userSchema = new Schema({
   //   enum: ['Member', 'Client', 'Owner', 'Admin'],
   //   default: 'Member'
   // },
-  // resetPasswordToken: String,
-  // resetPasswordExpires: Date,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
   votes: {
     like: [Schema.Types.ObjectId],
     dislike: [Schema.Types.ObjectId]
@@ -42,6 +46,11 @@ const userSchema = new Schema({
     ref: 'question',
     autopopulate: { select: 'questions' }
   }]
+});
+
+userSchema.virtual('gravatar').get(() => {
+  const hash = md5(this.email);
+  return `https://gravatar.com/avatar/${hash}?s=200`;
 });
 
 userSchema.plugin(autopopulate);

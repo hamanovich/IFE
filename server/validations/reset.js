@@ -1,21 +1,8 @@
-import isEmail from 'validator/lib/isEmail';
 import equals from 'validator/lib/equals';
 import isEmpty from 'lodash/isEmpty';
 
 export default (values) => {
   const errors = {};
-
-  if (!values.username) {
-    errors.username = 'Username is required';
-  }
-
-  if (!values.email) {
-    errors.email = 'Email is required';
-  }
-
-  if (values.email && !isEmail(values.email)) {
-    errors.email = 'Email is invalid';
-  }
 
   if (!values.password) {
     errors.password = 'Password is required';

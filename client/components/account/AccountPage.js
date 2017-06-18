@@ -68,8 +68,7 @@ class AccountPage extends Component {
           </ListGroup>
         </Col>
         <Col md={9} sm={8}>
-          <h1>Account: {user.username}</h1>
-          {<h2>{user.first_name} {user.last_name}</h2>}
+          <h1>{user.first_name} {user.last_name}</h1>
           <dl>
             <dt>Email:</dt>
             <dd>{user.email}</dd>

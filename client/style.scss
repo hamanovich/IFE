@@ -116,3 +116,12 @@ select[size]{
     transform: rotate(360deg);
   }
 }
+
+.panel{
+  box-shadow: none;
+  border: 0;
+
+  &:last-child{
+    margin-bottom: 0;
+  }
+}

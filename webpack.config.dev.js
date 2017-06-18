@@ -1,6 +1,8 @@
 import path from 'path';
 import webpack from 'webpack';
 
+process.noDeprecation = true;
+
 export default {
   devtool: 'cheap-module-eval-source-map',
   entry: [

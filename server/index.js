@@ -1,6 +1,5 @@
 import express from 'express';
 import logger from 'morgan';
-import bluebird from 'bluebird';
 import path from 'path';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
@@ -9,7 +8,6 @@ import WebpackDevMiddleWare from 'webpack-dev-middleware';
 import WebpackHotMiddleWare from 'webpack-hot-middleware';
 
 import webpackConfig from '../webpack.config.dev';
-import config from './config';
 
 import users from './routes/users';
 import auth from './routes/auth';
@@ -21,7 +19,7 @@ const isDevelopment = app.get('env') !== 'production';
 const DIST_DIR = path.join(__dirname, 'dist');
 const HTML_FILE = path.join(DIST_DIR, 'index.html');
 
-app.set('port', config.PORT);
+app.set('port', process.env.PORT);
 
 app.use(logger('dev'));
 
@@ -38,8 +36,11 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true, parameterLimit: 5
 
 app.use(express.static(path.join(__dirname, '/../public')));
 
-mongoose.Promise = bluebird;
-mongoose.connect(config.database, null).then(
+app.set('views', path.join(__dirname, '/views'));
+app.set('view engine', 'pug');
+
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.DATABASE, null).then(
   () => {
     if (isDevelopment) {
       app.use(WebpackDevMiddleWare(compiler, {
@@ -54,7 +55,7 @@ mongoose.connect(config.database, null).then(
       app.use('/api/questions', questions);
 
       app.get('/*', (req, res) => {
-        res.sendFile(path.join(__dirname, 'index.html'));
+        res.render('index', { title: 'IFE: Interview for Everyone.' });
       });
     } else {
       app.use(express.static(DIST_DIR));

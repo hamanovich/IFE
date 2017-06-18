@@ -64,15 +64,17 @@ class SignupForm extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
+    const { params, updateUser, addFlashMessage, userSignupRequest, logout } = this.props;
+
     if (this.isValid()) {
       this.setState({
         errors: {},
         isLoading: true
       }, () => {
-        if (this.props.params.id) {
-          this.props.updateUser(this.state).then(
+        if (params.id) {
+          updateUser(this.state).then(
             () => {
-              this.props.addFlashMessage({
+              addFlashMessage({
                 type: 'success',
                 text: 'You have updated profile successfully. Please login again.'
               });
@@ -81,9 +83,9 @@ class SignupForm extends Component {
             err => this.setState({ errors: err.response.data, isLoading: false })
           );
         } else {
-          this.props.userSignupRequest(this.state).then(
+          userSignupRequest(this.state).then(
             () => {
-              this.props.addFlashMessage({
+              addFlashMessage({
                 type: 'success',
                 text: 'You have signed up successfully'
               });
@@ -93,7 +95,7 @@ class SignupForm extends Component {
           );
         }
 
-        this.props.logout();
+        logout();
       });
     }
   };
