@@ -23,8 +23,8 @@ class SignupForm extends Component {
     updateUser: PropTypes.func.isRequired,
     addFlashMessage: PropTypes.func.isRequired,
     isUserExists: PropTypes.func.isRequired,
-    logout: PropTypes.func.isRequired,
     getUser: PropTypes.func.isRequired,
+    initialize: PropTypes.func.isRequired,
     params: PropTypes.object.isRequired,
     initialValues: PropTypes.object.isRequired
   };
@@ -34,52 +34,29 @@ class SignupForm extends Component {
   };
 
   state = {
-    _id: '',
-    username: '',
-    email: '',
-    password: '',
-    passwordConfirmation: '',
-    first_name: '',
-    last_name: '',
-    job_function: '',
-    primary_skill: '',
-    notes: '',
     errors: {},
     isLoading: false,
     invalid: false
   };
 
   componentDidMount = () => {
-    const { params, getUser, initialValues } = this.props;
-    const { _id, username, email, first_name, last_name, job_function, primary_skill, notes } = initialValues;
+    const { params, getUser, initialize, initialValues } = this.props;
 
-    console.log(_id, username, email, first_name, last_name, job_function, primary_skill, notes);
-
-    if (params.id) {
+    if (params.id && !initialValues.first_name) {
       getUser(params.id)
         .then((res) => {
-          const { _id, username, email, first_name, last_name, job_function, primary_skill, notes } = res.user;
-          console.log('U', res.user);
-          this.setState({
-            _id, username, email, first_name, last_name, job_function, primary_skill, notes
+          const { username, email, first_name, last_name, job_function, primary_skill, notes } = res.user;
+          initialize({
+            username, email, first_name, last_name, job_function, primary_skill, notes
           });
         });
     }
-    // if (params.id) {
-    //   getUser(params.id)
-    //     .then((res) => {
-    //       console.log('U', res.user);
-    //     });
-    //   this.setState({
-    //     _id, username, email, first_name, last_name, job_function, primary_skill, notes
-    //   });
-    // }
   };
 
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { params, updateUser, getUser, addFlashMessage, userSignupRequest, logout } = this.props;
+    const { params, updateUser, getUser, addFlashMessage, userSignupRequest } = this.props;
 
     if (this.isValid()) {
       this.setState({
@@ -110,8 +87,6 @@ class SignupForm extends Component {
             err => this.setState({ errors: err.response.data, isLoading: false })
           );
         }
-
-        // logout();
       });
     }
   };
@@ -154,10 +129,8 @@ class SignupForm extends Component {
   };
 
   render() {
-    const { errors, username, email, isLoading, invalid, first_name, last_name, job_function, primary_skill, notes } = this.state;
+    const { errors, isLoading, invalid } = this.state;
     const { params } = this.props;
-
-    console.log('render ', errors, username, email, isLoading, invalid, first_name, last_name, job_function, primary_skill, notes);
 
     return (
       <Form onSubmit={this.onSubmit} noValidate>
@@ -170,7 +143,6 @@ class SignupForm extends Component {
           placeholder="Type your name"
           onChange={this.onChange}
           checkUserExists={this.checkUserExists}
-          defaultValue={username}
           errorState={errors.username}
           readonly={!!params.id}
         />
@@ -183,7 +155,6 @@ class SignupForm extends Component {
           placeholder="Type your email"
           onChange={this.onChange}
           checkUserExists={this.checkUserExists}
-          defaultValue={email}
           errorState={errors.email}
           readonly={!!params.id}
         />
@@ -199,7 +170,7 @@ class SignupForm extends Component {
               onChange={this.onChange}
             />
           </Col>
-          TEST {first_name}
+          
           <Col sm={6}>
             <Field
               label="Last name:"
@@ -208,7 +179,6 @@ class SignupForm extends Component {
               name="last_name"
               placeholder="What is your surname"
               onChange={this.onChange}
-              defaultValue={last_name}
             />
           </Col>
         </Row>
@@ -224,7 +194,6 @@ class SignupForm extends Component {
               name="primary_skill"
               placeholder="Type your primary skill"
               onChange={this.onChange}
-              defaultValue={primary_skill}
             />
           </Col>
           <Col sm={6}>
@@ -235,7 +204,6 @@ class SignupForm extends Component {
               name="job_function"
               placeholder="Type your job function (level)"
               onChange={this.onChange}
-              defaultValue={job_function}
             />
           </Col>
         </Row>
@@ -246,7 +214,6 @@ class SignupForm extends Component {
           name="notes"
           placeholder="Please add some notes about yourself"
           onChange={this.onChange}
-          defaultValue={notes}
           rows={5}
         />
 
@@ -286,7 +253,7 @@ class SignupForm extends Component {
 }
 
 function mapStateToProps(state, props) {
-  if (props.params.id && typeof selectUser(state) !== 'undefined') {
+  if (props.params.id) {
     return {
       initialValues: selectUser(state)
     };

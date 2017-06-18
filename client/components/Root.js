@@ -9,7 +9,6 @@ import jwtDecode from 'jwt-decode';
 import routes from '../routes';
 import rootReducer from '../reducers';
 import setAuthorizationToken from '../utils/setAuthorizationToken';
-import { getUser } from '../actions/signupActions';
 import { setCurrentUser } from '../actions/authActions';
 
 const store = createStore(
@@ -25,7 +24,6 @@ const localJwtToken = localStorage.jwtToken;
 if (localJwtToken) {
   setAuthorizationToken(localJwtToken);
   store.dispatch(setCurrentUser(jwtDecode(localJwtToken)));
-  store.dispatch(getUser(jwtDecode(localJwtToken)._id));
 }
 
 const history = syncHistoryWithStore(browserHistory, store);

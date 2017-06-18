@@ -10,21 +10,15 @@ import { userSignupRequest, isUserExists } from '../../actions/signupActions';
 import { addFlashMessage } from '../../actions/flashMessages';
 
 class SignupPage extends Component {
-  componentDidMount = () => {
-    const { params } = this.props;
-    const { _id, username, email, first_name, last_name, job_function, primary_skill, notes } = initialValues;
-
-    console.log(_id, username, email, first_name, last_name, job_function, primary_skill, notes);
-  };
-
   render() {
-    const { userSignupRequest, addFlashMessage, isUserExists } = this.props;
+    const { user, userSignupRequest, addFlashMessage, isUserExists } = this.props;
 
     return (
       <Row>
         <Col md={6} mdOffset={3}>
           <SignupForm
             {...this.props}
+            user={user}
             userSignupRequest={userSignupRequest}
             isUserExists={isUserExists}
             addFlashMessage={addFlashMessage}
@@ -38,7 +32,8 @@ class SignupPage extends Component {
 SignupPage.propTypes = {
   userSignupRequest: PropTypes.func.isRequired,
   isUserExists: PropTypes.func.isRequired,
-  addFlashMessage: PropTypes.func.isRequired
+  addFlashMessage: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 export default connect(null, { userSignupRequest, isUserExists, addFlashMessage })(SignupPage);

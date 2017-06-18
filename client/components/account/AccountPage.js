@@ -11,8 +11,9 @@ import ListGroup from 'react-bootstrap/lib/ListGroup';
 import Well from 'react-bootstrap/lib/Well';
 import Modal from 'react-bootstrap/lib/Modal';
 
+import { selectUser } from '../../selectors';
 import { logout } from '../../actions/authActions';
-import { removeUserById } from '../../actions/signupActions';
+import { removeUserById, getUser } from '../../actions/signupActions';
 
 class AccountPage extends Component {
   static propTypes = {
@@ -26,6 +27,7 @@ class AccountPage extends Component {
       last_name: PropTypes.string
     }).isRequired,
     logout: PropTypes.func.isRequired,
+    getUser: PropTypes.func.isRequired,
     removeUserById: PropTypes.func.isRequired
   };
 
@@ -33,6 +35,13 @@ class AccountPage extends Component {
     showRemoveModal: false,
     _id: ''
   };
+
+  componentDidMount() {
+    const { user, getUser } = this.props;
+    if (!user.first_name) {
+      getUser(user._id);
+    }
+  }
 
   close = () => {
     this.setState({
@@ -112,4 +121,5 @@ class AccountPage extends Component {
   }
 }
 
-export default connect(null, { logout, removeUserById })(AccountPage);
+
+export default connect(null, { getUser, logout, removeUserById })(AccountPage);
