@@ -11,9 +11,11 @@ import {
   VOTE_DISLIKE
 } from './types';
 
-export const addQuestions = questions => ({
+export const addQuestions = (questions, count, pages) => ({
   type: ADD_QUESTIONS,
-  questions
+  questions,
+  count,
+  pages
 });
 
 export const filterQuestions = filter => ({
@@ -56,12 +58,14 @@ export const voteDislike = question => ({
   question
 });
 
-export const getQuestions = filter =>
-  dispatch => axios.get('/api/questions')
+export const getQuestions = (page = 1) =>
+  dispatch => axios.get(`/api/questions/page/${page}`)
     .then((res) => {
-      dispatch(addQuestions(res.data.ans));
+      const { ans, count, pages } = res.data;
+      dispatch(addQuestions(ans, count, pages));
 
-      if (filter) dispatch(filterQuestions(filter));
+      return { ans, count, pages };
+      // if (filter) dispatch(filterQuestions(filter));
     });
 
 export const getQuestion = id =>
@@ -81,7 +85,7 @@ export const voteQuestion = (id, field, value) =>
     .then((res) => {
       const like = field.split('.')[1];
 
-      return (like === 'like')
+      return like === 'like'
         ? dispatch(voteLike(res.data.que))
         : dispatch(voteDislike(res.data.que));
     });

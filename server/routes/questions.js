@@ -1,24 +1,36 @@
-import express from 'express';
-
 import Question from '../models/question';
 import User from '../models/user';
 
-const router = express.Router();
+exports.getQuestions = (req, res) => {
+  const page = req.params.page || 1;
+  const limit = 2;
+  const skip = (page * limit) - limit;
+  const countPrimise = Question.count();
+  const questionsPromise = Question
+    .find()
+    .skip(skip)
+    .limit(limit);
 
-router.get('/', (req, res) => {
-  Question.find()
-    .then(ans => res.json({ ans }))
-    .catch(error => res.status(500).json({ error }));
-});
+  Promise.all([questionsPromise, countPrimise]).then((result) => {
+    const [ans, count] = result;
+    const pages = Math.ceil(count / limit);
 
-router.get('/id/:id', (req, res) => {
+    if (!ans.length && skip) {
+      res.status(500).json({ error: `You asked for page ${page}. But that doesn't exist. Maximum page is ${pages}` });
+    }
+
+    res.json({ ans, count, pages });
+  }).catch(error => res.status(500).json({ error }));
+};
+
+exports.getQuestionById = (req, res) => {
   Question
     .findOne({ _id: req.params.id })
     .then(ans => res.json({ ans }))
     .catch(error => res.status(500).json({ error }));
-});
+};
 
-router.post('/add', (req, res) => {
+exports.addQuestion = (req, res) => {
   const { question, skill, level, theory, answer, answers, notes, userId, votes, lastModified } = req.body;
   Question.create({ question, skill, level, theory, answer, answers, notes, author: userId, votes, lastModified })
     .then((question) => {
@@ -27,9 +39,9 @@ router.post('/add', (req, res) => {
         .catch(err => res.status(500).json({ error: err }));
     })
     .catch(err => res.status(500).json({ error: err }));
-});
+};
 
-router.put('/:id', (req, res) => {
+exports.updateQuestion = (req, res) => {
   const { question, skill, level, theory, answer, answers, notes, username, lastModified } = req.body;
 
   Question.findByIdAndUpdate({ _id: req.params.id }, { $set: { question, skill, level, theory, answer, answers, notes, username, lastModified } })
@@ -39,16 +51,16 @@ router.put('/:id', (req, res) => {
         .catch(error => res.status(500).json({ error }));
     })
     .catch(err => res.status(500).json({ error: err }));
-});
+};
 
-router.put('/one/:id', (req, res) => {
+exports.updateQuestionField = (req, res) => {
   Question.findByIdAndUpdate({ _id: req.params.id }, { $set: { [req.body.field]: req.body.value, lastModified: req.body.lastModified } })
     .then(() => Question.findOne({ _id: req.params.id })
       .then(que => res.json({ que }))
       .catch(error => res.status(500).json({ error })));
-});
+};
 
-router.put('/vote/:id', (req, res) => {
+exports.voteQuestion = (req, res) => {
   Question.findByIdAndUpdate({ _id: req.params.id }, { $push: { [req.body.field]: req.body.value } })
     .then(() => Question.findOne({ _id: req.params.id })
       .then((que) => {
@@ -57,9 +69,9 @@ router.put('/vote/:id', (req, res) => {
           .catch(err => res.status(500).json({ error: err }));
       }))
     .catch(error => res.status(500).json({ error }));
-});
+};
 
-router.delete('/:id', (req, res) => {
+exports.deleteQuestion = (req, res) => {
   Question.findByIdAndRemove({ _id: req.params.id })
     .then((ans) => {
       User.findByIdAndUpdate({ _id: ans.author }, { $pull: { questions: ans._id } })
@@ -67,6 +79,4 @@ router.delete('/:id', (req, res) => {
         .catch(error => res.status(500).json({ error }));
     })
     .catch(error => res.status(500).json({ error }));
-});
-
-export default router;
+};

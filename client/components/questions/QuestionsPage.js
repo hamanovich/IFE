@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/lib/Row';
 
 import QuestionsList from './QuestionsList';
 import QuestionsBar from './QuestionsBar';
+import PaginationBar from '../overall/PaginationBar';
 import { getQuestions, filterQuestions, removeQuestionById, changeQuestionField, voteQuestion } from '../../actions/questionActions';
 import { addFlashMessage } from '../../actions/flashMessages';
 import { selectUser, selectAllQuestions, selectAllTypes, selectAllSkills, selectAllLevels } from '../../selectors';
@@ -32,12 +33,13 @@ class QuestionsPage extends Component {
   };
 
   state = {
-    active: ''
+    active: '',
+    activePage: 1,
+    pages: 0
   };
 
   componentDidMount() {
-    const { getQuestions, params } = this.props;
-    getQuestions(params.type || '');
+    this.pageContent(this.props.params.page || 1);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,11 +60,26 @@ class QuestionsPage extends Component {
     }
   }
 
-  filter = (route) => {
-    const { routes } = this.context.router;
-    const path = routes[1].path;
+  pageContent = (eventKey) => {
+    const { addFlashMessage, getQuestions } = this.props;
 
-    this.context.router.push(`${path}/${route}`);
+    getQuestions(eventKey)
+      .then(
+      ({ pages }) => {
+        this.setState({ pages, activePage: Number(eventKey) });
+        this.context.router.push(`${this.context.router.routes[1].path}/page/${eventKey}`);
+      },
+      (err) => {
+        addFlashMessage({
+          type: 'error',
+          text: err.response.data.error
+        });
+      }
+      );
+  };
+
+  filter = (route) => {
+    this.context.router.push(`${this.context.router.routes[1].path}/${route}`);
     this.props.filterQuestions(route);
     this.setState({ active: route });
   };
@@ -87,6 +104,12 @@ class QuestionsPage extends Component {
             removeQuestionById={removeQuestionById}
             changeQuestionField={changeQuestionField}
             voteQuestion={voteQuestion}
+          />
+
+          <PaginationBar
+            activePage={this.state.activePage}
+            pageContent={this.pageContent}
+            pages={this.state.pages}
           />
         </Col>
       </Row>

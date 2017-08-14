@@ -170,7 +170,7 @@ class SignupForm extends Component {
               onChange={this.onChange}
             />
           </Col>
-          
+
           <Col sm={6}>
             <Field
               label="Last name:"

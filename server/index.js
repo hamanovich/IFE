@@ -1,5 +1,5 @@
 import express from 'express';
-import logger from 'morgan';
+// import logger from 'morgan';
 import path from 'path';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
@@ -9,9 +9,7 @@ import WebpackHotMiddleWare from 'webpack-hot-middleware';
 
 import webpackConfig from '../webpack.config.dev';
 
-import users from './routes/users';
-import auth from './routes/auth';
-import questions from './routes/questions';
+import routes from './routes';
 
 const app = express();
 const compiler = webpack(webpackConfig);
@@ -21,7 +19,7 @@ const HTML_FILE = path.join(DIST_DIR, 'index.html');
 
 app.set('port', process.env.PORT);
 
-app.use(logger('dev'));
+// app.use(logger('dev'));
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -50,9 +48,7 @@ mongoose.connect(process.env.DATABASE, null).then(
 
       app.use(WebpackHotMiddleWare(compiler));
 
-      app.use('/api/users', users);
-      app.use('/api/auth', auth);
-      app.use('/api/questions', questions);
+      app.use('/api', routes);
 
       app.get('/*', (req, res) => {
         res.render('index', { title: 'IFE: Interview for Everyone.' });

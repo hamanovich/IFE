@@ -32,8 +32,7 @@ class AddQuestionPage extends Component {
     const { params, getQuestion } = this.props;
 
     if (params._id) {
-      getQuestion(params._id)
-      .then(res => console.log('R', res.question));
+      getQuestion(params._id);
     }
   };
 

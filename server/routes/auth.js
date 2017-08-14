@@ -1,13 +1,10 @@
-import express from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 import User from '../models/user';
 import { send } from '../handlers/mail';
 
-const router = express.Router();
-
-router.post('/', (req, res) => {
+exports.authUser = (req, res) => {
   const { identifier, password } = req.body;
 
   User.findOne({ $or: [{ username: identifier }, { email: identifier }] })
@@ -25,9 +22,9 @@ router.post('/', (req, res) => {
         res.status(401).json({ errors: { form: 'Invalid Credentials' } });
       }
     });
-});
+};
 
-router.post('/forgot', (req, res) => {
+exports.forgotUser = (req, res) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
@@ -51,9 +48,9 @@ router.post('/forgot', (req, res) => {
         .catch(error => res.status(500).json({ error }));
     })
     .catch(error => res.status(500).json({ error }));
-});
+};
 
-router.get('/reset/:token', (req, res) => {
+exports.getResetPassword = (req, res) => {
   User.findOne({
     resetPasswordToken: req.params.token,
     resetPasswordExpires: { $gt: Date.now() }
@@ -63,9 +60,9 @@ router.get('/reset/:token', (req, res) => {
     }
   })
     .catch(error => res.status(500).json({ error }));
-});
+};
 
-router.post('/reset/:token', (req, res) => {
+exports.postResetPassword = (req, res) => {
   if (req.body.password === req.body.passwordConfirmation) {
     User.findOne({
       resetPasswordToken: req.params.token,
@@ -87,6 +84,4 @@ router.post('/reset/:token', (req, res) => {
   } else {
     res.status(401).json({ errors: { reset: 'Passwords do not match!' } });
   }
-});
-
-export default router;
+};

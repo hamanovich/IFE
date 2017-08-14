@@ -1,25 +1,22 @@
-import express from 'express';
 import bcrypt from 'bcrypt';
 
 import validate from '../validations/signup';
 import validateUser from '../validations/user';
 import User from '../models/user';
 
-const router = express.Router();
-
-router.get('/:id', (req, res) => {
+exports.getUser = (req, res) => {
   User.findOne({ $or: [{ username: req.params.id }, { email: req.params.id }] })
     .then(user => res.json({ user }))
     .catch(error => res.status(500).json({ error }));
-});
+};
 
-router.get('/id/:id', (req, res) => {
+exports.getUserById = (req, res) => {
   User.findOne({ _id: req.params.id })
     .then(user => res.json({ user }))
     .catch(error => res.status(500).json({ error }));
-});
+};
 
-router.post('/', (req, res) => {
+exports.createUser = (req, res) => {
   validateUser(req.body, validate).then(({ errors, isValid }) => {
     if (isValid) {
       const { username, email, password, first_name, last_name, primary_skill, job_function, notes, questions } = req.body;
@@ -32,9 +29,9 @@ router.post('/', (req, res) => {
       res.status(400).json(errors);
     }
   });
-});
+};
 
-router.put('/:id', (req, res) => {
+exports.updateUser = (req, res) => {
   validateUser(req.body, validate).then(({ errors, isValid }) => {
     if (isValid) {
       const { username, email, password, first_name, last_name, primary_skill, job_function, notes } = req.body;
@@ -51,12 +48,10 @@ router.put('/:id', (req, res) => {
       res.status(400).json(errors);
     }
   });
-});
+};
 
-router.delete('/:id', (req, res) => {
+exports.deleteUser = (req, res) => {
   User.findByIdAndRemove({ _id: req.params.id })
     .then(user => res.json({ user }))
     .catch(error => res.status(500).json({ error }));
-});
-
-export default router;
+};
