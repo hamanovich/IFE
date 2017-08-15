@@ -11,7 +11,6 @@ import ListGroup from 'react-bootstrap/lib/ListGroup';
 import Well from 'react-bootstrap/lib/Well';
 import Modal from 'react-bootstrap/lib/Modal';
 
-import { selectUser } from '../../selectors';
 import { logout } from '../../actions/authActions';
 import { removeUserById, getUser } from '../../actions/signupActions';
 

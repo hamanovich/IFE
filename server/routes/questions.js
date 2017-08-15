@@ -80,3 +80,16 @@ exports.deleteQuestion = (req, res) => {
     })
     .catch(error => res.status(500).json({ error }));
 };
+
+exports.getQuestionsBySkills = (req, res) => {
+  const skills = req.params.tag;
+  const skillQuery = skills || { $exists: true };
+
+  const skillsPromise = Question.getSkillList();
+  const questionsPromise = Question.find({ skill: skillQuery });
+
+  Promise.all([skillsPromise, questionsPromise]).then((result) => {
+    const [skills, questions] = result;
+    res.json({ skills, questions });
+  }).catch(error => res.status(500).json({ error }));
+};

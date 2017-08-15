@@ -3,28 +3,10 @@ import PropTypes from 'prop-types';
 
 import QuestionsBarItem from './QuestionsBarItem';
 
-const QuestionsBar = ({ active, filter, selector }) => (
+const QuestionsBar = ({ active, filter, skills }) => (
   <aside>
     <QuestionsBarItem
-      header="Type"
-      type={selector.types}
-      name="theory"
-      active={active}
-      filter={filter}
-    />
-
-    <QuestionsBarItem
-      header="Skill"
-      type={selector.skills}
-      name="skill"
-      active={active}
-      filter={filter}
-    />
-
-    <QuestionsBarItem
-      header="Level"
-      type={selector.levels}
-      name="level"
+      skills={skills}
       active={active}
       filter={filter}
     />
@@ -34,7 +16,7 @@ const QuestionsBar = ({ active, filter, selector }) => (
 QuestionsBar.propTypes = {
   active: PropTypes.string.isRequired,
   filter: PropTypes.func.isRequired,
-  selector: PropTypes.object.isRequired
+  skills: PropTypes.array.isRequired
 };
 
 export default QuestionsBar;

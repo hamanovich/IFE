@@ -47,6 +47,9 @@ const NavigationBar = ({ logout, auth }) => {
         <LinkContainer to="/questions">
           <NavItem>Questions</NavItem>
         </LinkContainer>
+        <LinkContainer to="/tags">
+          <NavItem>Tags</NavItem>
+        </LinkContainer>
       </Nav>
       {auth.isAuthenticated ? userLinks : guestLinks}
     </Navbar>

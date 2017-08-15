@@ -62,7 +62,7 @@ questionSchema.index({
   answer: 'text'
 });
 
-questionSchema.pre('save', function preHook(next) {
+questionSchema.pre('save', function (next) {
   if (!this.isModified('question')) {
     next();
     return;
@@ -71,6 +71,13 @@ questionSchema.pre('save', function preHook(next) {
   this.slug = slug(this.question);
   next();
 });
+
+questionSchema.statics.getSkillList = function () {
+  return this.aggregate([
+    { $unwind: '$skill' },
+    { $group: { _id: '$skill', count: { $sum: 1 } } }
+  ]);
+};
 
 questionSchema.plugin(autopopulate);
 

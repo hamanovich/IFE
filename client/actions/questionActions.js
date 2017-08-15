@@ -65,7 +65,16 @@ export const getQuestions = (page = 1) =>
       dispatch(addQuestions(ans, count, pages));
 
       return { ans, count, pages };
-      // if (filter) dispatch(filterQuestions(filter));
+    });
+
+
+export const getQuestionsBySkill = tag =>
+  dispatch => axios.get(`/api/questions/tags/${tag}`)
+    .then((res) => {
+      const { questions, skills } = res.data;
+      dispatch(addQuestions(questions));
+
+      return { questions, skills };
     });
 
 export const getQuestion = id =>

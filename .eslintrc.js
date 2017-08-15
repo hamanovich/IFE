@@ -18,6 +18,7 @@ module.exports = {
         "no-nested-ternary": 0,
         "no-underscore-dangle": 0,
         "no-param-reassign": 0,
+        "func-names": 0,
         "jsx-a11y/no-static-element-interactions": 0,
         "import/prefer-default-export": 0,
         "react/no-array-index-key": 0,
@@ -54,6 +55,7 @@ module.exports = {
         "react/prop-types": 2,
         "react/react-in-jsx-scope": 2,
         "react/self-closing-comp": 2,
+        "react/jsx-closing-bracket-location": 0,
         "react/sort-comp": [2, {
             "order": [
                 "lifecycle",

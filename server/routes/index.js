@@ -19,6 +19,8 @@ router.post('/auth/reset/:token', authController.postResetPassword);
 
 router.get('/questions', questionsController.getQuestions);
 router.get('/questions/page/:page', questionsController.getQuestions);
+router.get('/questions/tags', questionsController.getQuestionsBySkills);
+router.get('/questions/tags/:tag', questionsController.getQuestionsBySkills);
 router.get('/questions/id/:id', questionsController.getQuestionById);
 router.post('/questions/add', questionsController.addQuestion);
 router.put('/questions/:id', questionsController.updateQuestion);

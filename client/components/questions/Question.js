@@ -24,7 +24,6 @@ class Question extends Component {
   static propTypes = {
     ans: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
-    index: PropTypes.number.isRequired,
     remove: PropTypes.func.isRequired,
     voteQuestion: PropTypes.func.isRequired,
     changeQuestionField: PropTypes.func.isRequired
@@ -66,12 +65,11 @@ class Question extends Component {
   };
 
   render() {
-    const { ans, index, remove, changeQuestionField, user, voteQuestion } = this.props;
+    const { ans, remove, changeQuestionField, user, voteQuestion } = this.props;
 
     const panelHeader = (
       <div className="clearfix">
         <h3 className="panel-title pull-left">
-          <strong style={{ marginBottom: 5, display: 'block' }}>Question {index + 1}:</strong>
           <span className="edit-field" onClick={() => this.open(ans.question, 'question')}>
             <MarkdownRenderer markdown={ans.question} />
           </span>
@@ -93,9 +91,7 @@ class Question extends Component {
         <h5 className="pull-left">
           <strong>Skill</strong>:
             {ans.skill && map(ans.skill, skill => (
-            <span
-              key={shortid.generate()}
-            >{' '}{skill}</span>
+              <a href={`/tags/${skill}`} key={shortid.generate()}>{' '}{skill}</a>
           ))}
         </h5>
         <Label

@@ -9,6 +9,7 @@ import LoginPage from './components/login/LoginPage';
 import ResetPage from './components/reset/ResetPage';
 import AddQuestionPage from './components/addQuestion/AddQuestionPage';
 import QuestionsPage from './components/questions/QuestionsPage';
+import TagsPage from './components/questions/TagsPage';
 import AccountPage from './components/account/AccountPage';
 
 import requireAuth from './utils/requireAuth';
@@ -26,6 +27,9 @@ export default (
     <Route path="questions" component={QuestionsPage}>
       <Route path=":type" component={QuestionsPage} />
       <Route path="page/:page" component={QuestionsPage} />
+    </Route>
+    <Route path="tags" component={TagsPage}>
+      <Route path=":tag" component={TagsPage} />
     </Route>
     <Route path="*" name="not-found" component={NotFound} />
   </Route>
